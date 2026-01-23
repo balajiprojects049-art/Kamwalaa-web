@@ -25,9 +25,9 @@ const Header = () => {
     const navLinks = [
         { path: '/', label: t.nav.home },
         { path: '/services', label: t.nav.services },
+        { path: '/become-partner', label: 'Become a Partner' },
         { path: '/about', label: t.nav.about },
-        { path: '/contact', label: t.nav.contact },
-        { path: '/become-partner', label: 'Become a Partner' } // Added Link
+        { path: '/contact', label: t.nav.contact }
     ];
 
     const isActive = (path) => location.pathname === path;
