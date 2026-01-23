@@ -72,10 +72,9 @@
 }
 
 .featured-price {
-    font-size: 0.9rem;
-    color: #0ea5e9; /* Light blue price */
-    font-weight: 700;
     font-size: 1.1rem;
+    color: #0ea5e9;
+    font-weight: 700;
 }
 
 .featured-btn {
@@ -97,6 +96,207 @@
     color: white;
 }
 
+/* =========================================
+   Service Detail Modal Styles
+   ========================================= */
+
+.fs-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 1rem;
+    backdrop-filter: blur(4px);
+}
+
+.fs-modal-content {
+    background: white;
+    width: 100%;
+    max-width: 900px;
+    border-radius: 16px;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    animation: modal-pop 0.3s ease-out;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+@keyframes modal-pop {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.fs-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: white;
+    border: 1px solid #E5E7EB;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #6B7280;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 10;
+}
+
+.fs-modal-close:hover {
+    background: #F3F4F6;
+    color: #111827;
+}
+
+.fs-modal-body {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+/* Left Column: Image */
+.fs-modal-image-col {
+    position: relative;
+}
+
+.fs-modal-img {
+    width: 100%;
+    height: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.fs-modal-img-placeholder {
+    width: 100%;
+    height: 300px;
+    background: linear-gradient(135deg, #E5E7EB 0%, #F3F4F6 100%);
+    border-radius: 12px;
+}
+
+/* Right Column: Info */
+.fs-modal-info-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.fs-modal-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #111827;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.2;
+}
+
+.fs-modal-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.fs-price-label {
+    font-size: 1.1rem;
+    color: #6B7280;
+    font-weight: 500;
+}
+
+.fs-price-value {
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: #0ea5e9;
+    /* Brand Blue */
+}
+
+.fs-modal-section {
+    margin-bottom: 2rem;
+}
+
+.fs-modal-section h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1F2937;
+    margin: 0 0 1rem 0;
+}
+
+.fs-lang-desc {
+    margin-bottom: 1rem;
+}
+
+.fs-lang-desc strong {
+    display: block;
+    font-size: 0.875rem;
+    color: #374151;
+    margin-bottom: 0.25rem;
+}
+
+.fs-lang-desc p {
+    margin: 0;
+    color: #6B7280;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.fs-benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.fs-benefits-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #4B5563;
+    font-size: 1rem;
+}
+
+.fs-check-icon {
+    color: #2563EB;
+    /* Check color */
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.fs-book-btn {
+    margin-top: auto;
+    width: 200px;
+    background: #0ea5e9;
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.3);
+}
+
+.fs-book-btn:hover {
+    background: #0284c7;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.4);
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
     .featured-grid {
@@ -109,15 +309,33 @@
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .featured-img-wrapper {
-        height: 140px;
+    .fs-modal-body {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .fs-modal-img {
+        height: 250px;
+    }
+
+    .fs-modal-title {
+        font-size: 1.5rem;
     }
 }
 
 @media (max-width: 480px) {
     .featured-grid {
         grid-template-columns: repeat(1, 1fr);
-        /* Or keep 2 for smaller cards? 1 is standard */
         gap: 1rem;
+    }
+
+    .fs-modal-content {
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    .fs-book-btn {
+        width: 100%;
     }
 }

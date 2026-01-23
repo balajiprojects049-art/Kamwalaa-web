@@ -26,9 +26,9 @@ export const servicesData = {
                         price: '₹250',
                         images: ['/assets/images/services/electrical/fan-install-1.jpg', '/assets/images/services/electrical/fan-install-2.jpg'],
                         description: {
-                            en: 'Professional installation of ceiling fans with secure mounting and wiring check.',
-                            te: 'సురక్షిత మౌంటింగ్ మరియు వైరింగ్ తనిఖీతో సీలింగ్ ఫ్యాన్ల ప్రొఫెషనల్ ఇన్‌స్టాలేషన్.',
-                            hi: 'सुरक्षित माउंटिंग और वायरिंग जांच के साथ सीलिंग पंखे का पेशेवर इंस्टालेशन।'
+                            en: 'Professional installation of ceiling fans using insulated safety tools. We ensure secure mounting to prevent wobbling, check regulator compatibility, and perform a full speed test. Includes post-installation cleanup.',
+                            te: 'ఇన్సులేటెడ్ సేఫ్టీ టూల్స్ ఉపయోగించి సీలింగ్ ఫ్యాన్ల ప్రొఫెషనల్ ఇన్‌స్టాలేషన్. వణుకు రాకుండా సురక్షిత మౌంటింగ్, రెగ్యులేటర్ కాంపాబిలిటీ తనిఖీ మరియు పూర్తి స్పీడ్ టెస్ట్ చేస్తాము. పని పూర్తయ్యాక శుభ్రపరచడం ఉంటుంది.',
+                            hi: 'इन्सुलेटेड सुरक्षा उपकरणों का उपयोग करके सीलिंग पंखे का पेशेवर इंस्टालेशन। हम हिलने से रोकने के लिए सुरक्षित माउंटिंग सुनिश्चित करते हैं, रेगुलेटर की अनुकूलता की जांच करते हैं और पूरी स्पीड टेस्ट करते हैं। इसमें काम के बाद की सफाई शामिल है।'
                         }
                     },
                     {
@@ -37,9 +37,9 @@ export const servicesData = {
                         price: '₹300',
                         images: ['/assets/images/services/electrical/fan-install-1.jpg'],
                         description: {
-                            en: 'Replacement of old fan with new one, ensuring proper balance and speed regulation.',
-                            te: 'పాత ఫ్యాన్‌ను కొత్తదానితో మార్చడం, సరైన బ్యాలెన్స్ మరియు స్పీడ్ రెగ్యులేషన్‌ను నిర్ధారించుకోవడం.',
-                            hi: 'पुराने पंखे को नए के साथ बदलना, उचित संतुलन और गति विनियमन सुनिश्चित करना।'
+                            en: 'Safe removal of old fans and installation of new ones. Our experts handle heavy lifting, verify ceiling hook strength, and ensure noiseless operation suitable for bedrooms and halls.',
+                            te: 'పాత ఫ్యాన్లను సురక్షితంగా తొలగించి కొత్తవాటిని అమర్చడం. మా నిపుణులు సీలింగ్ హుక్ బలాన్ని తనిఖీ చేస్తారు మరియు బెడ్ రూమ్‌లు, హాల్స్‌కు సరిపోయేలా శబ్దం లేని పనితీరును నిర్ధారిస్తారు.',
+                            hi: 'पुराने पंखों को सुरक्षित रूप से हटाना और नए लगाना। हमारे विशेषज्ञ सीलिंग हुक की मजबूती की जांच करते हैं और बेडरूम और हॉल के लिए उपयुक्त शोर-रहित संचालन सुनिश्चित करते हैं।'
                         }
                     },
                     {
@@ -113,14 +113,22 @@ export const servicesData = {
                         name: { en: 'Light Installation', te: 'లైట్ ఇన్‌స్టాలేషన్', hi: 'लाइट इंस्टालेशन' },
                         price: '₹200',
                         images: ['/assets/images/services/electrical/fan-install-1.jpg'],
-                        description: { en: 'Installation of tube lights and bulbs.', te: 'ట్యూబ్ లైట్లు మరియు బల్బుల ఇన్‌స్టాలేషన్.', hi: 'ट्यूब लाइट और बल्ब का इंस्टालेशन।' }
+                        description: {
+                            en: 'Installation of tube lights, fancy lights, and LED bulbs with proper holder fitting. We ensure zero flickering and safe connection to your existing switchboard.',
+                            te: 'సరైన హోల్డర్ ఫిట్టింగ్‌తో ట్యూబ్ లైట్లు, ఫ్యాన్సీ లైట్లు మరియు LED బల్బుల ఇన్‌స్టాలేషన్. మేము ఎటువంటి మినుకు మినుకు లేకుండా మరియు మీ స్విచ్‌బోర్డ్‌కు సురక్షితమైన కనెక్షన్‌ను నిర్ధారిస్తాము.',
+                            hi: 'उचित होल्डर फिटिंग के साथ ट्यूब लाइट, फैंसी लाइट और एलईडी बल्ब का इंस्टालेशन। हम बिना टिमटिमाते प्रकाश और आपके मौजूदा स्विचबोर्ड के लिए सुरक्षित कनेक्शन सुनिश्चित करते हैं।'
+                        }
                     },
                     {
                         id: 'switch-replace',
                         name: { en: 'Switch Replacement', te: 'స్విచ్ రీప్లేస్‌మెంట్', hi: 'स्विच प्रतिस्थापन' },
                         price: '₹100',
                         images: ['/assets/images/services/electrical/wiring-work.jpg'],
-                        description: { en: 'Replacement of faulty switches and sockets.', te: 'పాడైపోయిన స్విచ్‌ల రీప్లేస్‌మెంట్.', hi: 'दोषपूर्ण स्विच का प्रतिस्थापन।' }
+                        description: {
+                            en: 'Quick replacement of burnt or stuck switches and loose sockets. We use high-quality, fire-retardant switches to prevent short circuits and ensure child safety.',
+                            te: 'కాలిపోయిన లేదా ఇరుక్కుపోయిన స్విచ్‌లు మరియు లూజ్ సాకెట్ల త్వరిత మార్పిడి. షార్ట్ సర్క్యూట్‌లను నివారించడానికి మరియు పిల్లల భద్రతను నిర్ధారించడానికి మేము అధిక-నాణ్యత, ఫైర్-రిటార్డెంట్ స్విచ్‌లను ఉపయోగిస్తాము.',
+                            hi: 'जले हुए या अटके हुए स्विच और ढीले सॉकेट का त्वरित प्रतिस्थापन। शॉर्ट सर्किट को रोकने और बाल सुरक्षा सुनिश्चित करने के लिए हम उच्च गुणवत्ता वाले, आग प्रतिरोधी स्विच का उपयोग करते हैं।'
+                        }
                     },
                     {
                         id: 'dimmer',
@@ -171,24 +179,42 @@ export const servicesData = {
                         price: '₹500',
                         images: ['/assets/images/services/plumbing/tap-repair.png'],
                         description: {
-                            en: 'Installation of new kitchen or bathroom sinks with secure plumbing connections.',
-                            te: 'సురక్షిత ప్లంబింగ్ కనెక్షన్లతో కొత్త వంటగది లేదా బాత్రూమ్ సింక్ల ఇన్‌స్టాలేషన్.',
-                            hi: 'सुरक्षित प्लंबिंग कनेक्शन के साथ नए रसोई या बाथरूम सिंक की स्थापना।'
+                            en: 'Installation of new kitchen or bathroom sinks using high-grade sealants to prevent future leaks. We ensure proper leveling, secure waste pipe connection, and durability check. Includes removal of old sink debris.',
+                            te: 'భవిష్యత్తులో లీక్‌లు రాకుండా ఉండేందుకు హై-గ్రేడ్ సీలెంట్‌లను ఉపయోగించి కొత్త వంటగది లేదా బాత్రూమ్ సింక్ల ఇన్‌స్టాలేషన్. మేము సరైన లెవలింగ్, సురక్షితమైన వేస్ట్ పైప్ కనెక్షన్ మరియు మన్నికను తనిఖీ చేస్తాము. పాత సింక్ చెత్తను తొలగించడం ఇందులో ఉంటుంది.',
+                            hi: 'भविष्य में रिसाव को रोकने के लिए उच्च श्रेणी के सीलेंट का उपयोग करके नए रसोई या बाथरूम सिंक की स्थापना। हम उचित लेवलिंग, सुरक्षित अपशिष्ट पाइप कनेक्शन और स्थायित्व सुनिश्चित करते हैं। इसमें पुराने सिंक के मलबे को हटाना शामिल है।'
                         }
                     },
-                    { id: 'sink-repair', name: { en: 'Sink Leakage Repair', te: 'సింక్ లీకేజ్ రిపేర్', hi: 'सिंक रिसाव मरम्मत' }, price: '₹250' },
+                    {
+                        id: 'sink-repair',
+                        name: { en: 'Sink Leakage Repair', te: 'సింక్ లీకేజ్ రిపేర్', hi: 'सिंक रिसाव मरम्मत' },
+                        price: '₹250',
+                        description: {
+                            en: 'Expert diagnosis and repair of sink leakages. We dismantle the trap, clean blockages, seal joint gaps with industrial adhesives, and test water flow pressure to ensure a dry, mess-free area.',
+                            te: 'సింక్ లీకేజీల నిపుణుల నిర్ధారణ మరియు మరమ్మత్తు. మేము ట్రాప్‌ను విడదీస్తాము, అడ్డంకులను శుభ్రం చేస్తాము, ఇండస్ట్రియల్ అడెసివ్స్‌తో గ్యాప్‌లను సీల్ చేస్తాము మరియు డ్రై ఏరియా కోసం నీటి ప్రవాహ పీడనాన్ని పరీక్షిస్తాము.',
+                            hi: 'सिंक रिसाव का विशेषज्ञ निदान और मरम्मत। हम ट्रैप को अलग करते हैं, रुकावटों को साफ करते हैं, औद्योगिक चिपकने वाले के साथ अंतराल को सील करते हैं, और सूखे, गंदगी-मुक्त क्षेत्र को सुनिश्चित करने के लिए जल प्रवाह दबाव का परीक्षण करते हैं।'
+                        }
+                    },
                     {
                         id: 'tap-repair',
                         name: { en: 'Tap Repair', te: 'ట్యాప్ రిపేర్', hi: 'नल मरम्मत' },
                         price: '₹200',
                         images: ['/assets/images/services/plumbing/tap-repair.png'],
                         description: {
-                            en: 'Fixing leaking taps, replacing washers, and ensuring smooth water flow.',
-                            te: 'లీకవుతున్న ట్యాప్లను సరిచేయడం, వాషర్లను మార్చడం మరియు సాఫీగా నీటి ప్రవాహాన్ని నిర్ధారించడం.',
-                            hi: 'टपकते हुए नल को ठीक करना, वाशर बदलना और सुचारू जल प्रवाह सुनिश्चित करना।'
+                            en: 'Precision repair for dripping taps. We replace worn-out washers, re-seat the spindle, and check for thread damage. Ensures zero water wastage and smooth operation.',
+                            te: 'చుక్కలు పడే కుళాయిలకు ఖచ్చితమైన మరమ్మత్తు. మేము అరిగిపోయిన వాషర్లను మారుస్తాము, స్పిండిల్‌ను సరిచేస్తాము మరియు థ్రెడ్ డ్యామేజ్ కోసం తనిఖీ చేస్తాము. నీటి వృధా లేకుండా మరియు సులభంగా తిరిగేలా చూస్తాము.',
+                            hi: 'टपकते हुए नल के लिए सटीक मरम्मत। हम घिसे-पिटे वाशर बदलते हैं, स्पिंडल को फिर से सेट करते हैं, और धागे की क्षति की जांच करते हैं। शून्य पानी की बर्बादी और सुचारू संचालन सुनिश्चित करता है।'
                         }
                     },
-                    { id: 'tap-replace', name: { en: 'Tap Replacement', te: 'ట్యాప్ రీప్లేస్‌మెంట్', hi: 'नल प्रतिस्थापन' }, price: '₹300' }
+                    {
+                        id: 'tap-replace',
+                        name: { en: 'Tap Replacement', te: 'ట్యాప్ రీప్లేస్‌మెంట్', hi: 'नल प्रतिस्थापन' },
+                        price: '₹300',
+                        description: {
+                            en: 'Swapping old rusted taps with new, modern fittings. We use teflon tape for secure threading and ensure alignment is perfectly straight. Includes testing for high-pressure handling.',
+                            te: 'పాత తుప్పు పట్టిన కుళాయిలను కొత్త, ఆధునిక ఫిట్టింగ్‌లతో మార్చడం. మేము సురక్షితమైన థ్రెడింగ్ కోసం టెఫ్లాన్ టేప్‌ను ఉపయోగిస్తాము మరియు అలైన్‌మెంట్ ఖచ్చితంగా ఉండేలా చూస్తాము. అధిక పీడనాన్ని తట్టుకునేలా పరీక్షిస్తాము.',
+                            hi: 'पुराने जंग लगे नलों को नई, आधुनिक फिटिंग्स से बदलना। हम सुरक्षित थ्रेडिंग के लिए टेफ्लॉन टेप का उपयोग करते हैं और सुनिश्चित करते हैं कि संरेखण पूरी तरह से सीधा हो। उच्च दबाव से निपटने के परीक्षण शामिल हैं।'
+                        }
+                    }
                 ]
             },
             {
@@ -201,33 +227,78 @@ export const servicesData = {
                         price: '₹1,200',
                         images: ['/assets/images/services/plumbing/water-tank.png'],
                         description: {
-                            en: 'Mechanized dewatering, sludge removal, and high-pressure cleaning of overhead water tanks.',
-                            te: 'ఓవర్‌హెడ్ వాటర్ ట్యాంక్ల మెకనైజ్డ్ డీవాటరింగ్, స్లడ్జ్ తొలగింపు మరియు అధిక ఒత్తిడి క్లీనింగ్.',
-                            hi: 'ओवरहेड पानी की टंकियों की मशीनीकृत डीवाटरिंग, कीचड़ हटाना और उच्च दबाव वाली सफाई।'
+                            en: 'Full 6-stage mechanized cleaning process: Dewatering, sludge removal, high-pressure scrubbing, vacuum cleaning, anti-bacterial spray, and UV radiation treatment for 100% hygiene.',
+                            te: 'పూర్తి 6-దశల మెకనైజ్డ్ క్లీనింగ్ ప్రాసెస్: నీటిని తొలగించడం, బురద తీయడం, అధిక ఒత్తిడితో రుద్దడం, వాక్యూమ్ క్లీనింగ్, యాంటీ బాక్టీరియల్ స్ప్రే మరియు 100% పరిశుభ్రత కోసం UV రేడియేషన్ చికిత్స.',
+                            hi: 'पूर्ण 6-चरण मशीनीकृत सफाई प्रक्रिया: पानी निकालना, कीचड़ हटाना, उच्च दबाव वाली स्क्रबिंग, वैक्यूम सफाई, एंटी-बैक्टीरियल स्प्रे, और 100% स्वच्छता के लिए यूवी विकिरण उपचार।'
                         }
                     },
-                    { id: 'sump-clean', name: { en: 'Underground Sump Cleaning', te: 'అండర్‌గ్రౌండ్ సంప్ క్లీనింగ్', hi: 'भूमिगत सम्प सफाई' }, price: '₹1,500' },
-                    { id: 'disinfection', name: { en: 'Tank Disinfection', te: 'ట్యాంక్ డిసిన్‌ఫెక్షన్', hi: 'टैंक कीटाणुशोधन' }, price: '₹400' }
+                    {
+                        id: 'sump-clean',
+                        name: { en: 'Underground Sump Cleaning', te: 'అండర్‌గ్రౌండ్ సంప్ క్లీనింగ్', hi: 'भूमिगत सम्प सफाई' },
+                        price: '₹1,500',
+                        description: {
+                            en: 'Professional cleaning of underground water sumps with sludge removal.',
+                            te: 'బురద తొలగింపుతో అండర్‌గ్రౌండ్ వాటర్ సంప్‌ల ప్రొఫెషనల్ క్లీనింగ్.',
+                            hi: 'कीचड़ हटाने के साथ भूमिगत जल सम्प की पेशेवर सफाई।'
+                        }
+                    },
+                    {
+                        id: 'disinfection',
+                        name: { en: 'Tank Disinfection', te: 'ట్యాంక్ డిసిన్‌ఫెక్షన్', hi: 'टैंक कीटाणुशोधन' },
+                        price: '₹400',
+                        description: {
+                            en: 'Anti-bacterial dosage and ultraviolet disinfection for water tanks.',
+                            te: 'నీటి ట్యాంకుల కోసం యాంటీ బ్యాక్టీరియల్ మోతాదు మరియు అతినీలలోహిత క్రిమిసంహారక.',
+                            hi: 'पानी की टंकियों के लिए एंटी-बैक्टीरियल खुराक और अल्ट्रावाइलेट कीटाणुशोधन।'
+                        }
+                    }
                 ]
             },
             {
                 id: 'pipes',
                 name: { en: 'Pipelines & Pumps', te: 'పైప్‌లైన్‌లు', hi: 'पाइपलाइन' },
                 services: [
-                    { id: 'waterline', name: { en: 'Water Line Installation', te: 'వాటర్ లైన్ ఇన్‌స్టాలేషన్', hi: 'वॉटर लाइन इंस्टालेशन' }, price: '₹2,500' },
+                    {
+                        id: 'waterline',
+                        name: { en: 'Water Line Installation', te: 'వాటర్ లైన్ ఇన్‌స్టాలేషన్', hi: 'वॉटर लाइन इंस्टालेशन' },
+                        price: '₹2,500',
+                        description: {
+                            en: 'Installation of new UPVC, CPVC or GI water supply lines.',
+                            te: 'కొత్త UPVC, CPVC లేదా GI వాటర్ సప్లై లైన్ల ఇన్‌స్టాలేషన్.',
+                            hi: 'नई UPVC, CPVC या GI जल आपूर्ति लाइनों की स्थापना।'
+                        }
+                    },
                     {
                         id: 'pipe-leak',
                         name: { en: 'Pipe Leakage Repair', te: 'పైప్ లీకేజ్ రిపేర్', hi: 'पाइप रिसाव मरम्मत' },
                         price: '₹500',
                         images: ['/assets/images/services/plumbing/pipe-fix.png'],
                         description: {
-                            en: 'Expert detection and repair of concealed pipe leaks with minimal damage.',
-                            te: 'కనిష్ట నష్టంతో దాగి ఉన్న పైప్ లీకేజీల నిపుణుల గుర్తింపు మరియు మరమ్మత్తు.',
-                            hi: 'न्यूनतम क्षति के साथ छिपे हुए पाइप रिसाव का विशेषज्ञ पता लगाना और मरम्मत करना।'
+                            en: 'Advanced leak detection using moisture meters for concealed pipes. We surgically open walls only where necessary to fix leaks, minimizing structural damage, and re-seal pipes securely.',
+                            te: 'దాగి ఉన్న పైపుల కోసం తేమ మీటర్లను ఉపయోగించి అధునాతన లీక్ గుర్తింపు. లీక్‌లను సరిచేయడానికి అవసరమైన చోట మాత్రమే మేము గోడలను తెరుస్తాము, నిర్మాణ నష్టాన్ని తగ్గిస్తాము మరియు పైపులను సురక్షితంగా రీ-సీల్ చేస్తాము.',
+                            hi: 'छिपे हुए पाइपों के लिए नमी मीटर का उपयोग करके उन्नत रिसाव का पता लगाना। हम केवल वहीं दीवारें खोलते हैं जहाँ रिसाव को ठीक करने के लिए आवश्यक हो, जिससे संरचनात्मक क्षति कम हो, और पाइपों को सुरक्षित रूप से फिर से सील कर दिया जाए।'
                         }
                     },
-                    { id: 'blockage', name: { en: 'Blockage Removal', te: 'బ్లాకేజ్ తొలగింపు', hi: 'रुकावट हटाना' }, price: '₹800' },
-                    { id: 'bathroom-pipe', name: { en: 'Bathroom Pipeline Repair', te: 'బాత్రూమ్ పైప్‌లైన్ రిపేర్', hi: 'बाथरूम पाइपलाइन मरम्मत' }, price: '₹1,200' }
+                    {
+                        id: 'blockage',
+                        name: { en: 'Blockage Removal', te: 'బ్లాకేజ్ తొలగింపు', hi: 'रुकावट हटाना' },
+                        price: '₹800',
+                        description: {
+                            en: 'Clearing of clogged drains, sinks, and sewage pipes.',
+                            te: 'బ్లాక్ అయిన డ్రైనేజీలు, సింక్‌లు మరియు మురుగునీటి పైపులను క్లియర్ చేయడం.',
+                            hi: 'बंद नालियों, सिंक और सीवेज पाइपों की सफाई।'
+                        }
+                    },
+                    {
+                        id: 'bathroom-pipe',
+                        name: { en: 'Bathroom Pipeline Repair', te: 'బాత్రూమ్ పైప్‌లైన్ రిపేర్', hi: 'बाथरूम पाइपलाइन मरम्मत' },
+                        price: '₹1,200',
+                        description: {
+                            en: 'Correction of low pressure, leakage, or noise in bathroom pipes.',
+                            te: 'బాత్రూమ్ పైపులలో అల్ప పీడనం, లీకేజీ లేదా శబ్దాన్ని సరిదిద్దడం.',
+                            hi: 'बाथरूम पाइप में कम दबाव, रिसाव या शोर को ठीक करना।'
+                        }
+                    }
                 ]
             }
         ]
@@ -256,9 +327,9 @@ export const servicesData = {
                         price: '₹12-18/sq.ft',
                         images: ['/assets/images/services/painting/interior.png'],
                         description: {
-                            en: 'Premium interior wall painting with putty, primer, and 2-3 coats of high-quality paint.',
-                            te: 'పుట్టి, ప్రైమర్ మరియు 2-3 కోట్ల అధిక నాణ్యత గల పెయింట్‌తో ప్రీమియం ఇంటీరియర్ వాల్ పెయింటింగ్.',
-                            hi: 'पुट्टी, प्राइमर और उच्च गुणवत्ता वाले पेंट के 2-3 कोट के साथ प्रीमियम आंतरिक दीवार पेंटिंग।'
+                            en: 'Premium interior makeover including scraping, sanding, 1 coat of primer, 2 coats of putty, and 2-3 coats of luxury emulsion paint. We cover furniture and floors to prevent spills and ensure a perfectly smooth finish.',
+                            te: 'స్క్రాపింగ్, ఇసుకతో చదును చేయడం, 1 కోట్ ప్రైమర్, 2 కోట్లు పుట్టి మరియు 2-3 కోట్లు లగ్జరీ ఎమల్షన్ పెయింట్‌తో ప్రీమియం ఇంటీరియర్ మేక్ఓవర్. మేము ఫర్నిచర్ మరియు ఫ్లోర్లపై చుక్కలు పడకుండా కవర్ చేస్తాము మరియు అద్భుతమైన స్మూత్ ఫినిషింగ్ ఇస్తాము.',
+                            hi: 'प्रीमियम आंतरिक बदलाव जिसमें स्क्रैपिंग, सैंडिंग, 1 कोट प्राइमर, 2 कोट पुट्टी, और 2-3 कोट लक्जरी इमल्शन पेंट शामिल है। हम फर्नीचर और फर्श को ढकते हैं ताकि धब्बे न पड़ें और एकदम चिकनी फिनिश सुनिश्चित हो।'
                         }
                     },
                     {
@@ -267,22 +338,67 @@ export const servicesData = {
                         price: '₹15-25/sq.ft',
                         images: ['/assets/images/services/painting/interior.png'],
                         description: {
-                            en: 'Weather-proof exterior painting to protect your home from rain and sun.',
-                            te: 'వర్షం మరియు ఎండ నుండి మీ ఇంటిని రక్షించడానికి వెదర్-ప్రూఫ్ ఎక్స్టీరియర్ పెయింటింగ్.',
-                            hi: 'बारिश और धूप से आपके घर की रक्षा के लिए वेदर-प्रूफ बाहरी पेंटिंग।'
+                            en: 'High-performance exterior waterproofing and painting using Apex Ultima or equivalent. Protects walls from algae, fungus, heat, and heavy rain cracks. Includes power washing before painting.',
+                            te: 'అపెక్స్ అల్టిమా లేదా సమానమైన దానితో అధిక-పనితీరు గల ఎక్స్టీరియర్ వాటర్‌ప్రూఫింగ్ మరియు పెయింటింగ్. ఆల్గే, ఫంగస్, వేడి మరియు భారీ వర్షాల పగుళ్ల నుండి గోడలను రక్షిస్తుంది. పెయింటింగ్ ముందు పవర్ వాషింగ్ చేయడం ఉంటుంది.',
+                            hi: 'एपेक्स अल्टिमा या समकक्ष का उपयोग करके उच्च-प्रदर्शन बाहरी वॉटरप्रूफिंग और पेंटिंग। दीवारों को शैवाल, कवक, गर्मी और भारी बारिश की दरारों से बचाता है। पेंटिंग से पहले पावर वॉशिंग शामिल है।'
                         }
                     },
-                    { id: 'ceiling-paint', name: { en: 'Ceiling Painting', te: 'సీలింగ్ పెయింటింగ్', hi: 'छत पेंटिंग' }, price: '₹10-15/sq.ft' },
-                    { id: 'texture-paint', name: { en: 'Texture Painting', te: 'టెక్స్చర్ పెయింటింగ్', hi: 'बनावट पेंटिंग' }, price: '₹25-50/sq.ft' }
+                    {
+                        id: 'ceiling-paint',
+                        name: { en: 'Ceiling Painting', te: 'సీలింగ్ పెయింటింగ్', hi: 'छत पेंटिंग' },
+                        price: '₹10-15/sq.ft',
+                        description: {
+                            en: 'Whitewashing and color painting for ceilings to brighten up rooms.',
+                            te: 'గదులను ప్రకాశవంతం చేయడానికి సీలింగ్‌లకు వైట్‌వాష్ మరియు కలర్ పెయింటింగ్.',
+                            hi: 'कमरों को रोशन करने के लिए छत पर सफेदी और रंगीन पेंटिंग।'
+                        }
+                    },
+                    {
+                        id: 'texture-paint',
+                        name: { en: 'Texture Painting', te: 'టెక్స్చర్ పెయింటింగ్', hi: 'बनावट पेंटिंग' },
+                        price: '₹25-50/sq.ft',
+                        description: {
+                            en: 'Artistic texture painting designs for feature walls and living rooms.',
+                            te: 'ఫీచర్ వాల్స్ మరియు లివింగ్ రూమ్‌ల కోసం ఆర్టిస్టిక్ టెక్స్చర్ పెయింటింగ్ డిజైన్‌లు.',
+                            hi: 'फीचर वॉल और लिविंग रूम के लिए कलात्मक टेक्सचर पेंटिंग डिजाइन।'
+                        }
+                    }
                 ]
             },
             {
                 id: 'flooring',
                 name: { en: 'Flooring & Tiling', te: 'ఫ్లోరింగ్ & టైలింగ్', hi: 'फर्श और टाइलिंग' },
                 services: [
-                    { id: 'tile-install', name: { en: 'Tile Installation', te: 'టైల్ ఇన్‌స్టాలేషన్', hi: 'टाइल इंस्टालेशन' }, price: '₹50-100/sq.ft' },
-                    { id: 'tile-replace', name: { en: 'Tile Replacement', te: 'టైల్ రీప్లేస్‌మెంట్', hi: 'टाइल प्रतिस्थापन' }, price: '₹350/tile' },
-                    { id: 'marble-floor', name: { en: 'Marble Flooring', te: 'మార్బుల్ ఫ్లోరింగ్', hi: 'संगमरमर फर्श' }, price: 'Custom' }
+                    {
+                        id: 'tile-install',
+                        name: { en: 'Tile Installation', te: 'టైల్ ఇన్‌స్టాలేషన్', hi: 'टाइल इंस्टालेशन' },
+                        price: '₹50-100/sq.ft',
+                        description: {
+                            en: 'Expert installation of vitrified, ceramic, or porcelain tiles. We use spacers for uniform joints, laser levels for flatness, and high-quality epoxy grout that is water-resistant and lasting.',
+                            te: 'విట్రిఫైడ్, సిరామిక్ లేదా పింగాణీ టైల్స్ యొక్క నిపుణుల ఇన్‌స్టాలేషన్. మేము సమానమైన జాయింట్ల కోసం స్పేసర్లను, ఫ్లాట్‌నెస్ కోసం లేజర్ లెవెల్స్ మరియు నీటిని నిరోధించే మరియు మన్నికైన అధిక-నాణ్యత ఎపోక్సీ గ్రౌట్‌ను ఉపయోగిస్తాము.',
+                            hi: 'विट्रिफाइड, सिरेमिक या चीनी मिट्टी के बरतन टाइलों का विशेषज्ञ इंस्टालेशन। हम समान जोड़ों के लिए स्पेसर, समतलता के लिए लेजर लेवल, और उच्च गुणवत्ता वाले एपॉक्सी ग्राउट का उपयोग करते हैं जो पानी प्रतिरोधी और टिकाऊ है।'
+                        }
+                    },
+                    {
+                        id: 'tile-replace',
+                        name: { en: 'Tile Replacement', te: 'టైల్ రీప్లేస్‌మెంట్', hi: 'टाइल प्रतिस्थापन' },
+                        price: '₹350/tile',
+                        description: {
+                            en: 'Removing damaged tiles and installing matching new ones.',
+                            te: 'పాడైపోయిన టైల్స్‌ను తొలగించడం మరియు సరిపోలే కొత్త వాటిని అమర్చడం.',
+                            hi: 'क्षतिग्रस्त टाइलों को हटाना और मेल खाने वाली नई टाइलें लगाना।'
+                        }
+                    },
+                    {
+                        id: 'marble-floor',
+                        name: { en: 'Marble Flooring', te: 'మార్బుల్ ఫ్లోరింగ్', hi: 'संगमरमर फर्श' },
+                        price: 'Custom',
+                        description: {
+                            en: 'Laying, grinding, and polishing of Italian and Indian marble.',
+                            te: 'ఇటాలియన్ మరియు ఇండియన్ మార్బుల్ వేయడం, గ్రైండింగ్ మరియు పాలిషింగ్.',
+                            hi: 'इतालवी और भारतीय संगमरमर को बिछाना, पीसना और पॉलिश करना।'
+                        }
+                    }
                 ]
             }
         ]
@@ -304,17 +420,62 @@ export const servicesData = {
                 id: 'ro-repair',
                 name: { en: 'Service & Repair', te: 'సేవ & మరమ్మత్తు', hi: 'सेवा और मरम्मत' },
                 services: [
-                    { id: 'filter-clean', name: { en: 'Filter Cleaning', te: 'ఫిల్టర్ క్లీనింగ్', hi: 'फिल्टर सफाई' }, price: '₹300' },
-                    { id: 'filter-replace', name: { en: 'Filter Replacement', te: 'ఫిల్టర్ రీప్లేస్‌మెంట్', hi: 'फिल्टर प्रतिस्थापन' }, price: '₹450' },
-                    { id: 'membrane', name: { en: 'Membrane Replacement', te: 'మెంబ్రేన్ రీప్లేస్‌మెంట్', hi: 'मेम्ब्रेन प्रतिस्थापन' }, price: '₹600' }
+                    {
+                        id: 'filter-clean',
+                        name: { en: 'Filter Cleaning', te: 'ఫిల్టర్ క్లీనింగ్', hi: 'फिल्टर सफाई' },
+                        price: '₹300',
+                        description: {
+                            en: 'Cleaning of sediment and pre-carbon filters for better flow.',
+                            te: 'మెరుగైన ప్రవాహం కోసం అవక్షేప మరియు ప్రీ-కార్బన్ ఫిల్టర్ల క్లీనింగ్.',
+                            hi: 'बेहतर प्रवाह के लिए तलछट और पूर्व-कार्बन फिल्टर की सफाई।'
+                        }
+                    },
+                    {
+                        id: 'filter-replace',
+                        name: { en: 'Filter Replacement', te: 'ఫిల్టర్ రీప్లేస్‌మెంట్', hi: 'फिल्टर प्रतिस्थापन' },
+                        price: '₹450',
+                        description: {
+                            en: 'Comprehensive replacement of Sediment, Pre-Carbon, and Post-Carbon filters. We flush the new filters to remove air locks and ensure the water tastes fresh. Increases membrane life significantly.',
+                            te: 'సెడిమెంట్, ప్రీ-కార్బన్ మరియు పోస్ట్-కార్బన్ ఫిల్టర్ల సమగ్ర మార్పిడి. ఎయిర్ లాక్‌లను తొలగించడానికి మరియు నీరు తాజాగా ఉండేలా చూసుకోవడానికి మేము కొత్త ఫిల్టర్లను ఫ్లష్ చేస్తాము. మెంబ్రేన్ జీవితకాలం గణనీయంగా పెంచుతుంది.',
+                            hi: 'तलछट, प्री-कार्बन और पोस्ट-कार्बन फिल्टर का व्यापक प्रतिस्थापन। हम एयर लॉक को हटाने और पानी का स्वाद ताजा सुनिश्चित करने के लिए नए फिल्टर को फ्लश करते हैं। मेम्ब्रेन के जीवन को काफी बढ़ाता है।'
+                        }
+                    },
+                    {
+                        id: 'membrane',
+                        name: { en: 'Membrane Replacement', te: 'మెంబ్రేన్ రీప్లేస్‌మెంట్', hi: 'मेम्ब्रेन प्रतिस्थापन' },
+                        price: '₹600',
+                        description: {
+                            en: 'Replacement of the heart of your RO system. We use authentic, high-rejection membranes to bring TDS levels down to safe drinking limits (50-150 PPM). Includes housing cleaning.',
+                            te: 'మీ RO సిస్టమ్ యొక్క గుండెకాయ లాంటి మెంబ్రేన్ మార్పిడి. TDS స్థాయిలను సురక్షితమైన తాగునీటి పరిమితులకు (50-150 PPM) తగ్గించడానికి మేము అసలైన, హై-రిజెక్షన్ మెంబ్రేన్‌లను ఉపయోగిస్తాము. హౌసింగ్ క్లీనింగ్ కూడా ఉంటుంది.',
+                            hi: 'आपके आरओ सिस्टम के दिल का प्रतिस्थापन। हम टीडीएस स्तरों को सुरक्षित पीने की सीमा (50-150 पीपीएम) तक लाने के लिए प्रामाणिक, उच्च-अस्वीकृति झिल्ली का उपयोग करते हैं। इसमें हाउसिंग सफाई शामिल है।'
+                        }
+                    }
                 ]
             },
             {
                 id: 'ro-install',
                 name: { en: 'Installation', te: 'ఇన్‌స్టాలేషన్', hi: 'इंस्टालेशन' },
                 services: [
-                    { id: 'ro-install', name: { en: 'New RO Installation', te: 'కొత్త RO ఇన్‌స్టాలేషన్', hi: 'नया RO इंस्टालेशन' }, price: '₹600' },
-                    { id: 'ro-relocate', name: { en: 'RO Relocation', te: 'RO రీలొకేషన్', hi: 'RO स्थानांतरण' }, price: '₹700' }
+                    {
+                        id: 'ro-install',
+                        name: { en: 'New RO Installation', te: 'కొత్త RO ఇన్‌స్టాలేషన్', hi: 'नया RO इंस्टालेशन' },
+                        price: '₹600',
+                        description: {
+                            en: 'Installation of new RO water purifiers with inlet connection.',
+                            te: 'ఇన్లెట్ కనెక్షన్‌తో కొత్త RO వాటర్ ప్యూరిఫైయర్‌ల ఇన్‌స్టాలేషన్.',
+                            hi: 'इनलेट कनेक्शन के साथ नए आरओ वॉटर प्यूरीफायर की स्थापना।'
+                        }
+                    },
+                    {
+                        id: 'ro-relocate',
+                        name: { en: 'RO Relocation', te: 'RO రీలొకేషన్', hi: 'RO स्थानांतरण' },
+                        price: '₹700',
+                        description: {
+                            en: 'Uninstalling and re-installing RO unit at a new location.',
+                            te: 'కొత్త ప్రదేశంలో RO యూనిట్‌ను అన్‌ఇన్‌స్టాల్ చేయడం మరియు రీ-ఇన్‌స్టాల్ చేయడం.',
+                            hi: 'नई जगह पर आरओ यूनिट को अनइंस्टॉल और री-इंस्टॉल करना।'
+                        }
+                    }
                 ]
             }
         ]
@@ -336,7 +497,16 @@ export const servicesData = {
                 id: 'furniture-dismantle',
                 name: { en: 'Furniture', te: 'ఫర్నిచర్', hi: 'फर्नीचर' },
                 services: [
-                    { id: 'kitchen-dismantle', name: { en: 'Kitchen Dismantling', te: 'కిచెన్ డిస్మాంటిలింగ్', hi: 'रसोई विघटन' }, price: '₹3,500' },
+                    {
+                        id: 'kitchen-dismantle',
+                        name: { en: 'Kitchen Dismantling', te: 'కిచెన్ డిస్మాంటిలింగ్', hi: 'रसोई विघटन' },
+                        price: '₹3,500',
+                        description: {
+                            en: 'Systematic dismantling of modular units. We label parts for easy reassembly, protect glass/marble counters during removal, and stack debris neatly. Ideal for renovations or shifting.',
+                            te: 'మాడ్యులర్ యూనిట్ల క్రమబద్ధమైన డిస్మాంటిలింగ్. సులభంగా తిరిగి అమర్చడానికి మేము భాగాలకు లేబుల్ వేస్తాము, తొలగించేటప్పుడు గ్లాస్/మార్బుల్ కౌంటర్లను రక్షిస్తాము మరియు చెత్తను నీట్‌గా పేర్చుతాము. రినోవేషన్లు లేదా షిఫ్టింగ్ కోసం ఉత్తమం.',
+                            hi: 'मॉड्यूलर इकाइयों का व्यवस्थित विघटन। हम आसान री-असेंबली के लिए भागों को लेबल करते हैं, हटाने के दौरान कांच/संगमरमर के काउंटरों की रक्षा करते हैं, और मलबे को बड़े करीने से ढेर करते हैं। नवीनीकरण या स्थानांतरण के लिए आदर्श।'
+                        }
+                    },
                     { id: 'wardrobe-dismantle', name: { en: 'Wardrobe Dismantling', te: 'వార్డ్‌రోబ్ డిస్మాంటిలింగ్', hi: 'अलमारी विघटन' }, price: '₹1,200' }
                 ]
             },
@@ -344,8 +514,26 @@ export const servicesData = {
                 id: 'structure-dismantle',
                 name: { en: 'Structural', te: 'నిర్మాణ', hi: 'संरचनात्मक' },
                 services: [
-                    { id: 'ceiling-dismantle', name: { en: 'False Ceiling Dismantling', te: 'ఫాల్స్ సీలింగ్ డిస్మాంటిలింగ్', hi: 'फाल्स सीलिंग विघटन' }, price: '₹2,000' },
-                    { id: 'fittings-remove', name: { en: 'Old Fittings Removal', te: 'పాత ఫిట్టింగ్స్ తొలగింపు', hi: 'पुरानी फिटिंग्स हटाना' }, price: '₹800' }
+                    {
+                        id: 'ceiling-dismantle',
+                        name: { en: 'False Ceiling Dismantling', te: 'ఫాల్స్ సీలింగ్ డిస్మాంటిలింగ్', hi: 'फाल्स सीलिंग विघटन' },
+                        price: '₹2,000',
+                        description: {
+                            en: 'Removal of POP or Gypsum false ceiling panels safely.',
+                            te: 'POP లేదా జిప్సం ఫాల్స్ సీలింగ్ ప్యానెల్‌లను సురక్షితంగా తొలగించడం.',
+                            hi: 'पीओपी या जिप्सम फाल्स सीलिंग पैनल को सुरक्षित रूप से हटाना।'
+                        }
+                    },
+                    {
+                        id: 'fittings-remove',
+                        name: { en: 'Old Fittings Removal', te: 'పాత ఫిట్టింగ్స్ తొలగింపు', hi: 'पुरानी फिटिंग्स हटाना' },
+                        price: '₹800',
+                        description: {
+                            en: 'Taking out old fans, lights, geysers, and curtain rods.',
+                            te: 'పాత ఫ్యాన్లు, లైట్లు, గీజర్లు మరియు కర్టెన్ రాడ్లను తీసివేయడం.',
+                            hi: 'पुराने पंखे, लाइट, गीजर और परदे की छड़ें निकालना।'
+                        }
+                    }
                 ]
             }
         ]
@@ -373,7 +561,11 @@ export const servicesData = {
                         name: { en: 'Floor Cleaning', te: 'ఫ్లోర్ క్లీనింగ్', hi: 'फर्श सफाई' },
                         price: '₹300',
                         images: ['/assets/images/services/painting/interior.png'],
-                        description: { en: 'Deep cleaning and mopping of all floor types.', te: 'అన్ని రకాల ఫ్లోర్ల డీప్ క్లీనింగ్.', hi: 'सभी प्रकार के फर्श की गहरी सफाई।' }
+                        description: {
+                            en: 'Industrial-grade floor scrubbing using single-disc machines to remove tough grime and chemical residues. Neutralizes floor pH and restores original shine. Safe for marble, tiles, and granite.',
+                            te: 'మొండి జిడ్డు మరియు కెమికల్ అవశేషాలను తొలగించడానికి సింగిల్-డిస్క్ మెషీన్‌లను ఉపయోగించి ఇండస్ట్రియల్-గ్రేడ్ ఫ్లోర్ స్కబ్బింగ్. ఫ్లోర్ pH ను న్యూట్రలైజ్ చేస్తుంది మరియు అసలు మెరుపును తిరిగి ఇస్తుంది. మార్బుల్, టైల్స్ మరియు గ్రానైట్‌కు సురక్షితం.',
+                            hi: 'कठिन जमी हुई गंदगी और रासायनिक अवशेषों को हटाने के लिए सिंगल-डिस्क मशीनों का उपयोग करके औद्योगिक-ग्रेड फर्श स्क्रबिंग। फर्श के पीएच को बेअसर करता है और मूल चमक को पुनर्स्थापित करता है। संगमरमर, टाइल्स और ग्रेनाइट के लिए सुरक्षित।'
+                        }
                     },
                     {
                         id: 'tile-clean',
@@ -395,9 +587,36 @@ export const servicesData = {
                 id: 'kitchen-bath',
                 name: { en: 'Kitchen & Bath', te: 'వంటగది & స్నానాల గది', hi: 'रसोई और स्नानघर' },
                 services: [
-                    { id: 'stove-clean', name: { en: 'Stove & Chimney Cleaning', te: 'స్టవ్ & చిమ్నీ క్లీనింగ్', hi: 'स्टोव और चिमनी सफाई' }, price: '₹600' },
-                    { id: 'toilet-clean', name: { en: 'Toilet Cleaning', te: 'టాయిలెట్ క్లీనింగ్', hi: 'शौचालय सफाई' }, price: '₹300' },
-                    { id: 'basin-clean', name: { en: 'Basin Cleaning', te: 'బేసిన్ క్లీనింగ్', hi: 'बेसिन सफाई' }, price: '₹200' }
+                    {
+                        id: 'stove-clean',
+                        name: { en: 'Stove & Chimney Cleaning', te: 'స్టవ్ & చిమ్నీ క్లీనింగ్', hi: 'स्टोव और चिमनी सफाई' },
+                        price: '₹600',
+                        description: {
+                            en: 'Complete degreasing of burners, meshes, and hood. We use caustic-free specialized sprays to dissolve sticky oil layers from chimneys and stoves, restoring maximum suction power and safety.',
+                            te: 'బర్నర్లు, మెష్‌లు మరియు హుడ్ యొక్క పూర్తి డీగ్రీసింగ్. మేము చిమ్నీలు మరియు స్టవ్‌ల నుండి జిగట నూనె పొరలను కరిగించడానికి కాస్టిక్-రహిత ప్రత్యేక స్ప్రేలను ఉపయోగిస్తాము, గరిష్ట ఇన్‌హేలేషన్ శక్తి మరియు భద్రతను పునరుద్ధరిస్తాము.',
+                            hi: 'बर्नर, मेश और हुड की पूरी डेग्रीसिंग। हम चिमनी और स्टोव से चिपचिपी तेल की परतों को घोलने के लिए कास्टिक-मुक्त विशेष स्प्रे का उपयोग करते हैं, जिससे अधिकतम सक्शन पावर और सुरक्षा बहाल होती है।'
+                        }
+                    },
+                    {
+                        id: 'toilet-clean',
+                        name: { en: 'Toilet Cleaning', te: 'టాయిలెట్ క్లీనింగ్', hi: 'शौचालय सफाई' },
+                        price: '₹300',
+                        description: {
+                            en: 'Acid wash and sanitization of toilet bowls and tiles.',
+                            te: 'టాయిలెట్ బౌల్స్ మరియు టైల్స్ యొక్క యాసిడ్ వాష్ మరియు శానిటైజేషన్.',
+                            hi: 'शौचालय के कटोरे और टाइलों की एसिड वॉश और स्वच्छता।'
+                        }
+                    },
+                    {
+                        id: 'basin-clean',
+                        name: { en: 'Basin Cleaning', te: 'బేసిన్ క్లీనింగ్', hi: 'बेसिन सफाई' },
+                        price: '₹200',
+                        description: {
+                            en: 'Stain removal and polishing of wash basins.',
+                            te: 'వాష్ బేసిన్ల మరకలు తొలగించడం మరియు పాలిషింగ్.',
+                            hi: 'वाश बेसिन के दाग हटाना और पॉलिश करना।'
+                        }
+                    }
                 ]
             }
         ]
@@ -420,16 +639,52 @@ export const servicesData = {
                 id: 'garden-maintain',
                 name: { en: 'Maintenance', te: 'నిర్వహణ', hi: 'रखरखाव' },
                 services: [
-                    { id: 'lawn-maintain', name: { en: 'Lawn Maintenance', te: 'లాన్ మెయింటెనెన్స్', hi: 'लॉन रखरखाव' }, price: '₹800' },
-                    { id: 'garden-clean', name: { en: 'Garden Cleaning', te: 'గార్డెన్ క్లీనింగ్', hi: 'बगीचे की सफाई' }, price: '₹450' }
+                    {
+                        id: 'lawn-maintain',
+                        name: { en: 'Lawn Maintenance', te: 'లాన్ మెయింటెనెన్స్', hi: 'लॉन रखरखाव' },
+                        price: '₹800',
+                        description: {
+                            en: 'Professional lawn care using rotary mowers and edgers. We trim overgrown grass to uniform height, remove weeds manually, and water the turf deeply. Keeps your garden looking lush and neat.',
+                            te: 'రోటరీ మూవర్స్ మరియు ఎడ్జర్లను ఉపయోగించి ప్రొఫెషనల్ లాన్ కేర్. మేము పెరిగిన గడ్డిని సమాన ఎత్తుకు కత్తిరిస్తాము, కలుపు మొక్కలను మాన్యువల్‌గా తొలగిస్తాము మరియు టర్ఫ్‌కు లోతుగా నీరు పెడతాము. మీ తోటను పచ్చగా మరియు నీట్‌గా ఉంచుతుంది.',
+                            hi: 'रोटरी मावर्स और एडगर्स का उपयोग करके पेशेवर लॉन देखभाल। हम बढ़ी हुई घास को एक समान ऊंचाई तक काटते हैं, खरपतवार को हाथ से हटाते हैं, और टर्फ को गहराई से पानी देते हैं। आपके बगीचे को हरा-भरा और साफ-सुथरा रखता है।'
+                        }
+                    },
+                    {
+                        id: 'garden-clean',
+                        name: { en: 'Garden Cleaning', te: 'గార్డెన్ క్లీనింగ్', hi: 'बगीचे की सफाई' },
+                        price: '₹450',
+                        description: {
+                            en: 'Comprehensive garden cleanup removing dry leaves, plastic waste, and fallen branches. We sweep paved areas and bag all organic waste for composting or disposal.',
+                            te: 'ఎండిన ఆకులు, ప్లాస్టిక్ వ్యర్థాలు మరియు రాలిన కొమ్మలను తొలగించే సమగ్ర గార్డెన్ క్లీనప్. మేము పేవ్డ్ ప్రాంతాలను ఊడ్చేస్తాము మరియు కంపోస్టింగ్ లేదా పారవేయడం కోసం అన్ని సేంద్రీయ వ్యర్థాలను బ్యాగ్ చేస్తాము.',
+                            hi: 'सूखे पत्तों, प्लास्टिक कचरे और गिरे हुए शाखाओं को हटाने वाली व्यापक उद्यान सफाई। हम पक्के क्षेत्रों को झाड़ते हैं और खाद या निपटान के लिए सभी जैविक कचरे को बैग में डालते हैं।'
+                        }
+                    }
                 ]
             },
             {
                 id: 'planting',
                 name: { en: 'New Works', te: 'కొత్త పనులు', hi: 'नए कार्य' },
                 services: [
-                    { id: 'plant-new', name: { en: 'Planting New Plants', te: 'కొత్త మొక్కలను నాటడం', hi: 'नए पौधे लगाना' }, price: '₹500' },
-                    { id: 'garden-waterline', name: { en: 'Garden Water Line Installation', te: 'గార్డెన్ వాటర్ లైన్ ఇన్‌స్టాలేషన్', hi: 'बगीचे की वॉटर लाइन इंस्टालेशन' }, price: '₹1,800' }
+                    {
+                        id: 'plant-new',
+                        name: { en: 'Planting New Plants', te: 'కొత్త మొక్కలను నాటడం', hi: 'नए पौधे लगाना' },
+                        price: '₹500',
+                        description: {
+                            en: 'Professional planting of new saplings and decorative plants.',
+                            te: 'కొత్త మొక్కలు మరియు అలంకార మొక్కలను వృత్తిపరంగా నాటడం.',
+                            hi: 'नए पौधे और सजावटी पौधे लगाने की पेशेवर सेवा।'
+                        }
+                    },
+                    {
+                        id: 'garden-waterline',
+                        name: { en: 'Garden Water Line Installation', te: 'గార్డెన్ వాటర్ లైన్ ఇన్‌స్టాలేషన్', hi: 'बगीचे की वॉटर लाइन इंस्टालेशन' },
+                        price: '₹1,800',
+                        description: {
+                            en: 'Setting up drip irrigation or sprinkler systems for gardens.',
+                            te: 'తోటల కోసం బిందు సేద్యం లేదా స్ప్రింక్లర్ వ్యవస్థలను ఏర్పాటు చేయడం.',
+                            hi: 'बगीचों के लिए ड्रिप सिंचाई या स्प्रिंकलर सिस्टम स्थापित करना।'
+                        }
+                    }
                 ]
             }
         ]
@@ -452,10 +707,46 @@ export const servicesData = {
                 id: 'stove-gas',
                 name: { en: 'Stove & Gas', te: 'స్టవ్ & గ్యాస్', hi: 'स्टोव और गैस' },
                 services: [
-                    { id: 'stove-install', name: { en: 'Stove Installation', te: 'స్టవ్ ఇన్‌స్టాలేషన్', hi: 'स्टोव इंस्टालेशन' }, price: '₹300' },
-                    { id: 'gas-pipeline', name: { en: 'Gas Pipeline Installation', te: 'గ్యాస్ పైప్‌లైన్ ఇన్‌స్టాలేషన్', hi: 'गैस पाइपलाइन इंस्टालेशन' }, price: '₹1,200' },
-                    { id: 'leak-detect', name: { en: 'Leakage Detection', te: 'లీకేజ్ డిటెక్షన్', hi: 'रिसाव का पता लगाना' }, price: '₹350' },
-                    { id: 'gas-regulator', name: { en: 'Regulator Replacement', te: 'రెగ్యులేటర్ రీప్లేస్‌మెంట్', hi: 'नियामक प्रतिस्थापन' }, price: '₹200' }
+                    {
+                        id: 'stove-install',
+                        name: { en: 'Stove Installation', te: 'స్టవ్ ఇన్‌స్టాలేషన్', hi: 'स्टोव इंस्टालेशन' },
+                        price: '₹300',
+                        description: {
+                            en: 'Safe installation of glass or stainless steel gas stoves. We check the nozzle, adjust air mixing for blue flame efficiency, and ensure leak-proof connection to the cylinder/pipe.',
+                            te: 'గ్లాస్ లేదా స్టెయిన్‌లెస్ స్టీల్ గ్యాస్ స్టవ్‌ల సురక్షిత ఇన్‌స్టాలేషన్. మేము నాజిల్‌ను తనిఖీ చేస్తాము, నీలి మంట సామర్థ్యం కోసం గాలి మిశ్రమాన్ని సర్దుబాటు చేస్తాము మరియు సిలిండర్/పైప్‌కు లీక్-ప్రూఫ్ కనెక్షన్‌ను నిర్ధారిస్తాము.',
+                            hi: 'ग्लास या स्टेनलेस स्टील गैस स्टोव की सुरक्षित स्थापना। हम नोजल की जांच करते हैं, नीली लौ दक्षता के लिए हवा के मिश्रण को समायोजित करते हैं, और सिलेंडर/पाइप के लिए लीक-प्रूफ कनेक्शन सुनिश्चित करते हैं।'
+                        }
+                    },
+                    {
+                        id: 'gas-pipeline',
+                        name: { en: 'Gas Pipeline Installation', te: 'గ్యాస్ పైప్‌లైన్ ఇన్‌స్టాలేషన్', hi: 'गैस पाइपलाइन इंस्टालेशन' },
+                        price: '₹1,200',
+                        description: {
+                            en: 'Installation of copper or GI pipelines for cooking gas.',
+                            te: 'వంట గ్యాస్ కోసం రాగి లేదా GI పైప్‌లైన్‌ల ఇన్‌స్టాలేషన్.',
+                            hi: 'कुकिंग गैस के लिए कॉपर या जीआई पाइपलाइन का इंस्टालेशन।'
+                        }
+                    },
+                    {
+                        id: 'leak-detect',
+                        name: { en: 'Leakage Detection', te: 'లీకేజ్ డిటెక్షన్', hi: 'रिसाव का पता लगाना' },
+                        price: '₹350',
+                        description: {
+                            en: 'Advanced leak detection using digital gas sniffer solutions. We inspect the regulator, hose, and stove valves. Emergency isolation and immediate fix of minor leaks included.',
+                            te: 'డిజిటల్ గ్యాస్ స్నిఫర్ సొల్యూషన్స్ ఉపయోగించి అధునాతన లీక్ గుర్తింపు. మేము రెగ్యులేటర్, హోస్ మరియు స్టవ్ వాల్వ్‌లను తనిఖీస్తాము. అత్యవసర ఐసోలేషన్ మరియు చిన్న లీక్‌ల తక్షణ పరిష్కారం చేర్చబడింది.',
+                            hi: 'डिजिटल गैस स्निफर समाधानों का उपयोग करके उन्नत रिसाव का पता लगाना। हम रेगुलेटर, नली और स्टोव वाल्व का निरीक्षण करते हैं। आपातकालीन अलगाव और मामूली रिसाव का तत्काल सुधार शामिल है।'
+                        }
+                    },
+                    {
+                        id: 'gas-regulator',
+                        name: { en: 'Regulator Replacement', te: 'రెగ్యులేటర్ రీప్లేస్‌మెంట్', hi: 'नियामक प्रतिस्थापन' },
+                        price: '₹200',
+                        description: {
+                            en: 'Replacing old gas regulators with new safety-approved ones.',
+                            te: 'పాత గ్యాస్ రెగ్యులేటర్లను కొత్త భద్రతా-ఆమోదిత వాటితో భర్తీ చేయడం.',
+                            hi: 'पुराने गैस नियामकों को नए सुरक्षा-अनुमोदित नियामकों से बदलना।'
+                        }
+                    }
                 ]
             }
         ]
