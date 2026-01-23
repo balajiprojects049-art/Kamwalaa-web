@@ -12,9 +12,10 @@ import {
     FaBell,
     FaSearch
 } from 'react-icons/fa';
+import './AdminLayout.css';
 
 const AdminLayout = () => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Default closed on mobile
     const [scrolled, setScrolled] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
@@ -48,95 +49,67 @@ const AdminLayout = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50 flex">
+        <div className="admin-layout">
             {/* Sidebar */}
-            <aside
-                className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-                    } lg:relative lg:translate-x-0`}
-            >
-                <div className="h-full flex flex-col">
-                    {/* Logo */}
-                    <div className="h-20 flex items-center justify-center border-b border-gray-100">
-                        <Link to="/admin/dashboard" className="flex items-center gap-2">
-                            <span className="text-3xl">🛠️</span>
-                            <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                                Kamwalaa
-                            </span>
-                        </Link>
-                    </div>
+            <aside className={`admin-sidebar ${isSidebarOpen ? 'open' : 'closed'} lg:open`}> {/* Note: lg:open isn't real CSS, handled by media query in CSS file */}
+                <div className="admin-sidebar-header">
+                    <Link to="/admin/dashboard" className="admin-logo-link">
+                        <span style={{ fontSize: '1.5rem' }}>🛠️</span>
+                        <span className="admin-logo-text">Kamwalaa</span>
+                    </Link>
+                </div>
 
-                    {/* Navigation */}
-                    <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
-                        {menuItems.map((item) => (
-                            <Link
-                                key={item.path}
-                                to={item.path}
-                                className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group ${location.pathname === item.path
-                                        ? 'bg-primary text-white shadow-lg shadow-primary/30'
-                                        : 'text-gray-600 hover:bg-gray-50 hover:text-primary'
-                                    }`}
-                            >
-                                <span className={`text-xl ${location.pathname === item.path ? 'text-white' : 'text-gray-400 group-hover:text-primary'}`}>
-                                    {item.icon}
-                                </span>
-                                <span className="font-medium">{item.label}</span>
-                            </Link>
-                        ))}
-                    </nav>
-
-                    {/* User Profile & Logout */}
-                    <div className="p-4 border-t border-gray-100">
-                        <div className="bg-gray-50 rounded-xl p-4 flex items-center gap-3 mb-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold">
-                                A
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <p className="text-sm font-bold text-gray-900 truncate">Admin User</p>
-                                <p className="text-xs text-gray-500 truncate">admin@kamwalaa.com</p>
-                            </div>
-                        </div>
-                        <button
-                            onClick={handleLogout}
-                            className="w-full flex items-center justifyContent-center gap-2 px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium"
+                <nav className="admin-nav">
+                    {menuItems.map((item) => (
+                        <Link
+                            key={item.path}
+                            to={item.path}
+                            className={`admin-nav-item ${location.pathname === item.path ? 'active' : ''}`}
                         >
-                            <FaSignOutAlt /> Sign Out
-                        </button>
+                            <span className="admin-nav-icon">{item.icon}</span>
+                            <span className="font-medium">{item.label}</span>
+                        </Link>
+                    ))}
+                </nav>
+
+                <div className="admin-sidebar-footer">
+                    <div className="admin-user-profile">
+                        <div className="admin-avatar">A</div>
+                        <div className="admin-user-info">
+                            <p className="admin-user-name">Admin User</p>
+                            <p className="admin-user-email">admin@kamwalaa.com</p>
+                        </div>
                     </div>
+                    <button onClick={handleLogout} className="admin-logout-btn">
+                        <FaSignOutAlt /> Sign Out
+                    </button>
                 </div>
             </aside>
 
             {/* Main Content */}
-            <div className="flex-1 flex flex-col min-w-0">
-                {/* Header */}
-                <header className={`sticky top-0 z-40 bg-white/80 backdrop-blur-md transition-shadow duration-300 ${scrolled ? 'shadow-md' : ''}`}>
-                    <div className="h-20 px-8 flex items-center justify-between">
-                        <button
-                            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                            className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-                        >
-                            {isSidebarOpen ? <FaTimes /> : <FaBars />}
+            <div className="admin-main-wrapper">
+                <header className={`admin-header ${scrolled ? 'scrolled' : ''}`}>
+                    <button
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                        className="admin-toggle-btn"
+                    >
+                        {isSidebarOpen ? <FaTimes /> : <FaBars />}
+                    </button>
+
+                    <div className="admin-search">
+                        <FaSearch color="#9ca3af" />
+                        <input type="text" placeholder="Search..." />
+                    </div>
+
+                    <div className="admin-header-actions">
+                        <button className="icon-btn">
+                            <FaBell />
+                            <span className="notification-badge"></span>
                         </button>
-
-                        <div className="hidden md:flex items-center bg-gray-100 rounded-full px-4 py-2 w-96">
-                            <FaSearch className="text-gray-400 mr-2" />
-                            <input
-                                type="text"
-                                placeholder="Search..."
-                                className="bg-transparent border-none focus:outline-none w-full text-sm text-gray-700 placeholder-gray-400"
-                            />
-                        </div>
-
-                        <div className="flex items-center gap-4">
-                            <button className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors">
-                                <FaBell className="text-xl" />
-                                <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
-                            </button>
-                        </div>
                     </div>
                 </header>
 
-                {/* Content Area */}
-                <main className="flex-1 p-8 overflow-y-auto">
+                <main className="admin-content-area">
                     <Outlet />
                 </main>
             </div>
@@ -144,7 +117,7 @@ const AdminLayout = () => {
             {/* Mobile Overlay */}
             {isSidebarOpen && (
                 <div
-                    className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm"
+                    className="mobile-overlay lg:hidden"
                     onClick={() => setIsSidebarOpen(false)}
                 ></div>
             )}
