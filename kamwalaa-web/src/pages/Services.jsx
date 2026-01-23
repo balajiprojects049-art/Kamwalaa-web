@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import PageHero from '../components/common/PageHero';
-import { FiSearch, FiChevronRight, FiClock, FiCheck } from 'react-icons/fi';
+import { FiSearch, FiChevronRight, FiClock, FiCheck, FiStar, FiUser, FiCalendar, FiInfo, FiShield, FiHeart, FiShare2, FiChevronDown, FiChevronUp, FiDollarSign, FiAward } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
 import { getAllCategories, getAllServicesFlat } from '../data/servicesData';
 import { getServiceIcon } from '../utils/serviceIcons';
+import EnhancedServiceModal from '../components/EnhancedServiceModal';
 import './Services.css';
 
 const Services = () => {
@@ -25,6 +26,14 @@ const Services = () => {
     // Modal State
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalService, setModalService] = useState(null);
+
+    // Enhanced Modal State
+    const [activeImageIndex, setActiveImageIndex] = useState(0);
+    const [expandedFAQ, setExpandedFAQ] = useState(null);
+    const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+    const [selectedAddOns, setSelectedAddOns] = useState([]);
+    const [quantity, setQuantity] = useState(1);
+    const [isFavorite, setIsFavorite] = useState(false);
 
     // Initial Route Handling
     useEffect(() => {
@@ -113,6 +122,82 @@ const Services = () => {
             }
         });
     };
+
+    // Mock Data for Corporate Features
+    const mockReviews = [
+        { id: 1, name: "Rajesh Kumar", rating: 5, date: "2 days ago", comment: "Excellent service! Very professional and timely." },
+        { id: 2, name: "Priya Sharma", rating: 4, date: "1 week ago", comment: "Good work, but took slightly longer than expected." },
+        { id: 3, name: "Anil Reddy", rating: 5, date: "2 weeks ago", comment: "Highly recommended! Will use again." }
+    ];
+
+    const mockProvider = {
+        name: "Ravi Kumar",
+        experience: "8 years",
+        rating: 4.8,
+        completedJobs: 1250,
+        certifications: ["Certified Electrician", "Safety Trained"],
+        verified: true
+    };
+
+    const mockTimeSlots = [
+        { id: 1, date: "2026-01-24", time: "09:00 AM - 11:00 AM", available: true, isPeak: false },
+        { id: 2, date: "2026-01-24", time: "02:00 PM - 04:00 PM", available: true, isPeak: true },
+        { id: 3, date: "2026-01-25", time: "10:00 AM - 12:00 PM", available: true, isPeak: false },
+        { id: 4, date: "2026-01-25", time: "03:00 PM - 05:00 PM", available: false, isPeak: true }
+    ];
+
+    const mockFAQs = [
+        { id: 1, question: "How long does the service take?", answer: "Typically 30-45 minutes for standard installations." },
+        { id: 2, question: "Do I need to provide any materials?", answer: "No, all necessary materials are included in the service." },
+        { id: 3, question: "What is your cancellation policy?", answer: "Free cancellation up to 2 hours before the scheduled time." },
+        { id: 4, question: "Is there a warranty?", answer: "Yes, all our services come with a 30-day warranty." }
+    ];
+
+    const mockAddOns = [
+        { id: 1, name: "Extended Warranty (1 Year)", price: "₹199", checked: false },
+        { id: 2, name: "Priority Service (Next Day)", price: "₹99", checked: false },
+        { id: 3, name: "Deep Cleaning After Service", price: "₹149", checked: false }
+    ];
+
+    const mockRelatedServices = [
+        { id: 1, name: "AC Servicing", price: "₹499", image: "/api/placeholder/100/75" },
+        { id: 2, name: "Ceiling Fan Repair", price: "₹199", image: "/api/placeholder/100/75" },
+        { id: 3, name: "Light Fixture Install", price: "₹299", image: "/api/placeholder/100/75" }
+    ];
+
+    // Handler Functions
+    const toggleFAQ = (id) => {
+        setExpandedFAQ(expandedFAQ === id ? null : id);
+    };
+
+    const handleAddOnToggle = (id) => {
+        if (selectedAddOns.includes(id)) {
+            setSelectedAddOns(selectedAddOns.filter(item => item !== id));
+        } else {
+            setSelectedAddOns([...selectedAddOns, id]);
+        }
+    };
+
+    const handleShare = () => {
+        if (navigator.share) {
+            navigator.share({
+                title: modalService?.name?.en || 'Service',
+                text: 'Check out this service from Kamwalaa!',
+                url: window.location.href
+            });
+        }
+    };
+
+    const calculateTotal = () => {
+        if (!modalService) return 0;
+        const basePrice = parseInt(modalService.price.replace('₹', ''));
+        const addOnsTotal = selectedAddOns.reduce((total, id) => {
+            const addOn = mockAddOns.find(a => a.id === id);
+            return total + (addOn ? parseInt(addOn.price.replace('₹', '')) : 0);
+        }, 0);
+        return (basePrice * quantity) + addOnsTotal;
+    };
+
 
     return (
         <div className="services-page-layout">
@@ -257,96 +342,32 @@ const Services = () => {
                 )}
             </div>
 
-            {/* Service Details Modal - Placed at top level for stacking context */}
+            {/* Enhanced Service Details Modal */}
             {isModalOpen && modalService && (
-                <div className="modal-overlay" onClick={handleCloseModal}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <button className="modal-close-btn" onClick={handleCloseModal}>&times;</button>
-
-                        <div className="modal-body vertical-stack">
-                            {/* 1. Image at the top */}
-                            <div className="modal-images-full">
-                                {modalService.images && modalService.images.length > 0 ? (
-                                    <img
-                                        src={modalService.images[0]}
-                                        alt={modalService.name[currentLanguage] || modalService.name.en}
-                                        className="modal-main-image-full"
-                                    />
-                                ) : (
-                                    <div className="modal-placeholder-image">
-                                        <span>No Image Available</span>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* 2. Service Title */}
-                            <div className="modal-header-section">
-                                <h2>{modalService.name[currentLanguage] || modalService.name.en}</h2>
-                            </div>
-
-                            {/* 3. Price below Title */}
-                            <div className="modal-price-section">
-                                <span className="price-label">Price:</span>
-                                <span className="price-amount">{modalService.price}</span>
-                            </div>
-
-                            {/* 4. Description */}
-                            <div className="modal-description-section">
-                                <h3>About this Service</h3>
-                                {modalService.description && (
-                                    <div className="multi-lang-desc">
-                                        <div className="desc-group en">
-                                            <strong>English:</strong>
-                                            <p>{modalService.description.en}</p>
-                                        </div>
-                                        {modalService.description.te && (
-                                            <div className="desc-group te">
-                                                <strong>Telugu:</strong>
-                                                <p>{modalService.description.te}</p>
-                                            </div>
-                                        )}
-                                        {modalService.description.hi && (
-                                            <div className="desc-group hi">
-                                                <strong>Hindi:</strong>
-                                                <p>{modalService.description.hi}</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* 5. Benefits */}
-                            <div className="modal-benefits-section">
-                                <h3>Service Benefits</h3>
-                                <div className="modal-features-grid">
-                                    <div className="modal-feature-item">
-                                        <FiCheck className="feature-icon" />
-                                        <span>Verified & Background Checked Professionals</span>
-                                    </div>
-                                    <div className="modal-feature-item">
-                                        <FiCheck className="feature-icon" />
-                                        <span>Safe, Hygienic & Contactless Service</span>
-                                    </div>
-                                    <div className="modal-feature-item">
-                                        <FiClock className="feature-icon" />
-                                        <span>On-time Arrival & Prompt Completion</span>
-                                    </div>
-                                    <div className="modal-feature-item">
-                                        <FiCheck className="feature-icon" />
-                                        <span>30-Day Service Warranty</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* 6. Action Button */}
-                            <div className="modal-action-section">
-                                <button className="modal-book-btn-full" onClick={handleBookService}>
-                                    Book This Service
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <EnhancedServiceModal
+                    modalService={modalService}
+                    currentLanguage={currentLanguage}
+                    handleCloseModal={handleCloseModal}
+                    handleBookService={handleBookService}
+                    mockReviews={mockReviews}
+                    mockProvider={mockProvider}
+                    mockTimeSlots={mockTimeSlots}
+                    mockFAQs={mockFAQs}
+                    mockAddOns={mockAddOns}
+                    mockRelatedServices={mockRelatedServices}
+                    expandedFAQ={expandedFAQ}
+                    toggleFAQ={toggleFAQ}
+                    selectedTimeSlot={selectedTimeSlot}
+                    setSelectedTimeSlot={setSelectedTimeSlot}
+                    selectedAddOns={selectedAddOns}
+                    handleAddOnToggle={handleAddOnToggle}
+                    quantity={quantity}
+                    setQuantity={setQuantity}
+                    isFavorite={isFavorite}
+                    setIsFavorite={setIsFavorite}
+                    handleShare={handleShare}
+                    calculateTotal={calculateTotal}
+                />
             )}
         </div>
     );

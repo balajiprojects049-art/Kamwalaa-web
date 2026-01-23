@@ -1,0 +1,582 @@
+/* Enhanced Modal Styles - Corporate Features */
+
+.modal-content.enhanced {
+    max-width: 520px;
+}
+
+/* Action Icons (Favorite & Share) */
+.modal-action-icons {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    display: flex;
+    gap: 10px;
+    z-index: 11;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+    background: white;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.icon-btn svg {
+    font-size: 20px;
+    color: #666;
+}
+
+.icon-btn svg.active {
+    color: #ef4444;
+    fill: #ef4444;
+}
+
+/* Rating Section */
+.modal-rating-section {
+    padding: 12px 24px 0;
+}
+
+.rating-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rating-display .star {
+    color: #fbbf24;
+    font-size: 20px;
+}
+
+.rating-display .star.filled {
+    fill: #fbbf24;
+}
+
+.rating-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.rating-count {
+    color: #64748b;
+    font-size: 14px;
+}
+
+/* Service Provider Section */
+.modal-provider-section {
+    padding: 20px 24px;
+}
+
+.provider-card {
+    display: flex;
+    gap: 16px;
+    background: #f8fafc;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.provider-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0b6cff 0%, #0056d6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.provider-info h4 {
+    margin: 0 0 4px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.verified-badge {
+    color: #10b981;
+    font-size: 18px;
+}
+
+.provider-info p {
+    margin: 0 0 10px;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.provider-certs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.cert-badge {
+    font-size: 11px;
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+/* Pricing Breakdown */
+.modal-pricing-breakdown {
+    padding: 20px 24px;
+    background: #fef3c7;
+    border-top: 1px solid #fde047;
+    border-bottom: 1px solid #fde047;
+}
+
+.modal-pricing-breakdown h3 {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    color: #78350f;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #fde68a;
+    font-size: 15px;
+}
+
+.price-row:last-child {
+    border-bottom: none;
+}
+
+.price-row.total {
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 2px solid #fbbf24;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.total-price {
+    color: #0b6cff;
+    font-size: 24px;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.quantity-selector button {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: white;
+    border: 1px solid #d4d4d8;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.quantity-selector button:hover {
+    background: #0b6cff;
+    color: white;
+    border-color: #0b6cff;
+}
+
+.quantity-selector span {
+    font-weight: 700;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* Time Slot Selection */
+.modal-timeslot-section {
+    padding: 20px 24px;
+}
+
+.modal-timeslot-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.timeslot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.timeslot-card {
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.timeslot-card:hover:not(.disabled) {
+    border-color: #0b6cff;
+    background: #eff6ff;
+}
+
+.timeslot-card.selected {
+    border-color: #0b6cff;
+    background: #dbeafe;
+}
+
+.timeslot-card.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f1f5f9;
+}
+
+.slot-date {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.slot-time {
+    font-size: 14px;
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.peak-badge,
+.unavailable-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 10px;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.peak-badge {
+    background: #fef3c7;
+    color: #78350f;
+}
+
+.unavailable-badge {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Add-ons Section */
+.modal-addons-section {
+    padding: 20px 24px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.modal-addons-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    color: #0f172a;
+}
+
+.addon-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.addon-item:has(input:checked) {
+    background: #eff6ff;
+    border-color: #0b6cff;
+}
+
+.addon-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    cursor: pointer;
+}
+
+.addon-item label {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.addon-name {
+    font-size: 14px;
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.addon-price {
+    font-size: 15px;
+    color: #0b6cff;
+    font-weight: 800;
+}
+
+/* Reviews Section */
+.modal-reviews-section {
+    padding: 20px 24px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.modal-reviews-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    color: #0f172a;
+}
+
+.review-card {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 12px;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.reviewer-info strong {
+    display: block;
+    font-size: 15px;
+    color: #0f172a;
+    margin-bottom: 2px;
+}
+
+.review-date {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.review-rating {
+    display: flex;
+    gap: 2px;
+}
+
+.review-rating .star {
+    font-size: 14px;
+    color: #d1d5db;
+}
+
+.review-rating .star.filled {
+    color: #fbbf24;
+    fill: #fbbf24;
+}
+
+.review-comment {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #475569;
+}
+
+/* FAQ Section */
+.modal-faq-section {
+    padding: 20px 24px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.modal-faq-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.faq-item {
+    margin-bottom: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    cursor: pointer;
+    background: #fafafa;
+    font-weight: 600;
+    font-size: 14px;
+    color: #0f172a;
+    transition: all 0.2s;
+}
+
+.faq-question:hover {
+    background: #f1f5f9;
+}
+
+.faq-answer {
+    padding: 14px 16px;
+    background: white;
+    border-top: 1px solid #e2e8f0;
+}
+
+.faq-answer p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #475569;
+}
+
+/* Warranty & Policies */
+.modal-warranty-section {
+    padding: 20px 24px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.modal-warranty-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.policy-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.policy-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: #f0fdf4;
+    padding: 14px;
+    border-radius: 10px;
+    border-left: 3px solid #10b981;
+}
+
+.policy-item svg {
+    color: #10b981;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.policy-item strong {
+    display: block;
+    font-size: 15px;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.policy-item p {
+    margin: 0;
+    font-size: 13px;
+    color: #475569;
+}
+
+/* Related Services */
+.modal-related-section {
+    padding: 20px 24px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.modal-related-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    color: #0f172a;
+}
+
+.related-services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.related-service-card {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+}
+
+.related-service-card:hover {
+    border-color: #0b6cff;
+    transform: translateY(-2px);
+}
+
+.related-service-card img {
+    width: 100%;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.related-service-card h4 {
+    margin: 0 0 4px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.related-price {
+    margin: 0;
+    font-size: 14px;
+    color: #0b6cff;
+    font-weight: 800;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .modal-content.enhanced {
+        max-width: 100%;
+        max-height: 95vh;
+    }
+
+    .timeslot-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .related-services-grid {
+        grid-template-columns: 1fr;
+    }
+}
