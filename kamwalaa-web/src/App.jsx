@@ -23,6 +23,7 @@ import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminServices from './pages/admin/AdminServices';
 import AdminBookings from './pages/admin/AdminBookings';
+import AdminCustomers from './pages/admin/AdminCustomers';
 
 import './index.css';
 import './App.css';
@@ -57,9 +58,9 @@ function App() {
                     <Route path="dashboard" element={<AdminDashboard />} />
                     <Route path="services" element={<AdminServices />} />
                     <Route path="bookings" element={<AdminBookings />} />
+                    <Route path="customers" element={<AdminCustomers />} />
 
                     {/* Placeholders for future routes */}
-                    <Route path="customers" element={<div className="p-8">Customer Management (Coming Soon)</div>} />
                     <Route path="settings" element={<div className="p-8">Admin Settings (Coming Soon)</div>} />
                   </Route>
                 </Routes>
