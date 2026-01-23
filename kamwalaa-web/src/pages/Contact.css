@@ -112,6 +112,7 @@
     box-shadow: 0 0 0 3px rgba(0, 100, 175, 0.1);
 }
 
-.contact-form-card .btn {
-    margin-top: 1rem;
+/* Spacing adjustment for Footer */
+.contact-page {
+    padding-bottom: 6rem;
 }
