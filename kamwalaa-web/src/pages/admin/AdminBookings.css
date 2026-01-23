@@ -1,0 +1,355 @@
+/* AdminBookings.css */
+.admin-bookings-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.bookings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bookings-header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 0.25rem;
+}
+
+.bookings-header p {
+    color: #6b7280;
+}
+
+.header-stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.stat-pill {
+    background: white;
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.stat-pill span {
+    font-weight: 700;
+}
+
+.stat-pill.pending span {
+    color: #f59e0b;
+    /* Amber 500 */
+}
+
+/* Controls Bar */
+.controls-bar {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    background: white;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid #f3f4f6;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.search-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.625rem 1rem 0.625rem 2.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.search-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.filter-wrapper {
+    position: relative;
+    width: 200px;
+}
+
+.filter-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    z-index: 10;
+}
+
+.status-filter {
+    width: 100%;
+    padding: 0.625rem 1rem 0.625rem 2.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: white;
+    font-size: 0.95rem;
+    cursor: pointer;
+    appearance: none;
+    /* Hide default arrow to potentially style custom one, but standard is fine */
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+}
+
+/* Table */
+.bookings-table-card {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f3f4f6;
+    overflow: hidden;
+}
+
+.bookings-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.bookings-table th {
+    text-align: left;
+    padding: 1rem;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #6b7280;
+    letter-spacing: 0.05em;
+}
+
+.bookings-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+    color: #374151;
+    font-size: 0.95rem;
+}
+
+.id-cell {
+    font-family: inherit;
+    font-weight: 600;
+    color: #111827;
+}
+
+.customer-info,
+.service-info,
+.datetime-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.customer-name,
+.service-name {
+    font-weight: 600;
+    color: #111827;
+}
+
+.customer-phone,
+.service-cat {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.datetime-info span {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: #4b5563;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status-pending {
+    background-color: #fffbeb;
+    color: #d97706;
+}
+
+.status-confirmed,
+.status-completed {
+    background-color: #ecfdf5;
+    color: #059669;
+}
+
+.status-cancelled {
+    background-color: #fef2f2;
+    color: #ef4444;
+}
+
+.status-default {
+    background-color: #f3f4f6;
+    color: #6b7280;
+}
+
+.amount-cell {
+    font-weight: 600;
+    color: #111827;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.icon-btn {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.view-btn {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+
+.confirm-btn,
+.complete-btn {
+    background-color: #ecfdf5;
+    color: #059669;
+}
+
+.cancel-btn {
+    background-color: #fef2f2;
+    color: #ef4444;
+}
+
+.icon-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(0.95);
+}
+
+.no-data {
+    text-align: center;
+    padding: 3rem;
+    color: #9ca3af;
+}
+
+/* Modal Specifics */
+.booking-modal {
+    max-width: 38rem;
+}
+
+.booking-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.detail-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.detail-group label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #9ca3af;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.detail-group p {
+    font-weight: 500;
+    color: #1f2937;
+    font-size: 1rem;
+}
+
+.detail-divider {
+    grid-column: span 2;
+    height: 1px;
+    background-color: #e5e7eb;
+    margin: 0.5rem 0;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+.highlight-text {
+    font-weight: 700 !important;
+    color: #2563eb !important;
+}
+
+.address-text {
+    color: #4b5563 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5;
+}
+
+.price-text {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    color: #059669 !important;
+}
+
+.action-btn {
+    padding: 0.625rem 1.25rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.action-btn.accept {
+    background-color: #059669;
+    color: white;
+}
+
+.action-btn.accept:hover {
+    background-color: #047857;
+}
+
+.action-btn.reject {
+    background-color: #ef4444;
+    color: white;
+}
+
+.action-btn.reject:hover {
+    background-color: #dc2626;
+}
