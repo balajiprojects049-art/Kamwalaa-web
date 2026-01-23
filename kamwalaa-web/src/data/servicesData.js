@@ -584,8 +584,8 @@ export const servicesData = {
                 ]
             },
             {
-                id: 'kitchen-bath',
-                name: { en: 'Kitchen & Bath', te: 'వంటగది & స్నానాల గది', hi: 'रसोई और स्नानघर' },
+                id: 'bathroom-cleaning',
+                name: { en: 'Bathroom Cleaning', te: 'బాత్రూమ్ క్లీనింగ్', hi: 'बाथरूम सफाई' },
                 services: [
                     {
                         id: 'stove-clean',
