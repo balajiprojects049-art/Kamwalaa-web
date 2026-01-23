@@ -616,6 +616,66 @@ export const servicesData = {
                             te: 'వాష్ బేసిన్ల మరకలు తొలగించడం మరియు పాలిషింగ్.',
                             hi: 'वाश बेसिन के दाग हटाना और पॉलिश करना।'
                         }
+                    },
+                    {
+                        id: 'bathroom-deep-clean',
+                        name: { en: 'Bathroom Deep Cleaning', te: 'బాత్రూమ్ డీప్ క్లీనింగ్', hi: 'बाथरूम डीप क्लीनिंग' },
+                        price: '₹800',
+                        description: {
+                            en: 'Complete bathroom sanitization including toilet, sink, shower, tiles, mirrors, and fixtures. Removes soap scum, hard water stains, and mold. Includes drain cleaning and deodorization.',
+                            te: 'టాయిలెట్, సింక్, షవర్, టైల్స్, అద్దాలు మరియు ఫిక్చర్‌లతో సహా పూర్తి బాత్రూమ్ శానిటైజేషన్. సబ్బు మలినం, గట్టి నీటి మరకలు మరియు అచ్చును తొలగిస్తుంది.',
+                            hi: 'शौचालय, सिंक, शावर, टाइल्स, दर्पण और फिक्स्चर सहित संपूर्ण बाथरूम स्वच्छता। साबुन की गंदगी, कठोर पानी के दाग और फफूंदी को हटाता है।'
+                        }
+                    },
+                    {
+                        id: 'shower-bathtub-clean',
+                        name: { en: 'Shower & Bathtub Cleaning', te: 'షవర్ & బాత్‌టబ్ క్లీనింగ్', hi: 'शावर और बाथटब सफाई' },
+                        price: '₹400',
+                        description: {
+                            en: 'Deep cleaning of shower cubicles and bathtubs with anti-limescale treatment.',
+                            te: 'యాంటీ-లైమ్‌స్కేల్ ట్రీట్‌మెంట్‌తో షవర్ క్యూబికల్స్ మరియు బాత్‌టబ్‌ల డీప్ క్లీనింగ్.',
+                            hi: 'एंटी-लाइमस्केल उपचार के साथ शावर क्यूबिकल्स और बाथटब की गहरी सफाई।'
+                        }
+                    },
+                    {
+                        id: 'bathroom-tile-grout',
+                        name: { en: 'Bathroom Tile & Grout Cleaning', te: 'బాత్రూమ్ టైల్ & గ్రౌట్ క్లీనింగ్', hi: 'बाथरूम टाइल और ग्राउट सफाई' },
+                        price: '₹500',
+                        description: {
+                            en: 'Professional tile and grout cleaning to remove mold, mildew, and stubborn stains using specialized brushes and cleaning agents.',
+                            te: 'ప్రత్యేక బ్రష్‌లు మరియు క్లీనింగ్ ఏజెంట్‌లను ఉపయోగించి అచ్చు, బూజు మరియు మొండి మరకలను తొలగించడానికి ప్రొఫెషనల్ టైల్ మరియు గ్రౌట్ క్లీనింగ్.',
+                            hi: 'विशेष ब्रश और सफाई एजेंटों का उपयोग करके फफूंद, फफूंदी और जिद्दी दाग हटाने के लिए पेशेवर टाइल और ग्राउट सफाई।'
+                        }
+                    },
+                    {
+                        id: 'bathroom-exhaust-fan',
+                        name: { en: 'Bathroom Exhaust Fan Cleaning', te: 'బాత్రూమ్ ఎగ్జాస్ట్ ఫ్యాన్ క్లీనింగ్', hi: 'बाथरूम एग्जॉस्ट फैन सफाई' },
+                        price: '₹250',
+                        description: {
+                            en: 'Removal and cleaning of exhaust fan blades and housing to improve ventilation.',
+                            te: 'వెంటిలేషన్ మెరుగుపరచడానికి ఎగ్జాస్ట్ ఫ్యాన్ బ్లేడ్‌లు మరియు హౌసింగ్ తొలగించడం మరియు శుభ్రపరచడం.',
+                            hi: 'वेंटिलेशन में सुधार के लिए एग्जॉस्ट फैन ब्लेड और हाउसिंग को हटाना और साफ करना।'
+                        }
+                    },
+                    {
+                        id: 'bathroom-drain-clean',
+                        name: { en: 'Bathroom Drain Unclogging', te: 'బాత్రూమ్ డ్రైన్ అన్‌క్లాగింగ్', hi: 'बाथरूम ड्रेन अनक्लॉगिंग' },
+                        price: '₹350',
+                        description: {
+                            en: 'Clearing of clogged bathroom drains using drain snakes and eco-friendly solutions.',
+                            te: 'డ్రైన్ స్నేక్స్ మరియు పర్యావరణ అనుకూల సొల్యూషన్స్ ఉపయోగించి బ్లాక్ అయిన బాత్రూమ్ డ్రైన్‌లను క్లియర్ చేయడం.',
+                            hi: 'ड्रेन स्नेक और पर्यावरण के अनुकूल समाधानों का उपयोग करके बंद बाथरूम नालियों की सफाई।'
+                        }
+                    },
+                    {
+                        id: 'mirror-glass-clean',
+                        name: { en: 'Mirror & Glass Cleaning', te: 'అద్దం & గ్లాస్ క్లీనింగ్', hi: 'दर्पण और कांच सफाई' },
+                        price: '₹150',
+                        description: {
+                            en: 'Streak-free cleaning of bathroom mirrors and glass surfaces.',
+                            te: 'బాత్రూమ్ అద్దాలు మరియు గ్లాస్ ఉపరితలాల స్ట్రీక్-రహిత శుభ్రపరచడం.',
+                            hi: 'बाथरूम दर्पण और कांच की सतहों की धारी-मुक्त सफाई।'
+                        }
                     }
                 ]
             }
