@@ -731,4 +731,38 @@
 .service-card .view-details-btn {
     margin-top: 16px;
     width: 100%;
+} 
+ 
+/* MOBILE RESPONSIVE */
+@media (max-width: 1024px) {
+    .three-column-layout {
+        grid-template-columns: 240px 280px 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content-area {
+        margin-top: 70px;
+        padding: 0 16px 40px;
+    }
+    .three-column-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .categories-column, .subcategories-column, .services-column {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 12px;
+    }
+    .category-item {
+        padding: 10px 8px;
+    }
+    .service-img-wrapper {
+        height: 140px;
+    }
 }
