@@ -1,0 +1,230 @@
+/* Corporate Strip Styles */
+
+/* Stats Strip */
+.corporate-stats-strip {
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 60px 0;
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.corp-stat-item {
+    text-align: center;
+    padding: 20px;
+    border-right: 1px solid #e2e8f0;
+}
+
+.corp-stat-item:last-child {
+    border-right: none;
+}
+
+.corp-stat-number {
+    display: block;
+    font-size: 36px;
+    font-weight: 800;
+    color: #0b6cff;
+    margin-bottom: 8px;
+    line-height: 1;
+}
+
+.corp-stat-label {
+    font-size: 16px;
+    color: #475569;
+    font-weight: 500;
+}
+
+/* Partners Strip */
+.corporate-partners-section {
+    padding: 60px 0;
+    background: white;
+    text-align: center;
+}
+
+.partners-title {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #64748b;
+    margin-bottom: 40px;
+    font-weight: 600;
+}
+
+.partners-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    flex-wrap: wrap;
+    opacity: 0.6;
+}
+
+.partner-logo {
+    height: 40px;
+    object-fit: contain;
+    filter: grayscale(100%);
+    transition: all 0.3s ease;
+}
+
+.partner-logo:hover {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* App Download / Business Section */
+.corporate-cta-section {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    padding: 80px 0;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-content-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 2;
+}
+
+.cta-text-content {
+    max-width: 600px;
+}
+
+.cta-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.1);
+    color: #38bdf8;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.cta-title {
+    font-size: 42px;
+    font-weight: 800;
+    margin: 0 0 20px;
+    line-height: 1.2;
+}
+
+.cta-description {
+    font-size: 18px;
+    color: #94a3b8;
+    margin-bottom: 32px;
+    line-height: 1.6;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 16px;
+}
+
+.btn-store {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    color: #0f172a;
+    padding: 12px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: transform 0.2s;
+}
+
+.btn-store:hover {
+    transform: translateY(-2px);
+}
+
+.store-icon {
+    font-size: 24px;
+}
+
+.store-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.2;
+}
+
+.store-subtitle {
+    font-size: 11px;
+    color: #64748b;
+}
+
+.store-title {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.cta-image-wrapper {
+    position: relative;
+}
+
+.phone-mockup {
+    width: 320px;
+    transform: rotate(-10deg) translateY(40px);
+    border-radius: 40px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 8px solid #334155;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+
+    .corp-stat-item {
+        border-right: none;
+        padding: 0;
+    }
+
+    .cta-title {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .cta-content-wrapper {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cta-text-content {
+        margin-bottom: 40px;
+    }
+
+    .cta-buttons {
+        justify-content: center;
+    }
+
+    .phone-mockup {
+        width: 280px;
+        transform: none;
+    }
+
+    .partners-logos {
+        gap: 30px;
+    }
+
+    .partner-logo {
+        height: 30px;
+    }
+}
