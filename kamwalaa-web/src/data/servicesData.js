@@ -404,7 +404,7 @@ export const servicesData = {
         color: '#8B5CF6',
         bgColor: '#EDE9FE',
         gradient: 'linear-gradient(135deg, #8B5CF6, #7C3AED)',
-        image: '/assets/images/services/refrigerator/main-refrigerator.jpg',
+        image: '/assets/images/services/refrigerator/main-refrigerator-v2.png',
         description: {
             en: 'Expert refrigerator repair, gas refilling, and maintenance services for all brands.',
             te: 'అన్ని బ్రాండ్‌ల కోసం నిపుణుల రిఫ్రిజిరేటర్ రిపేర్, గ్యాస్ రీఫిల్లింగ్ మరియు మెయింటెనెన్స్ సేవలు.',
@@ -585,7 +585,7 @@ export const servicesData = {
         color: '#06B6D4',
         bgColor: '#CFFAFE',
         gradient: 'linear-gradient(135deg, #06B6D4, #0891B2)',
-        image: '/assets/images/services/water-purifier/main-ro.jpg',
+        image: '/assets/images/services/water-purifier/main-ro-v2.png',
         description: {
             en: 'RO installation, relocation, filter cleaning, and membrane replacement services.',
             te: 'RO ఇన్‌స్టాలేషన్, రీలొకేషన్, ఫిల్టర్ క్లీనింగ్ మరియు మెంబ్రేన్ రీప్లేస్‌మెంట్ సేవలు.',
