@@ -313,6 +313,7 @@ export const servicesData = {
         color: '#3B82F6',
         bgColor: '#DBEAFE',
         gradient: 'linear-gradient(135deg, #3B82F6, #2563EB)',
+        image: '/assets/images/services/ac/main-ac.jpg',
         description: {
             en: 'Complete AC solutions including installation, repair, servicing, and gas refilling for all brands.',
             te: 'అన్ని బ్రాండ్‌ల కోసం ఇన్‌స్టాలేషన్, రిపేర్, సర్వీసింగ్ మరియు గ్యాస్ రీఫిల్లింగ్‌తో సహా పూర్తి AC సొల్యూషన్స్.',
@@ -403,6 +404,7 @@ export const servicesData = {
         color: '#8B5CF6',
         bgColor: '#EDE9FE',
         gradient: 'linear-gradient(135deg, #8B5CF6, #7C3AED)',
+        image: '/assets/images/services/refrigerator/main-refrigerator.jpg',
         description: {
             en: 'Expert refrigerator repair, gas refilling, and maintenance services for all brands.',
             te: 'అన్ని బ్రాండ్‌ల కోసం నిపుణుల రిఫ్రిజిరేటర్ రిపేర్, గ్యాస్ రీఫిల్లింగ్ మరియు మెయింటెనెన్స్ సేవలు.',
@@ -483,6 +485,7 @@ export const servicesData = {
         color: '#8B5CF6',
         bgColor: '#F3E8FF',
         gradient: 'linear-gradient(135deg, #8B5CF6, #7C3AED)',
+        image: '/assets/images/services/painting/main-painting.png',
         description: {
             en: 'Professional painting services for interior and exterior walls, ceiling painting, and marble & tile installation.',
             te: 'ఇంటీరియర్ మరియు ఎక్స్టీరియర్ వాల్స్, సీలింగ్ పెయింటింగ్ మరియు మార్బుల్ & టైల్ ఇన్‌స్టాలేషన్ కోసం ప్రొఫెషనల్ పెయింటింగ్ సేవలు.',
@@ -582,6 +585,7 @@ export const servicesData = {
         color: '#06B6D4',
         bgColor: '#CFFAFE',
         gradient: 'linear-gradient(135deg, #06B6D4, #0891B2)',
+        image: '/assets/images/services/water-purifier/main-ro.jpg',
         description: {
             en: 'RO installation, relocation, filter cleaning, and membrane replacement services.',
             te: 'RO ఇన్‌స్టాలేషన్, రీలొకేషన్, ఫిల్టర్ క్లీనింగ్ మరియు మెంబ్రేన్ రీప్లేస్‌మెంట్ సేవలు.',
