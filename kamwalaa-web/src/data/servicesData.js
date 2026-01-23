@@ -164,6 +164,7 @@ export const servicesData = {
         color: '#0EA5E9',
         bgColor: '#E0F2FE',
         gradient: 'linear-gradient(135deg, #0EA5E9, #0369A1)',
+        image: '/assets/images/services/plumbing/main-plumbing.png',
         description: {
             en: 'Complete plumbing solutions including sink & tap services, water tank cleaning, and pipe repairs.',
             te: 'సింక్ & ట్యాప్ సేవలు, వాటర్ ట్యాంక్ క్లీనింగ్ మరియు పైప్ మరమ్మతులతో సహా పూర్తి ప్లంబింగ్ సొల్యూషన్స్.',
