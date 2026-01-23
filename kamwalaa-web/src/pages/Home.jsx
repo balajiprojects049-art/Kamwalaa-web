@@ -29,7 +29,7 @@ const Home = () => {
             images: [getRepresentativeImage(cat)],
             type: 'category',
             categoryId: cat.id
-        }));
+        })).slice(0, 4);
     }, []);
 
     // Helper to get specific subcategory
