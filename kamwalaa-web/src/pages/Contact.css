@@ -72,3 +72,46 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Fix text visibility on blue background */
+.contact-info h2,
+.contact-info .contact-intro,
+.contact-info .info-item h3,
+.contact-info .info-item p {
+    color: #ffffff !important;
+}
+
+/* Clean Input Styles for Contact Form */
+.contact-form-card .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.contact-form-card label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.contact-form-card input,
+.contact-form-card textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    color: var(--text-primary);
+    transition: all 0.2s;
+}
+
+.contact-form-card input:focus,
+.contact-form-card textarea:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px rgba(0, 100, 175, 0.1);
+}
+
+.contact-form-card .btn {
+    margin-top: 1rem;
+}
