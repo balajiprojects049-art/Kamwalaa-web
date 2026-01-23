@@ -17,6 +17,7 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Booking from './pages/Booking';
 import BookingSuccess from './pages/BookingSuccess';
+import BecomePartner from './pages/BecomePartner';
 
 // Admin Pages
 import AdminLogin from './pages/admin/AdminLogin';
@@ -49,6 +50,7 @@ function App() {
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/booking" element={<Booking />} />
                     <Route path="/booking-success" element={<BookingSuccess />} />
+                    <Route path="/become-partner" element={<BecomePartner />} />
                   </Route>
 
                   {/* Admin Routes */}
