@@ -129,9 +129,17 @@ const Hero = () => {
                                         position: 'absolute',
                                         top: 0,
                                         left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover',
                                         opacity: index === currentImageIndex ? 1 : 0,
                                         transition: 'opacity 1s ease-in-out',
-                                        zIndex: index === currentImageIndex ? 2 : 1
+                                        zIndex: index === currentImageIndex ? 2 : 1,
+                                        borderRadius: 'inherit'
+                                    }}
+                                    onError={(e) => {
+                                        console.error(`Failed to load image: ${imgSrc}`);
+                                        e.target.src = 'https://via.placeholder.com/600x600?text=Service+Image';
                                     }}
                                 />
                             ))}

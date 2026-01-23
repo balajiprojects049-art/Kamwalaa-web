@@ -5,11 +5,13 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useCity } from '../../context/CityContext';
 import { useAuth } from '../../context/AuthContext';
 import './Header.css';
+import './UserDropdown.css';
 
 const Header = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const { currentLanguage, changeLanguage, t, languages } = useLanguage();
     const { selectedCity, changeCity } = useCity();
     const { user, logout } = useAuth();
@@ -100,16 +102,32 @@ const Header = () => {
 
                         {/* Auth Buttons */}
                         {user ? (
-                            <div className="user-menu" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <Link to="/profile" className="btn btn-ghost btn-sm" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#2563eb', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px' }}>
+                            <div className="user-menu-container">
+                                <button
+                                    className="user-menu-btn"
+                                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                                >
+                                    <div className="user-avatar">
                                         {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
                                     </div>
-                                    <span>Profile</span>
-                                </Link>
-                                <button onClick={logout} className="btn btn-outline btn-sm">
-                                    Logout
+                                    <span className="user-name">{user.name || 'User'}</span>
+                                    <FiChevronDown />
                                 </button>
+
+                                {isUserMenuOpen && (
+                                    <div className="user-dropdown">
+                                        <Link to="/bookings" className="dropdown-item" onClick={() => setIsUserMenuOpen(false)}>
+                                            My Bookings
+                                        </Link>
+                                        <Link to="/profile" className="dropdown-item" onClick={() => setIsUserMenuOpen(false)}>
+                                            Profile Settings
+                                        </Link>
+                                        <div className="dropdown-divider"></div>
+                                        <button onClick={() => { logout(); setIsUserMenuOpen(false); }} className="dropdown-item logout-item">
+                                            Logout
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <>
@@ -147,14 +165,16 @@ const Header = () => {
                                 {link.label}
                             </Link>
                         ))}
-                        <div className="mobile-auth-buttons">
-                            <Link to="/login" className="btn btn-outline" onClick={() => setIsMobileMenuOpen(false)}>
-                                {t.nav.login}
-                            </Link>
-                            <Link to="/signup" className="btn btn-primary" onClick={() => setIsMobileMenuOpen(false)}>
-                                {t.nav.signup}
-                            </Link>
-                        </div>
+                        {!user && (
+                            <div className="mobile-auth-buttons">
+                                <Link to="/login" className="btn btn-outline" onClick={() => setIsMobileMenuOpen(false)}>
+                                    {t.nav.login}
+                                </Link>
+                                <Link to="/signup" className="btn btn-primary" onClick={() => setIsMobileMenuOpen(false)}>
+                                    {t.nav.signup}
+                                </Link>
+                            </div>
+                        )}
                     </nav>
                 </div>
             )}

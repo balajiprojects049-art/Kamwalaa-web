@@ -37,7 +37,7 @@ const Login = () => {
         // Perform login action
         login(mockUser);
         alert('Login Successful!');
-        navigate('/profile');
+        navigate('/'); // Redirect to Home
     };
 
     const handleChange = (e) => {

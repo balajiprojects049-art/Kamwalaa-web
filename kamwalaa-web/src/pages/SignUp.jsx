@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import './Login.css'; // Reusing Login CSS
 
 const SignUp = () => {
+    const { login } = useAuth();
+    const navigate = useNavigate();
+
     // Standard Signup State
     const [formData, setFormData] = useState({
-        fullName: '',
+        name: '',
         email: '',
         phone: '',
         password: ''
@@ -20,10 +24,18 @@ const SignUp = () => {
 
     const handleSignUp = (e) => {
         e.preventDefault();
-        // Here you would send the data to your backend
-        console.log('Signing up with:', formData);
-        alert('Account created successfully! Please login.');
-        // Redirect to login or auto-login logic here
+        // Simulate Backend Signup & Auto Login
+        const newUser = {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            address: '' // Empty initially
+        };
+
+        console.log('Signing up with:', newUser);
+        login(newUser);
+        alert('Account created successfully! Welcome ' + newUser.name);
+        navigate('/'); // Redirect to Home
     };
 
     return (
@@ -83,8 +95,8 @@ const SignUp = () => {
                                 <div className="input-wrapper">
                                     <input
                                         type="text"
-                                        name="fullName"
-                                        value={formData.fullName}
+                                        name="name"
+                                        value={formData.name}
                                         onChange={handleChange}
                                         className="form-input no-icon"
                                         required

@@ -32,7 +32,6 @@ const Services = () => {
             const category = allCategories.find(c => c.id === categoryId);
             if (category) {
                 // If the selected category is different, update it
-                // Logic: Only force update if we are not already on it, OR if we need to set a specific subcat/service
                 setSelectedCategory(category);
 
                 // Handle specific service selection from state
@@ -61,7 +60,6 @@ const Services = () => {
             }
         }
     }, [categoryId, location.state]);
-    // Note: dependency on allCategories is stable. 
 
     const handleViewDetails = (service) => {
         setModalService(service);
@@ -111,8 +109,7 @@ const Services = () => {
         navigate('/booking', {
             state: {
                 selectedServices: [service],
-                category: selectedCategory // This might be stale if search result is from different cat, but for booking it works. 
-                // ideally find category from service.categoryId
+                category: selectedCategory
             }
         });
     };
@@ -213,92 +210,6 @@ const Services = () => {
                             <div className="column-header">
                                 <h3>{selectedSubcategory?.name[currentLanguage] || selectedSubcategory?.name.en}</h3>
                             </div>
-
-                            {/* Service Details Modal */}
-                            {isModalOpen && modalService && (
-                                <div className="modal-overlay" onClick={handleCloseModal}>
-                                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                                        <button className="modal-close-btn" onClick={handleCloseModal}>&times;</button>
-
-                                        <div className="modal-body">
-                                            {/* Modal Images */}
-                                            <div className="modal-images">
-                                                {modalService.images && modalService.images.length > 0 ? (
-                                                    <img
-                                                        src={modalService.images[0]}
-                                                        alt={modalService.name[currentLanguage] || modalService.name.en}
-                                                        className="modal-main-image"
-                                                    />
-                                                ) : (
-                                                    <div className="modal-placeholder-image">
-                                                        <span>No Image Available</span>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            {/* Modal Info */}
-                                            <div className="modal-info">
-                                                <h2>{modalService.name[currentLanguage] || modalService.name.en}</h2>
-                                                <div className="modal-price">
-                                                    <span className="price-label">Price</span>
-                                                    <span className="price-amount">{modalService.price}</span>
-                                                </div>
-
-                                                <div className="modal-description">
-                                                    <h3>About this Service</h3>
-
-                                                    {modalService.description && (
-                                                        <div className="multi-lang-desc">
-                                                            <div className="desc-group en">
-                                                                <strong>English:</strong>
-                                                                <p>{modalService.description.en}</p>
-                                                            </div>
-                                                            {modalService.description.te && (
-                                                                <div className="desc-group te">
-                                                                    <strong>Telugu:</strong>
-                                                                    <p>{modalService.description.te}</p>
-                                                                </div>
-                                                            )}
-                                                            {modalService.description.hi && (
-                                                                <div className="desc-group hi">
-                                                                    <strong>Hindi:</strong>
-                                                                    <p>{modalService.description.hi}</p>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                <div className="modal-extra-info">
-                                                    <h3>Service Benefits</h3>
-                                                    <div className="modal-features">
-                                                        <div className="modal-feature-item">
-                                                            <FiCheck className="feature-icon" />
-                                                            <span>Verified & Background Checked Professionals</span>
-                                                        </div>
-                                                        <div className="modal-feature-item">
-                                                            <FiCheck className="feature-icon" />
-                                                            <span>Safe, Hygienic & Contactless Service</span>
-                                                        </div>
-                                                        <div className="modal-feature-item">
-                                                            <FiClock className="feature-icon" />
-                                                            <span>On-time Arrival & Prompt Completion</span>
-                                                        </div>
-                                                        <div className="modal-feature-item">
-                                                            <FiCheck className="feature-icon" />
-                                                            <span>30-Day Service Warranty</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <button className="modal-book-btn" onClick={handleBookService}>
-                                                    Book This Service
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
                             <div className="services-list-grid">
                                 {selectedSubcategory?.services?.map((service, idx) => (
                                     <div key={idx} className="service-card-item">
@@ -345,6 +256,98 @@ const Services = () => {
                     </div>
                 )}
             </div>
+
+            {/* Service Details Modal - Placed at top level for stacking context */}
+            {isModalOpen && modalService && (
+                <div className="modal-overlay" onClick={handleCloseModal}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <button className="modal-close-btn" onClick={handleCloseModal}>&times;</button>
+
+                        <div className="modal-body vertical-stack">
+                            {/* 1. Image at the top */}
+                            <div className="modal-images-full">
+                                {modalService.images && modalService.images.length > 0 ? (
+                                    <img
+                                        src={modalService.images[0]}
+                                        alt={modalService.name[currentLanguage] || modalService.name.en}
+                                        className="modal-main-image-full"
+                                    />
+                                ) : (
+                                    <div className="modal-placeholder-image">
+                                        <span>No Image Available</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* 2. Service Title */}
+                            <div className="modal-header-section">
+                                <h2>{modalService.name[currentLanguage] || modalService.name.en}</h2>
+                            </div>
+
+                            {/* 3. Price below Title */}
+                            <div className="modal-price-section">
+                                <span className="price-label">Price:</span>
+                                <span className="price-amount">{modalService.price}</span>
+                            </div>
+
+                            {/* 4. Description */}
+                            <div className="modal-description-section">
+                                <h3>About this Service</h3>
+                                {modalService.description && (
+                                    <div className="multi-lang-desc">
+                                        <div className="desc-group en">
+                                            <strong>English:</strong>
+                                            <p>{modalService.description.en}</p>
+                                        </div>
+                                        {modalService.description.te && (
+                                            <div className="desc-group te">
+                                                <strong>Telugu:</strong>
+                                                <p>{modalService.description.te}</p>
+                                            </div>
+                                        )}
+                                        {modalService.description.hi && (
+                                            <div className="desc-group hi">
+                                                <strong>Hindi:</strong>
+                                                <p>{modalService.description.hi}</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* 5. Benefits */}
+                            <div className="modal-benefits-section">
+                                <h3>Service Benefits</h3>
+                                <div className="modal-features-grid">
+                                    <div className="modal-feature-item">
+                                        <FiCheck className="feature-icon" />
+                                        <span>Verified & Background Checked Professionals</span>
+                                    </div>
+                                    <div className="modal-feature-item">
+                                        <FiCheck className="feature-icon" />
+                                        <span>Safe, Hygienic & Contactless Service</span>
+                                    </div>
+                                    <div className="modal-feature-item">
+                                        <FiClock className="feature-icon" />
+                                        <span>On-time Arrival & Prompt Completion</span>
+                                    </div>
+                                    <div className="modal-feature-item">
+                                        <FiCheck className="feature-icon" />
+                                        <span>30-Day Service Warranty</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 6. Action Button */}
+                            <div className="modal-action-section">
+                                <button className="modal-book-btn-full" onClick={handleBookService}>
+                                    Book This Service
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

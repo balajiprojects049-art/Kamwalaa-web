@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import PageHero from '../components/common/PageHero';
+import RateServiceModal from '../components/common/RateServiceModal';
 import { Link } from 'react-router-dom';
 import { FiCalendar, FiClock, FiMapPin, FiCheckCircle } from 'react-icons/fi';
 import './UserBookings.css';
 
 const UserBookings = () => {
     const { user } = useAuth();
+    const [selectedBookingForReview, setSelectedBookingForReview] = useState(null);
+
+    const handleReviewSubmit = (reviewData) => {
+        console.log('Review Submitted:', reviewData);
+        alert('Thank you for your feedback!');
+        setSelectedBookingForReview(null);
+    };
+
+    const handleInvoice = (booking) => {
+        alert(`Downloading Invoice for Booking #${booking.id}...\n(In a real app, this would download a PDF)`);
+    };
 
     // Mock Data - In real app, fetch from API
     const bookings = [
@@ -53,38 +65,68 @@ const UserBookings = () => {
                     <div className="bookings-list">
                         {bookings.map(booking => (
                             <div key={booking.id} className="booking-card">
+                                {/* Header: ID and Status */}
                                 <div className="booking-header">
-                                    <div className="booking-id">#{booking.id}</div>
-                                    <div className={`booking-status ${booking.status.toLowerCase()}`}>
+                                    <span className="booking-id">ID: {booking.id}</span>
+                                    <span className={`booking-status ${booking.status.toLowerCase()}`}>
                                         {booking.status}
+                                    </span>
+                                </div>
+
+                                {/* Body: Service Info and Price */}
+                                <div className="booking-body">
+                                    <div className="booking-info">
+                                        <h3 className="booking-service">{booking.service}</h3>
+                                        <div className="booking-details">
+                                            <div className="detail-item">
+                                                <FiCalendar /> <span>{booking.date}</span>
+                                            </div>
+                                            <div className="detail-item">
+                                                <FiClock /> <span>{booking.time}</span>
+                                            </div>
+                                            <div className="detail-item">
+                                                <FiMapPin /> <span>{user.address || 'Home Address'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="booking-price-tag">
+                                        <span className="label">Total Amount</span>
+                                        <span className="amount">{booking.amount}</span>
                                     </div>
                                 </div>
 
-                                <h3 className="booking-service">{booking.service}</h3>
-
-                                <div className="booking-details">
-                                    <div className="detail-item">
-                                        <FiCalendar /> {booking.date}
+                                {/* Footer: Actions */}
+                                {booking.status === 'Completed' && (
+                                    <div className="booking-footer">
+                                        <button
+                                            className="btn btn-sm btn-outline"
+                                            onClick={() => setSelectedBookingForReview(booking)}
+                                        >
+                                            <FiCheckCircle style={{ marginRight: '0.5rem' }} /> Rate Service
+                                        </button>
+                                        <button
+                                            className="btn btn-sm btn-outline"
+                                            onClick={() => handleInvoice(booking)}
+                                        >
+                                            Invoice
+                                        </button>
                                     </div>
-                                    <div className="detail-item">
-                                        <FiClock /> {booking.time}
-                                    </div>
-                                    <div className="detail-item">
-                                        <FiMapPin /> {user.address || 'Home Address'}
-                                    </div>
-                                </div>
-
-                                <div className="booking-footer">
-                                    <div className="booking-amount">{booking.amount}</div>
-                                    {booking.status === 'Completed' && (
-                                        <button className="btn btn-sm btn-outline">Rate Service</button>
-                                    )}
-                                </div>
+                                )}
                             </div>
                         ))}
                     </div>
                 )}
             </div>
+
+            {/* Rate Service Modal */}
+            {selectedBookingForReview && (
+                <RateServiceModal
+                    booking={selectedBookingForReview}
+                    onClose={() => setSelectedBookingForReview(null)}
+                    onSubmit={handleReviewSubmit}
+                />
+            )}
         </div>
     );
 };
