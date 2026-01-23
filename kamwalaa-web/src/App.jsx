@@ -4,13 +4,10 @@ import { LanguageProvider } from './context/LanguageContext';
 import { ToastProvider } from './context/ToastContext';
 import { CityProvider } from './context/CityContext';
 import ErrorBoundary from './components/common/ErrorBoundary';
-import CitySelector from './components/common/CitySelector';
-import Header from './components/layout/Header';
-import Footer from './components/layout/Footer';
-import ScrollToTop from './components/common/ScrollToTop';
-import ScrollToTopButton from './components/common/ScrollToTopButton';
-import ToastContainer from './components/common/ToastContainer';
-import FloatingActionButton from './components/common/FloatingActionButton';
+import PublicLayout from './components/layout/PublicLayout';
+import AdminLayout from './components/admin/AdminLayout';
+
+// Public Pages
 import Home from './pages/Home';
 import Services from './pages/Services';
 import ServiceDetail from './pages/ServiceDetail';
@@ -20,6 +17,11 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Booking from './pages/Booking';
 import BookingSuccess from './pages/BookingSuccess';
+
+// Admin Pages
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminDashboard from './pages/admin/AdminDashboard';
+
 import './index.css';
 import './App.css';
 
@@ -31,10 +33,9 @@ function App() {
           <ToastProvider>
             <Router>
               <div className="App">
-                <ScrollToTop />
-                <Header />
-                <main>
-                  <Routes>
+                <Routes>
+                  {/* Public Routes wrapped in PublicLayout */}
+                  <Route element={<PublicLayout />}>
                     <Route path="/" element={<Home />} />
                     <Route path="/services" element={<Services />} />
                     <Route path="/services/:categoryId" element={<Services />} />
@@ -44,13 +45,21 @@ function App() {
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/booking" element={<Booking />} />
                     <Route path="/booking-success" element={<BookingSuccess />} />
-                  </Routes>
-                </main>
-                <Footer />
-                <ToastContainer />
-                <CitySelector />
-                <FloatingActionButton />
-                <ScrollToTopButton />
+                  </Route>
+
+                  {/* Admin Routes */}
+                  <Route path="/admin/login" element={<AdminLogin />} />
+
+                  <Route path="/admin" element={<AdminLayout />}>
+                    <Route index element={<AdminDashboard />} />
+                    <Route path="dashboard" element={<AdminDashboard />} />
+                    {/* Placeholders for future routes */}
+                    <Route path="bookings" element={<div className="p-8">Bookings Management (Coming Soon)</div>} />
+                    <Route path="services" element={<div className="p-8">Services Management (Coming Soon)</div>} />
+                    <Route path="customers" element={<div className="p-8">Customer Management (Coming Soon)</div>} />
+                    <Route path="settings" element={<div className="p-8">Admin Settings (Coming Soon)</div>} />
+                  </Route>
+                </Routes>
               </div>
             </Router>
           </ToastProvider>
