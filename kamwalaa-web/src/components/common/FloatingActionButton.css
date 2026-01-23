@@ -1,0 +1,129 @@
+.fab-container {
+    position: fixed;
+    bottom: var(--spacing-xl);
+    right: var(--spacing-xl);
+    z-index: var(--z-fixed);
+}
+
+.fab-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+    color: white;
+    border: none;
+    box-shadow: var(--shadow-xl);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: all var(--transition-base);
+    position: relative;
+    z-index: 2;
+}
+
+.fab-button:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-2xl);
+}
+
+.fab-button:active {
+    transform: scale(0.95);
+}
+
+.fab-actions {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all var(--transition-base);
+    pointer-events: none;
+}
+
+.fab-container.open .fab-actions {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.fab-action {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: white;
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-lg);
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    transition: all var(--transition-base);
+    animation: slideInUp 0.3s ease-out;
+    animation-delay: var(--delay);
+    animation-fill-mode: both;
+    border: 2px solid transparent;
+}
+
+.fab-action:hover {
+    transform: translateX(-5px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--color);
+    color: var(--color);
+}
+
+.fab-action-icon {
+    font-size: 1.25rem;
+    color: var(--color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fab-action-label {
+    white-space: nowrap;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .fab-container {
+        bottom: var(--spacing-lg);
+        right: var(--spacing-lg);
+    }
+
+    .fab-button {
+        width: 56px;
+        height: 56px;
+        font-size: 1.25rem;
+    }
+
+    .fab-action {
+        padding: var(--spacing-xs) var(--spacing-md);
+        font-size: var(--text-xs);
+    }
+
+    .fab-action-label {
+        display: none;
+    }
+
+    .fab-action-icon {
+        font-size: 1.1rem;
+    }
+}

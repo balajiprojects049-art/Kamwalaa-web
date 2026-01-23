@@ -1,0 +1,198 @@
+.city-selector-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-modal-backdrop);
+    padding: var(--spacing-lg);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.city-selector-modal {
+    background: white;
+    border-radius: var(--radius-2xl);
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: var(--shadow-2xl);
+    z-index: var(--z-modal);
+    animation: scaleIn 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.city-selector-header {
+    padding: var(--spacing-2xl);
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+    color: white;
+    position: relative;
+}
+
+.city-selector-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-lg);
+    font-size: 2rem;
+}
+
+.city-selector-header h2 {
+    margin: 0 0 var(--spacing-sm);
+    font-size: var(--text-2xl);
+    color: white;
+}
+
+.city-selector-header p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: var(--text-sm);
+}
+
+.city-selector-close {
+    position: absolute;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.25rem;
+    transition: all var(--transition-fast);
+}
+
+.city-selector-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.city-selector-body {
+    padding: var(--spacing-xl);
+    overflow-y: auto;
+    flex: 1;
+}
+
+.city-search-wrapper {
+    position: relative;
+    margin-bottom: var(--spacing-lg);
+}
+
+.city-search-icon {
+    position: absolute;
+    left: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-tertiary);
+    font-size: 1.25rem;
+    pointer-events: none;
+}
+
+.city-search-input {
+    width: 100%;
+    padding: 0.875rem 1rem 0.875rem 3rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-base);
+    transition: all var(--transition-fast);
+}
+
+.city-search-input:focus {
+    outline: none;
+    border-color: var(--primary-600);
+    box-shadow: 0 0 0 3px rgba(0, 73, 118, 0.1);
+}
+
+.city-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.city-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    background: var(--bg-secondary);
+    border: 2px solid transparent;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-align: left;
+    width: 100%;
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.city-item:hover {
+    background: var(--primary-50);
+    border-color: var(--primary-200);
+    transform: translateX(4px);
+}
+
+.city-item-icon {
+    color: var(--primary-600);
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.city-item-name {
+    flex: 1;
+}
+
+.city-item-arrow {
+    color: var(--primary-600);
+    font-size: 1.25rem;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.city-item:hover .city-item-arrow {
+    opacity: 1;
+}
+
+.city-no-results {
+    padding: var(--spacing-2xl);
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.city-no-results p {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .city-selector-overlay {
+        padding: var(--spacing-md);
+    }
+
+    .city-selector-modal {
+        max-height: 85vh;
+    }
+
+    .city-selector-header {
+        padding: var(--spacing-xl);
+    }
+
+    .city-selector-body {
+        padding: var(--spacing-lg);
+    }
+}

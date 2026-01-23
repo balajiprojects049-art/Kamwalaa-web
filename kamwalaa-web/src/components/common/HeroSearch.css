@@ -1,0 +1,227 @@
+.hero-search-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-search-bar {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 8px;
+    /* Matching the image's simpler rounded corners */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding: 0.25rem;
+    height: 56px;
+}
+
+.search-segment {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 1rem;
+    position: relative;
+}
+
+/* City Segment */
+.city-segment {
+    width: 180px;
+    cursor: pointer;
+}
+
+.city-selector {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    color: #374151;
+    font-weight: 500;
+}
+
+.selected-value {
+    flex: 1;
+    margin: 0 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.segment-icon {
+    color: #9CA3AF;
+    font-size: 1.2rem;
+}
+
+.chevron-icon {
+    color: #9CA3AF;
+    transition: transform 0.2s;
+}
+
+.chevron-icon.rotate {
+    transform: rotate(180deg);
+}
+
+.city-dropdown-list {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+    overflow: hidden;
+    border: 1px solid #E5E7EB;
+}
+
+.city-option {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background 0.1s;
+    font-size: 0.95rem;
+    color: #374151;
+}
+
+.city-option:hover {
+    background: #F3F4F6;
+    color: #2563EB;
+}
+
+/* Divider */
+.search-divider {
+    width: 1px;
+    height: 60%;
+    background-color: #E5E7EB;
+    margin: 0 0.5rem;
+}
+
+/* Service Segment */
+.service-segment {
+    flex: 1;
+}
+
+.service-search-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    color: #1F2937;
+    margin-left: 0.75rem;
+}
+
+.service-search-input::placeholder {
+    color: #9CA3AF;
+}
+
+/* Results Dropdown */
+.hero-search-results {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 100;
+    border: 1px solid #E5E7EB;
+    /* Remove padding to allow header to flush */
+    padding-top: 0;
+    overflow-x: hidden;
+}
+
+.search-dropdown-header {
+    background-color: #007bff;
+    /* Adjust var(--primary-600) if defined, using fallback blue */
+    background: var(--primary-600, #0066cc);
+    color: white;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    font-size: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.search-group-header {
+    background-color: #f9fafb;
+    color: #6b7280;
+    /* Gray-500 */
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #f3f4f6;
+    pointer-events: none;
+}
+
+.hero-search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #F3F4F6;
+}
+
+.hero-search-result-item:hover {
+    background: #F9FAFB;
+}
+
+.indented-item {
+    padding-left: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.indented-item:hover {
+    background-color: #f0f9ff;
+    color: var(--primary-700);
+}
+
+.hero-result-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F3F4F6;
+    border-radius: 6px;
+    margin-right: 12px;
+}
+
+.hero-result-info h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #1F2937;
+}
+
+.hero-result-info p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #6B7280;
+}
+
+@media (max-width: 640px) {
+    .hero-search-bar {
+        flex-direction: column;
+        height: auto;
+        padding: 0.5rem;
+    }
+
+    .city-segment {
+        width: 100%;
+        padding: 0.75rem;
+        border-bottom: 1px solid #E5E7EB;
+    }
+
+    .search-divider {
+        display: none;
+    }
+
+    .service-segment {
+        width: 100%;
+        padding: 0.75rem;
+    }
+}

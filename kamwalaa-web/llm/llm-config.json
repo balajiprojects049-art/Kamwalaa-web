@@ -1,0 +1,5 @@
+{
+  "defaultModel": "claude-haiku-4.5",
+  "enabled": true,
+  "fallbackModel": "claude-instant-1"
+}
