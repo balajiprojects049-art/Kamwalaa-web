@@ -57,6 +57,8 @@ function App() {
                       <Route path="/booking" element={<Booking />} />
                       <Route path="/booking-success" element={<BookingSuccess />} />
                       <Route path="/become-partner" element={<BecomePartner />} />
+                      <Route path="/profile" element={<UserProfile />} />
+                      <Route path="/bookings" element={<UserBookings />} />
                     </Route>
 
                     {/* Admin Routes */}
@@ -75,6 +77,7 @@ function App() {
               </Router>
             </ToastProvider>
           </CityProvider>
+        </AuthProvider>
       </LanguageProvider>
     </ErrorBoundary>
   );
