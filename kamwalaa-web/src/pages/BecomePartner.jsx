@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import PageHero from '../components/common/PageHero';
 import { FiTrendingUp, FiClock, FiDollarSign } from 'react-icons/fi';
+import { getAllCategories } from '../data/servicesData';
 import './BecomePartner.css';
 
 const BecomePartner = () => {
+    const categories = getAllCategories();
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
@@ -112,12 +114,11 @@ const BecomePartner = () => {
                                     required
                                 >
                                     <option value="">Choose a category</option>
-                                    <option value="cleaning">Cleaning Services</option>
-                                    <option value="plumbing">Plumbing</option>
-                                    <option value="electrician">Electrician</option>
-                                    <option value="painting">Painting</option>
-                                    <option value="appliance">Appliance Repair</option>
-                                    <option value="beauty">Beauty Services</option>
+                                    {categories.map(cat => (
+                                        <option key={cat.id} value={cat.id}>
+                                            {cat.name.en}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
 
