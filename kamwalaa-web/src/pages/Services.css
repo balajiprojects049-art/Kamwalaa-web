@@ -164,6 +164,28 @@
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
+.category-item span {
+    flex: 1;
+}
+
+.arrow-icon {
+    color: #94a3b8;
+    font-size: 18px;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+
+.category-item:hover .arrow-icon {
+    opacity: 1;
+    color: #3b82f6;
+    transform: translateX(2px);
+}
+
+.category-item.active .arrow-icon {
+    opacity: 1;
+    color: #3b82f6;
+}
+
 .categories-column .category-item+.category-item {
     margin-top: 6px;
 }
