@@ -176,7 +176,7 @@
     gap: var(--spacing-sm);
     font-size: var(--text-sm);
     color: var(--text-primary);
-    margin-bottom: 4px;
+    margin-bottom: -15px;
 }
 
 .list-icon {
