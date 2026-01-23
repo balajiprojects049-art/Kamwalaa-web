@@ -78,14 +78,13 @@ const Login = () => {
                                     Email Address
                                 </label>
                                 <div className="input-wrapper">
-                                    <FiMail className="input-icon" />
                                     <input
                                         type="email"
                                         id="email"
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className="form-input"
+                                        className="form-input no-icon"
                                         required
                                     />
                                 </div>
@@ -97,14 +96,13 @@ const Login = () => {
                                     Password
                                 </label>
                                 <div className="input-wrapper">
-                                    <FiLock className="input-icon" />
                                     <input
                                         type={showPassword ? 'text' : 'password'}
                                         id="password"
                                         name="password"
                                         value={formData.password}
                                         onChange={handleChange}
-                                        className="form-input"
+                                        className="form-input no-icon"
                                         required
                                     />
                                     <button
