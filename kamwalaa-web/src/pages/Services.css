@@ -67,7 +67,7 @@
 }
 
 .main-content-area {
-    margin-top: 18px;
+    margin-top: 80px;
     padding-bottom: 64px;
 }
 
@@ -313,7 +313,7 @@
     justify-content: center;
     z-index: 999999;
     pointer-events: auto;
-    padding: 40px 20px;
+    padding: 120px 20px 40px;
     backdrop-filter: blur(4px);
 }
 
@@ -321,11 +321,11 @@
     position: relative;
     background: #fff;
     width: 100%;
-    max-width: 500px;
+    max-width: 420px;
     border-radius: 24px;
     padding: 0;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
-    max-height: 90vh;
+    max-height: 75vh;
     overflow-y: auto;
     scrollbar-width: thin;
     animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -353,12 +353,16 @@
     height: 200px;
     overflow: hidden;
     border-radius: 24px 24px 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-main-image-full {
-    width: 100%;
+    width: 80%;
     height: 100%;
     object-fit: cover;
+    border-radius: 12px;
 }
 
 .modal-header-section {
@@ -393,35 +397,57 @@
 
 .modal-description-section,
 .modal-benefits-section {
-    padding: 0 24px 20px;
+    padding: 0 24px 30px;
     border-top: 1px solid #f1f5f9;
     padding-top: 20px;
 }
 
 .modal-description-section h3,
 .modal-benefits-section h3 {
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 700;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     color: #0f172a;
+    letter-spacing: -0.3px;
 }
 
 .multi-lang-desc .desc-group {
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+    background: #f8fafc;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border-left: 3px solid var(--accent);
+}
+
+/* Language-specific border colors */
+.multi-lang-desc .desc-group.en {
+    border-left-color: #0b6cff;
+    /* Blue for English */
+}
+
+.multi-lang-desc .desc-group.te {
+    border-left-color: #10b981;
+    /* Green for Telugu */
+}
+
+.multi-lang-desc .desc-group.hi {
+    border-left-color: #ef4444;
+    /* Red for Hindi */
 }
 
 .multi-lang-desc .desc-group strong {
-    font-size: 13px;
-    color: var(--muted);
+    font-size: 12px;
+    color: var(--accent);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
+    font-weight: 700;
 }
 
 .multi-lang-desc .desc-group p {
-    margin: 4px 0 0;
+    margin: 8px 0 0;
     font-size: 15px;
-    line-height: 1.5;
-    color: var(--text-secondary);
+    line-height: 1.6;
+    color: #475569;
 }
 
 .modal-features-grid {
@@ -444,8 +470,6 @@
 
 .modal-action-section {
     padding: 16px 24px 24px;
-    position: sticky;
-    bottom: 0;
     background: white;
     border-top: 1px solid #f1f5f9;
 }
@@ -473,17 +497,28 @@
     position: absolute;
     top: 12px;
     right: 12px;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 10;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    font-size: 24px;
+    font-weight: 300;
+    color: #333;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    color: #d32f2f;
 }
 
 .no-results {
