@@ -4,8 +4,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #111827;
-    /* gray-900 */
+    background-color: #0f172a;
+    /* Slate 900 for deeper contrast */
     position: relative;
     overflow: hidden;
     font-family: 'Inter', sans-serif;
@@ -26,38 +26,36 @@
     position: absolute;
     top: -10%;
     left: -10%;
-    width: 40%;
-    height: 40%;
-    background-color: rgba(59, 130, 246, 0.2);
-    /* primary/20 (assuming blue) */
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
     border-radius: 50%;
-    filter: blur(100px);
+    filter: blur(80px);
 }
 
 .admin-blob-2 {
     position: absolute;
     bottom: -10%;
     right: -10%;
-    width: 40%;
-    height: 40%;
-    background-color: rgba(236, 72, 153, 0.2);
-    /* secondary/20 (assuming pink/purple) */
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
     border-radius: 50%;
-    filter: blur(100px);
+    filter: blur(80px);
 }
 
 /* Login Card */
 .admin-login-card {
-    background-color: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    background: rgba(30, 41, 59, 0.7);
+    /* Slate 800 with transparency */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2.5rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     width: 100%;
-    max-width: 28rem;
-    /* max-w-md */
+    max-width: 26rem;
     z-index: 10;
     position: relative;
     color: white;
@@ -66,39 +64,40 @@
 /* Header Section */
 .admin-login-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
 }
 
 .admin-icon-circle {
-    width: 4rem;
-    height: 4rem;
+    width: 4.5rem;
+    height: 4.5rem;
     border-radius: 50%;
     background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    /* primary to secondary gradient */
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 1rem auto;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    margin: 0 auto 1.25rem auto;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
 }
 
 .admin-icon-circle svg {
-    font-size: 1.875rem;
-    /* text-3xl */
+    font-size: 2rem;
     color: white;
 }
 
 .admin-login-header h2 {
-    font-size: 1.875rem;
-    /* 3xl */
+    font-size: 1.75rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
-    color: white;
+    color: #f8fafc;
+    /* Slate 50 */
+    letter-spacing: -0.025em;
 }
 
 .admin-login-header p {
-    color: #d1d5db;
-    /* gray-300 */
+    color: #94a3b8;
+    /* Slate 400 */
+    line-height: 1.5;
+    font-size: 0.95rem;
 }
 
 /* Form Styles */
@@ -115,77 +114,86 @@
 }
 
 .form-label {
-    color: #d1d5db;
-    /* gray-300 */
-    font-size: 0.875rem;
-    /* sm */
-    font-weight: 500;
+    color: #e2e8f0;
+    /* Slate 200 - High contrast vs dark bg */
+    font-size: 0.9rem;
+    font-weight: 600;
     margin-left: 0.25rem;
+    display: block;
+    /* Ensure it takes up space */
 }
 
 .input-wrapper {
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .input-icon {
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    padding-left: 0.75rem;
+    left: 1rem;
+    color: #94a3b8;
+    /* Slate 400 */
     display: flex;
+    /* Fix alignment */
     align-items: center;
+    justify-content: center;
+    height: 100%;
     pointer-events: none;
-    color: #9ca3af;
-    /* gray-400 */
+    font-size: 1.1rem;
+    z-index: 2;
+    /* Ensure icon is above input bg */
 }
 
 .form-input {
     width: 100%;
-    padding: 0.75rem 1rem 0.75rem 2.5rem;
-    /* pl-10 */
-    background-color: rgba(31, 41, 55, 0.5);
-    /* gray-800/50 */
-    border: 1px solid #4b5563;
-    /* gray-600 */
-    border-radius: 0.5rem;
-    color: white;
+    padding: 0.875rem 1rem 0.875rem 2.75rem;
+    /* More left padding for icon */
+    background-color: rgba(15, 23, 42, 0.6);
+    /* Darker input bg */
+    border: 1px solid #334155;
+    /* Slate 700 */
+    border-radius: 0.75rem;
+    color: #f8fafc;
+    /* Slate 50 */
     font-size: 1rem;
-    transition: all 0.3s;
+    transition: all 0.2s ease;
     box-sizing: border-box;
-    /* Critical for width: 100% */
 }
 
 .form-input:focus {
     outline: none;
     border-color: #3b82f6;
-    /* primary */
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+    background-color: rgba(15, 23, 42, 0.8);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .form-input::placeholder {
-    color: #6b7280;
-    /* gray-500 */
+    color: #64748b;
+    /* Slate 500 */
 }
 
 /* Button */
 .admin-login-btn {
     width: 100%;
-    padding: 0.75rem 1rem;
-    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    padding: 0.875rem;
+    margin-top: 0.5rem;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
     color: white;
-    font-weight: 700;
-    border-radius: 0.5rem;
+    font-weight: 600;
+    border-radius: 0.75rem;
     border: none;
     cursor: pointer;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    transition: all 0.2s;
     font-size: 1rem;
+    letter-spacing: 0.025em;
 }
 
 .admin-login-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.4);
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
 }
 
 .admin-login-btn:disabled {
@@ -220,21 +228,22 @@
 
 /* Footer Link */
 .admin-login-footer {
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     text-align: center;
 }
 
 .back-link {
-    color: #9ca3af;
-    /* gray-400 */
-    font-size: 0.875rem;
+    color: #94a3b8;
+    /* Slate 400 */
+    font-size: 0.9rem;
     text-decoration: none;
-    transition: color 0.2s;
     background: none;
     border: none;
     cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.2s;
 }
 
 .back-link:hover {
-    color: white;
+    color: #f8fafc;
 }
