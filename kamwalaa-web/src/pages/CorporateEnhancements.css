@@ -1,0 +1,137 @@
+/* Corporate-Level Enhancements for Services Page */
+
+/* Trust Stats Banner */
+.trust-stats-banner {
+    background: linear-gradient(135deg, #0b6cff 0%, #0056d6 100%);
+    padding: 24px 0;
+    margin-bottom: 32px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: white;
+}
+
+.stat-icon {
+    font-size: 36px;
+    color: #fbbf24;
+    flex-shrink: 0;
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 13px;
+    opacity: 0.95;
+    font-weight: 500;
+}
+
+/* Enhanced Service Cards */
+.service-card-item {
+    position: relative;
+}
+
+.popular-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+}
+
+.popular-badge svg {
+    font-size: 14px;
+}
+
+.service-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.service-title-row h4 {
+    flex: 1;
+    margin: 0;
+}
+
+.verified-icon {
+    color: #10b981;
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.service-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.service-rating .star-filled {
+    color: #fbbf24;
+    fill: #fbbf24;
+    font-size: 16px;
+}
+
+.rating-number {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.rating-count {
+    font-size: 13px;
+    color: #64748b;
+}
+
+/* Responsive Stats Banner */
+@media (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .stat-item {
+        justify-content: center;
+    }
+
+    .stat-number {
+        font-size: 24px;
+    }
+}

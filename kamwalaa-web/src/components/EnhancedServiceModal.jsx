@@ -73,25 +73,8 @@ const EnhancedServiceModal = ({
                         <h2>{modalService.name[currentLanguage] || modalService.name.en}</h2>
                     </div>
 
-                    {/* 4. Service Provider Info */}
-                    <div className="modal-provider-section">
-                        <div className="provider-card">
-                            <div className="provider-avatar">
-                                <FiUser />
-                            </div>
-                            <div className="provider-info">
-                                <h4>{mockProvider.name} {mockProvider.verified && <FiAward className="verified-badge" />}</h4>
-                                <p>{mockProvider.experience} experience • {mockProvider.completedJobs}+ jobs</p>
-                                <div className="provider-certs">
-                                    {mockProvider.certifications.map((cert, idx) => (
-                                        <span key={idx} className="cert-badge">{cert}</span>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    {/* 5. Pricing Breakdown */}
+                    {/* 4. Pricing Breakdown */}
                     <div className="modal-pricing-breakdown">
                         <h3><FiDollarSign /> Pricing Details</h3>
                         <div className="price-row">
