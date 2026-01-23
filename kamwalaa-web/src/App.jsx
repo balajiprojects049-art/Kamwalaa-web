@@ -21,6 +21,7 @@ import BookingSuccess from './pages/BookingSuccess';
 // Admin Pages
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminServices from './pages/admin/AdminServices';
 
 import './index.css';
 import './App.css';
@@ -53,9 +54,10 @@ function App() {
                   <Route path="/admin" element={<AdminLayout />}>
                     <Route index element={<AdminDashboard />} />
                     <Route path="dashboard" element={<AdminDashboard />} />
+                    <Route path="services" element={<AdminServices />} />
+
                     {/* Placeholders for future routes */}
                     <Route path="bookings" element={<div className="p-8">Bookings Management (Coming Soon)</div>} />
-                    <Route path="services" element={<div className="p-8">Services Management (Coming Soon)</div>} />
                     <Route path="customers" element={<div className="p-8">Customer Management (Coming Soon)</div>} />
                     <Route path="settings" element={<div className="p-8">Admin Settings (Coming Soon)</div>} />
                   </Route>
