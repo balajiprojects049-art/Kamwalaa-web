@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import PageHero from '../components/common/PageHero';
 import { FiSearch, FiChevronRight, FiClock, FiCheck } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
 import { getAllCategories, getAllServicesFlat } from '../data/servicesData';
@@ -118,6 +119,11 @@ const Services = () => {
 
     return (
         <div className="services-page-layout">
+            <PageHero
+                title={t.nav.services}
+                subtitle="Explore our professional home services"
+            />
+
             {/* Search Header - Fixed at Top */}
             <div className="services-search-header">
                 <div className="container">

@@ -1,16 +1,14 @@
-import React from 'react';
+import PageHero from '../components/common/PageHero';
 import { FiUsers, FiTarget, FiAward } from 'react-icons/fi';
 import './About.css';
 
 const About = () => {
     return (
         <div className="about-page">
-            <div className="page-header about-header">
-                <div className="container">
-                    <h1 className="page-title">About Kamwalaa</h1>
-                    <p className="page-subtitle">Revolutionizing Home Services in India</p>
-                </div>
-            </div>
+            <PageHero
+                title="About Kamwalaa"
+                subtitle="Revolutionizing Home Services in India"
+            />
 
             <div className="section container">
                 <div className="about-content">

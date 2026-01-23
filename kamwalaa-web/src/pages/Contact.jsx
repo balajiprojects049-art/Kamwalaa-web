@@ -1,16 +1,15 @@
 import React from 'react';
+import PageHero from '../components/common/PageHero';
 import { FiMapPin, FiPhone, FiMail } from 'react-icons/fi';
 import './Contact.css';
 
 const Contact = () => {
     return (
         <div className="contact-page">
-            <div className="page-header contact-header">
-                <div className="container">
-                    <h1 className="page-title">Contact Us</h1>
-                    <p className="page-subtitle">We are here to help you</p>
-                </div>
-            </div>
+            <PageHero
+                title="Contact Us"
+                subtitle="We are here to help you"
+            />
 
             <div className="section container">
                 <div className="contact-wrapper">
