@@ -11,16 +11,9 @@ export const useCity = () => {
 };
 
 const cities = [
-    'Nellore',
     'Hyderabad',
-    'Bangalore',
-    'Chennai',
-    'Vijayawada',
-    'Visakhapatnam',
-    'Tirupati',
-    'Guntur',
     'Warangal',
-    'Kurnool'
+    'Nalgonda'
 ];
 
 export const CityProvider = ({ children }) => {
