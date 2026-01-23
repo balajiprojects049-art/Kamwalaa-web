@@ -1,11 +1,11 @@
-/* Featured Services */
+/* Featured Services - Clean Version */
 .featured-section {
-    padding: 60px 0;
+    padding: 30px 0;
     background: #fff;
 }
 
 .featured-header {
-    margin-bottom: 30px;
+    margin-bottom: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -36,30 +36,27 @@
 .featured-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
+    gap: 20px;
 }
 
 .featured-card {
     background: white;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     border: 1px solid #e5e7eb;
     cursor: pointer;
     transition: all 0.3s ease;
-    position: relative;
-    display: flex;
-    flex-direction: column;
 }
 
 .featured-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     border-color: #0b6cff;
 }
 
 .featured-img-wrapper {
-    height: 180px;
+    height: 160px;
     position: relative;
     overflow: hidden;
 }
@@ -75,47 +72,17 @@
     transform: scale(1.05);
 }
 
-.fs-popular-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
-    color: white;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 700;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.fs-popular-badge svg {
-    font-size: 12px;
-}
-
-/* Info Section */
 .featured-info {
     padding: 16px;
-    flex: 1;
     display: flex;
     flex-direction: column;
-}
-
-.featured-name-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 8px;
+    gap: 8px;
 }
 
 .featured-name {
     font-size: 16px;
     font-weight: 600;
     color: #1f2937;
-    margin-bottom: 0;
     line-height: 1.4;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -124,58 +91,15 @@
     -webkit-box-orient: vertical;
 }
 
-.fs-verified-icon {
-    color: #10b981;
-    flex-shrink: 0;
-    margin-top: 3px;
-    font-size: 16px;
-}
-
-.featured-rating {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin-bottom: 12px;
-}
-
-.fs-star {
-    color: #e5e7eb;
-    font-size: 14px;
-}
-
-.fs-star.filled {
-    color: #fbbf24;
-    fill: #fbbf24;
-}
-
-.fs-rating-val {
-    font-weight: 700;
-    font-size: 13px;
-    color: #1f2937;
-}
-
-.fs-rating-count {
-    color: #6b7280;
-    font-size: 12px;
-}
-
-.featured-price-row {
-    margin-top: auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 12px;
-    border-top: 1px solid #f3f4f6;
-}
-
 .featured-price {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: #0b6cff;
 }
 
 .featured-btn {
-    padding: 6px 12px;
+    margin-top: 8px;
+    padding: 8px 12px;
     background: #f0f9ff;
     color: #0b6cff;
     border: none;
@@ -184,6 +108,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
+    width: 100%;
 }
 
 .featured-btn:hover {
@@ -191,173 +116,7 @@
     color: white;
 }
 
-/* Modal Styles Reuse or Custom */
-.fs-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(4px);
-    padding: 20px;
-}
-
-.fs-modal-content {
-    background: white;
-    width: 100%;
-    max-width: 900px;
-    max-height: 90vh;
-    border-radius: 16px;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-
-.fs-modal-close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    font-size: 24px;
-    line-height: 1;
-    cursor: pointer;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.fs-modal-body {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    height: 100%;
-    overflow: hidden;
-}
-
-.fs-modal-image-col {
-    background: #f3f4f6;
-    height: 100%;
-}
-
-.fs-modal-img {
-    width: 100%;
-    height: 100%;
-    /**/
-    object-fit: cover;
-    min-height: 400px;
-}
-
-.fs-modal-info-col {
-    padding: 40px;
-    overflow-y: auto;
-}
-
-.fs-modal-title {
-    font-size: 28px;
-    font-weight: 800;
-    margin: 0 0 10px;
-}
-
-.fs-modal-price {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.fs-price-label {
-    font-size: 14px;
-    color: #6b7280;
-    text-transform: uppercase;
-    font-weight: 600;
-}
-
-.fs-price-value {
-    font-size: 24px;
-    font-weight: 700;
-    color: #0b6cff;
-}
-
-.fs-modal-section {
-    margin-bottom: 30px;
-}
-
-.fs-modal-section h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 16px;
-}
-
-.fs-lang-desc {
-    margin-bottom: 12px;
-}
-
-.fs-lang-desc strong {
-    display: block;
-    font-size: 12px;
-    color: #6b7280;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-}
-
-.fs-lang-desc p {
-    margin: 0;
-    color: #374151;
-    line-height: 1.6;
-}
-
-.fs-benefits-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.fs-benefits-list li {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-    color: #4b5563;
-}
-
-.fs-check-icon {
-    color: #10b981;
-    font-weight: 800;
-}
-
-.fs-book-btn {
-    width: 100%;
-    padding: 16px;
-    background: #0b6cff;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.fs-book-btn:hover {
-    background: #0056d6;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(11, 108, 255, 0.3);
-}
-
-/* Response */
+/* Responsive */
 @media (max-width: 1024px) {
     .featured-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -367,19 +126,6 @@
 @media (max-width: 768px) {
     .featured-grid {
         grid-template-columns: repeat(2, 1fr);
-    }
-
-    .fs-modal-body {
-        grid-template-columns: 1fr;
-        overflow-y: auto;
-    }
-
-    .fs-modal-image-col {
-        height: 250px;
-    }
-
-    .fs-modal-info-col {
-        padding: 24px;
     }
 }
 

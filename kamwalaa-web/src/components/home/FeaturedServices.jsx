@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiStar, FiShield } from 'react-icons/fi';
 import { useLanguage } from '../../context/LanguageContext';
 import './FeaturedServices.css';
 
@@ -52,11 +51,6 @@ const FeaturedServices = ({ title, services = [] }) => {
                             onClick={() => handleServiceClick(service)}
                         >
                             <div className="featured-img-wrapper">
-                                {idx === 0 && (
-                                    <div className="fs-popular-badge">
-                                        <FiStar fill="#fff" /> Popular
-                                    </div>
-                                )}
                                 {service.images && service.images.length > 0 ? (
                                     <img
                                         src={service.images[0]}
@@ -76,27 +70,15 @@ const FeaturedServices = ({ title, services = [] }) => {
                             </div>
 
                             <div className="featured-info">
-                                <div className="featured-name-row">
-                                    <div className="featured-name">
-                                        {service.name[currentLanguage] || service.name.en}
+                                <div className="featured-name">
+                                    {service.name[currentLanguage] || service.name.en}
+                                </div>
+                                {service.price && service.price !== 'View Services' && (
+                                    <div className="featured-price">
+                                        ₹{service.price}
                                     </div>
-                                    <FiShield className="fs-verified-icon" title="Verified" />
-                                </div>
-
-                                <div className="featured-rating">
-                                    <FiStar className="fs-star filled" />
-                                    <span className="fs-rating-val">4.{8 - (idx % 3)}</span>
-                                    <span className="fs-rating-count">({120 + idx * 15})</span>
-                                </div>
-
-                                <div className="featured-price-row">
-                                    {service.price && service.price !== 'View Services' && (
-                                        <div className="featured-price">
-                                            ₹{service.price}
-                                        </div>
-                                    )}
-                                    <button className="featured-btn">View</button>
-                                </div>
+                                )}
+                                <button className="featured-btn">View Details</button>
                             </div>
                         </div>
                     ))}

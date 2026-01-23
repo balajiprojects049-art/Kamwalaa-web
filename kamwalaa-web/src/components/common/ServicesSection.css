@@ -1,13 +1,17 @@
 .services-section {
     background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
     position: relative;
+    padding-top: 3rem !important;
+    /* Force reduced padding */
+    padding-bottom: 3rem !important;
 }
 
 /* Section Header */
 .section-header {
     text-align: center;
     max-width: 700px;
-    margin: 0 auto var(--spacing-4xl);
+    margin: 0 auto 2rem;
+    /* Reduced from spacing-4xl */
 }
 
 .section-badge {

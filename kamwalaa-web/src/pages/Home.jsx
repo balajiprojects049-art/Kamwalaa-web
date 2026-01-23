@@ -6,7 +6,6 @@ import ServicesSection from '../components/common/ServicesSection';
 import WhyChooseUs from '../components/common/WhyChooseUs';
 import HowItWorks from '../components/common/HowItWorks';
 import Testimonials from '../components/common/Testimonials';
-import { CorporateStats, CorporatePartners, CorporateBusinessCTA } from '../components/home/CorporateStrip';
 import { servicesData } from '../data/servicesData';
 
 const Home = () => {
@@ -74,7 +73,6 @@ const Home = () => {
     return (
         <div className="home-page">
             <Hero />
-            <CorporateStats />
             <ServiceCategoriesSlider />
 
             <FeaturedServices title="Main Services" services={mainServices} />
@@ -86,9 +84,7 @@ const Home = () => {
             <ServicesSection />
             <WhyChooseUs />
             <HowItWorks />
-            <CorporatePartners />
             <Testimonials />
-            <CorporateBusinessCTA />
         </div>
     );
 };
