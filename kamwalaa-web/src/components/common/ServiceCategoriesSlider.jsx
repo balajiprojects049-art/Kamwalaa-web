@@ -69,7 +69,6 @@ const ServiceCategoriesSlider = () => {
                     <div
                         className="slider-track"
                         style={{
-                            transform: `translateX(-${currentIndex * (100 / cardsToShow) + (currentIndex * 1.5 / cardsToShow)}%)`, // Adjust for gap 
                             // Simplified transform for gap logic, better to use flexible calculation
                             transform: `translateX(calc(-${currentIndex} * (100% / ${cardsToShow} + 1.5rem / ${cardsToShow})))`
                         }}
