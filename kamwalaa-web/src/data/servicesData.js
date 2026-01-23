@@ -722,6 +722,7 @@ export const servicesData = {
         color: '#10B981',
         bgColor: '#DCFCE7',
         gradient: 'linear-gradient(135deg, #10B981, #059669)',
+        image: '/assets/images/services/cleaning/main-cleaning.jpg',
         description: {
             en: 'Professional kitchen and bathroom cleaning services for a hygienic home.',
             te: 'పరిశుభ్రమైన ఇంటి కోసం ప్రొఫెషనల్ కిచెన్ మరియు బాత్రూమ్ క్లీనింగ్ సేవలు.',
@@ -865,6 +866,7 @@ export const servicesData = {
         color: '#22C55E',
         bgColor: '#D1FAE5',
         gradient: 'linear-gradient(135deg, #22C55E, #16A34A)',
+        image: '/assets/images/services/gardening/main-gardening.jpg',
         description: {
             en: 'Complete gardening solutions including planting, lawn maintenance, and garden cleaning.',
             te: 'ప్లాంటింగ్, లాన్ మెయింటెనెన్స్ మరియు గార్డెన్ క్లీనింగ్‌తో సహా పూర్తి గార్డెనింగ్ సొల్యూషన్స్.',
@@ -933,6 +935,7 @@ export const servicesData = {
         color: '#F59E0B',
         bgColor: '#FEF3C7',
         gradient: 'linear-gradient(135deg, #F59E0B, #D97706)',
+        image: '/assets/images/services/gas/main-gas.jpg',
         description: {
             en: 'Gas stove installation, pipeline installation, leak detection, and regulator replacement.',
             te: 'గ్యాస్ స్టవ్ ఇన్‌స్టాలేషన్, పైప్‌లైన్ ఇన్‌స్టాలేషన్, లీక్ డిటెక్షన్ మరియు రెగ్యులేటర్ రీప్లేస్‌మెంట్.',
