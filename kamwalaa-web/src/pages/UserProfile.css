@@ -1,0 +1,73 @@
+.user-profile-page {
+    background-color: #f9fafb;
+    min-height: 80vh;
+    padding-bottom: 4rem;
+}
+
+.profile-container {
+    max-width: 600px;
+    margin: -3rem auto 0;
+    position: relative;
+    z-index: 10;
+}
+
+.profile-card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
+    font-size: 3rem;
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+}
+
+.profile-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #111827;
+}
+
+.profile-header p {
+    color: #6b7280;
+    margin-top: 0.5rem;
+}
+
+.profile-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.profile-form label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.profile-form .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
