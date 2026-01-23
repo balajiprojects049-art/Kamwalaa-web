@@ -8,37 +8,40 @@ const Testimonials = () => {
 
     const testimonials = [
         {
-            name: 'Ravi Kumar',
-            role: 'Homeowner, Nellore',
+            name: 'Priyanka Rao',
+            role: 'Resident, Hyderabad',
             rating: 5,
             content: {
-                en: "Excellent service! The electrician arrived on time and fixed the issue quickly. Highly recommended.",
-                te: "అద్భుతమైన సేవ! ఎలక్ట్రీషియన్ సమయానికి వచ్చి సమస్యను త్వరగా పరిష్కరించారు. ఖచ్చితంగా సిఫార్సు చేస్తున్నాను.",
-                hi: "उत्कृष्ट सेवा! बिजली मिस्त्री समय पर आया और समस्या को जल्दी ठीक कर दिया। अत्यधिक अनुशंसित।"
+                en: "Excellent deep cleaning service for my flat in Gachibowli. The team was verified and very professional. worth every penny!",
+                te: "గచ్చిబౌలిలోని నా ఫ్లాట్‌కి అద్భుతమైన డీప్ క్లీనింగ్ నిపుణులు. బృందం చాలా ప్రొఫెషనల్. ప్రతీ పైసాకు విలువ!",
+                hi: "गचीबोौली में मेरे फ्लैट के लिए उत्कृष्ट पेशेवर सफाई सेवा। टीम सत्यापित और बहुत पेशेवर थी।"
             },
-            image: "https://randomuser.me/api/portraits/men/32.jpg"
+            // Indian Professional Woman
+            image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&h=150&q=80"
         },
         {
-            name: 'Priya Reddy',
-            role: 'Housewife',
+            name: 'Venkat Reddy',
+            role: 'Shop Owner, Warangal',
             rating: 5,
             content: {
-                en: "Very professional cleaning service. My kitchen looks brand new. Thank you Kamwalaa!",
-                te: "చాలా ప్రొఫెషనల్ క్లీనింగ్ సర్వీస్. నా వంటగది కొత్తగా కనిపిస్తోంది. ధన్యవాదాలు కంవలా!",
-                hi: "बहुत ही पेशेवर सफाई सेवा। मेरी रसोई बिल्कुल नई दिख रही है। धन्यवाद कमवाला!"
+                en: "Booked an electrician for my shop in Hanamkonda. He came within 2 hours and fixed the main board issue perfectly.",
+                te: "హనుమకొండలోని నా షాపు కోసం ఎలక్ట్రీషియన్‌ని బుక్ చేసాను. 2 గంటల్లో వచ్చి మెయిన్ బోర్డు సమస్యను పరిష్కరించారు.",
+                hi: "हनमकोंडा में मेरी दुकान के लिए एक बिजली मिस्त्री बुक किया। वह 2 घंटे के भीतर आया और समस्या ठीक की।"
             },
-            image: "https://randomuser.me/api/portraits/women/44.jpg"
+            // Indian Man
+            image: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=150&h=150&q=80"
         },
         {
-            name: 'Suresh Babu',
-            role: 'Business Owner',
+            name: 'Srinivas G',
+            role: 'Homeowner, Nalgonda',
             rating: 4,
             content: {
-                en: "Great plumbing work. The pricing was transparent and affordable.",
-                te: "గొప్ప ప్లంబింగ్ పని. ధరలు పారదర్శకంగా మరియు సరసమైనవిగా ఉన్నాయి.",
-                hi: "शानदार प्लंबिंग का काम। मूल्य निर्धारण पारदर्शी और किफायती था।"
+                en: "Good plumbing service. The booking process on the app was easy and the plumber knew his job well.",
+                te: "మంచి ప్లంబింగ్ సర్వీస్. యాప్‌లో బుకింగ్ ప్రాసెస్ సులభం మరియు ప్లంబర్‌కు పని బాగా తెలుసు.",
+                hi: "अच्छी प्लंबिंग सेवा। ऐप पर बुकिंग प्रक्रिया आसान थी और प्लंबर को अपना काम अच्छे से आता था।"
             },
-            image: "https://randomuser.me/api/portraits/men/67.jpg"
+            // Another Indian Man
+            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&h=150&q=80"
         }
     ];
 
