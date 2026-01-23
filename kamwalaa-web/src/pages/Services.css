@@ -73,7 +73,7 @@
 
 .three-column-layout {
     display: grid;
-    grid-template-columns: 220px 320px 1fr;
+    grid-template-columns: 280px 320px 1fr;
     gap: 24px;
     align-items: start;
 }
@@ -94,36 +94,74 @@
 .category-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 8px;
-    border-radius: 8px;
+    gap: 14px;
+    padding: 14px 12px;
+    border-radius: 12px;
     cursor: pointer;
-    color: #0b1724;
-    transition: background .12s ease, transform .08s ease;
+    color: #1e293b;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.category-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
 }
 
 .category-item:hover {
-    background: #f3f6fb;
-    transform: translateY(-1px);
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.12);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.category-item:hover::before {
+    transform: scaleY(1);
 }
 
 .category-item.active {
-    background: #eef6ff;
-    box-shadow: inset 3px 0 0 var(--accent);
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border-color: rgba(59, 130, 246, 0.3);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+}
+
+.category-item.active::before {
+    transform: scaleY(1);
 }
 
 .cat-icon-wrapper {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--muted);
-    font-size: 18px;
+    border-radius: 10px;
+    font-size: 20px;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    transition: all 0.3s ease;
+}
+
+.category-item:hover .cat-icon-wrapper {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    transform: scale(1.1) rotate(5deg);
 }
 
 .category-item.active .cat-icon-wrapper {
-    color: var(--accent);
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
 .categories-column .category-item+.category-item {
