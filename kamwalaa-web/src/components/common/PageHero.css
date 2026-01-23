@@ -1,11 +1,16 @@
 .page-hero {
-    height: 300px;
+    height: 380px;
+    /* Increased to account for pull-up */
     background-color: var(--primary-800);
     background-size: cover;
     background-position: center;
     display: flex;
     align-items: center;
     position: relative;
+    margin-top: -80px;
+    /* Pull up into the header space */
+    padding-top: 80px;
+    /* Push content down so it's not behind header */
     margin-bottom: var(--spacing-xl);
     color: white;
 }
