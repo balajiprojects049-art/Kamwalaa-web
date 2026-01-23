@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
 import './Login.css';
 
 const Login = () => {
     const { t } = useLanguage();
     const [showPassword, setShowPassword] = useState(false);
+    const [useOtpLogin, setUseOtpLogin] = useState(false); // Toggle between Password/OTP
     const [formData, setFormData] = useState({
-        email: '',
-        password: ''
+        phone: '',
+        password: '',
+        otp: ''
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Login:', formData);
-        // Add your login logic here
+        if (useOtpLogin) {
+            console.log('Logging in with OTP:', formData.phone, formData.otp);
+        } else {
+            console.log('Logging in with Password:', formData.phone, formData.password);
+        }
     };
 
     const handleChange = (e) => {
@@ -23,6 +28,11 @@ const Login = () => {
             ...formData,
             [e.target.name]: e.target.value
         });
+    };
+
+    const handleSendOtp = () => {
+        if (!formData.phone) return alert('Please enter phone number');
+        alert('OTP Sent to: ' + formData.phone);
     };
 
     return (
@@ -52,13 +62,6 @@ const Login = () => {
                                     <p>100% safe and encrypted</p>
                                 </div>
                             </div>
-                            <div className="brand-feature">
-                                <div className="feature-icon">⚡</div>
-                                <div className="feature-text">
-                                    <h4>Quick Booking</h4>
-                                    <p>Book in just 3 clicks</p>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -67,86 +70,120 @@ const Login = () => {
                 <div className="login-form-container">
                     <div className="login-form-wrapper">
                         <div className="form-header">
-                            <h2 className="form-title">{t.nav.login}</h2>
-                            <p className="form-subtitle">Enter your credentials to access your account</p>
+                            <h2 className="form-title">{useOtpLogin ? 'Login via OTP' : 'Login'}</h2>
+                            <p className="form-subtitle">Enter your phone number to continue</p>
                         </div>
 
                         <form onSubmit={handleSubmit} className="login-form">
-                            {/* Email Field */}
+                            {/* Phone Field */}
                             <div className="form-group">
-                                <label htmlFor="email" className="form-label">
-                                    Email Address
+                                <label htmlFor="phone" className="form-label">
+                                    Phone Number
                                 </label>
                                 <div className="input-wrapper">
                                     <input
-                                        type="email"
-                                        id="email"
-                                        name="email"
-                                        value={formData.email}
+                                        type="tel"
+                                        id="phone"
+                                        name="phone"
+                                        value={formData.phone}
                                         onChange={handleChange}
                                         className="form-input no-icon"
+                                        placeholder="+91"
                                         required
                                     />
                                 </div>
                             </div>
 
-                            {/* Password Field */}
-                            <div className="form-group">
-                                <label htmlFor="password" className="form-label">
-                                    Password
-                                </label>
-                                <div className="input-wrapper">
-                                    <input
-                                        type={showPassword ? 'text' : 'password'}
-                                        id="password"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        className="form-input no-icon"
-                                        required
-                                    />
-                                    <button
-                                        type="button"
-                                        className="password-toggle"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                    >
-                                        {showPassword ? <FiEyeOff /> : <FiEye />}
-                                    </button>
+                            {/* Password or OTP Field */}
+                            {!useOtpLogin ? (
+                                <div className="form-group">
+                                    <label htmlFor="password" className="form-label">
+                                        Password
+                                    </label>
+                                    <div className="input-wrapper">
+                                        <input
+                                            type={showPassword ? 'text' : 'password'}
+                                            id="password"
+                                            name="password"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            className="form-input no-icon"
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            className="password-toggle"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                                        </button>
+                                    </div>
+                                    <div style={{ textAlign: 'right', marginTop: '0.5rem' }}>
+                                        <button
+                                            type="button"
+                                            onClick={() => setUseOtpLogin(true)}
+                                            style={{ background: 'none', border: 'none', color: '#2563eb', cursor: 'pointer', fontWeight: 600 }}
+                                        >
+                                            Login via OTP instead?
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="form-group">
+                                    <label htmlFor="otp" className="form-label">
+                                        OTP Code
+                                    </label>
+                                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                        <input
+                                            type="text"
+                                            id="otp"
+                                            name="otp"
+                                            value={formData.otp}
+                                            onChange={handleChange}
+                                            className="form-input no-icon"
+                                            placeholder="Enter OTP"
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            className="btn btn-secondary"
+                                            onClick={handleSendOtp}
+                                            style={{ whiteSpace: 'nowrap' }}
+                                        >
+                                            Get OTP
+                                        </button>
+                                    </div>
+                                    <div style={{ textAlign: 'right', marginTop: '0.5rem' }}>
+                                        <button
+                                            type="button"
+                                            onClick={() => setUseOtpLogin(false)}
+                                            style={{ background: 'none', border: 'none', color: '#2563eb', cursor: 'pointer', fontWeight: 600 }}
+                                        >
+                                            Login with Password instead?
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
 
-                            {/* Remember & Forgot */}
-                            <div className="form-options">
-                                <label className="checkbox-label">
-                                    <input type="checkbox" className="checkbox-input" />
-                                    <span>Remember me</span>
-                                </label>
-                                <Link to="/forgot-password" className="forgot-link">
-                                    Forgot Password?
-                                </Link>
-                            </div>
+                            {/* Remember & Forgot - Only for Password Mode */}
+                            {!useOtpLogin && (
+                                <div className="form-options">
+                                    <label className="checkbox-label">
+                                        <input type="checkbox" className="checkbox-input" />
+                                        <span>Remember me</span>
+                                    </label>
+                                    <Link to="/forgot-password" className="forgot-link">
+                                        Forgot Password?
+                                    </Link>
+                                </div>
+                            )}
 
                             {/* Submit Button */}
                             <button type="submit" className="btn btn-primary btn-lg submit-btn">
-                                {t.nav.login}
+                                {useOtpLogin ? 'Verify & Login' : 'Login'}
                             </button>
 
-                            {/* Social Login */}
-                            <div className="social-login">
-                                <div className="divider">
-                                    <span>Or continue with</span>
-                                </div>
-                                <div className="social-buttons">
-                                    <button type="button" className="social-btn">
-                                        <img src="https://www.google.com/favicon.ico" alt="Google" />
-                                        Google
-                                    </button>
-                                    <button type="button" className="social-btn">
-                                        <img src="https://www.facebook.com/favicon.ico" alt="Facebook" />
-                                        Facebook
-                                    </button>
-                                </div>
-                            </div>
+
 
                             {/* Sign Up Link */}
                             <p className="signup-text">

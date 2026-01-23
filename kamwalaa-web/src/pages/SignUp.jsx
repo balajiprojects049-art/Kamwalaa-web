@@ -1,25 +1,29 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiUser, FiMail, FiLock, FiPhone } from 'react-icons/fi';
 import './Login.css'; // Reusing Login CSS
 
 const SignUp = () => {
-    const [otpSent, setOtpSent] = useState(false);
-    const [otp, setOtp] = useState('');
+    // Standard Signup State
+    const [formData, setFormData] = useState({
+        fullName: '',
+        email: '',
+        phone: '',
+        password: ''
+    });
 
-    const handleSendOtp = (e) => {
-        e.preventDefault();
-        // Mock OTP generation
-        const mockOtp = Math.floor(1000 + Math.random() * 9000);
-        alert(`Your Kamwalaa Verification Code is: ${mockOtp}`);
-        console.log('Generated OTP:', mockOtp); // For debugging
-        setOtpSent(true);
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
     };
 
     const handleSignUp = (e) => {
         e.preventDefault();
-        // Here you would verify the OTP matches the input
-        console.log('Signing up with OTP verified');
+        // Here you would send the data to your backend
+        console.log('Signing up with:', formData);
+        alert('Account created successfully! Please login.');
+        // Redirect to login or auto-login logic here
     };
 
     return (
@@ -73,18 +77,31 @@ const SignUp = () => {
                             <p className="form-subtitle">Join thousands of happy customers</p>
                         </div>
 
-                        <form className="login-form" onSubmit={otpSent ? handleSignUp : handleSendOtp}>
+                        <form className="login-form" onSubmit={handleSignUp}>
                             <div className="form-group">
                                 <label className="form-label">Full Name</label>
                                 <div className="input-wrapper">
-                                    <input type="text" className="form-input no-icon" required />
+                                    <input
+                                        type="text"
+                                        name="fullName"
+                                        value={formData.fullName}
+                                        onChange={handleChange}
+                                        className="form-input no-icon"
+                                        required
+                                    />
                                 </div>
                             </div>
 
                             <div className="form-group">
                                 <label className="form-label">Email Address (Optional)</label>
                                 <div className="input-wrapper">
-                                    <input type="email" className="form-input no-icon" />
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        className="form-input no-icon"
+                                    />
                                 </div>
                             </div>
 
@@ -93,42 +110,33 @@ const SignUp = () => {
                                 <div className="input-wrapper">
                                     <input
                                         type="tel"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleChange}
                                         className="form-input no-icon"
                                         required
                                         placeholder="+91"
-                                        disabled={otpSent} // Lock phone after OTP sent
                                     />
                                 </div>
                             </div>
 
-                            {/* OTP Field - Only shown after sending */}
-                            {otpSent && (
-                                <div className="form-group animate-fade-in-up">
-                                    <label className="form-label">Enter OTP</label>
-                                    <div className="input-wrapper">
-                                        <input
-                                            type="text"
-                                            className="form-input no-icon"
-                                            placeholder="Enter 4-digit code"
-                                            maxLength="4"
-                                            required
-                                        />
-                                    </div>
-                                    <p style={{ fontSize: '0.85rem', color: '#6b7280', marginTop: '0.5rem' }}>
-                                        We sent a code to your phone number.
-                                        <button
-                                            type="button"
-                                            onClick={() => setOtpSent(false)}
-                                            style={{ border: 'none', background: 'none', color: '#2563eb', cursor: 'pointer', fontWeight: 600, marginLeft: '0.25rem' }}
-                                        >
-                                            Change Number?
-                                        </button>
-                                    </p>
+                            <div className="form-group">
+                                <label className="form-label">Password</label>
+                                <div className="input-wrapper">
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        className="form-input no-icon"
+                                        required
+                                        placeholder="Create a password"
+                                    />
                                 </div>
-                            )}
+                            </div>
 
                             <button type="submit" className="btn btn-primary btn-lg submit-btn">
-                                {otpSent ? 'Verify & Sign Up' : 'Get OTP'}
+                                Sign Up
                             </button>
 
                             <p className="signup-text">
