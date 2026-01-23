@@ -313,7 +313,7 @@ export const servicesData = {
         color: '#3B82F6',
         bgColor: '#DBEAFE',
         gradient: 'linear-gradient(135deg, #3B82F6, #2563EB)',
-        image: '/assets/images/services/ac/main-ac.jpg',
+        image: '/assets/images/services/ac/main-ac-v2.png',
         description: {
             en: 'Complete AC solutions including installation, repair, servicing, and gas refilling for all brands.',
             te: 'అన్ని బ్రాండ్‌ల కోసం ఇన్‌స్టాలేషన్, రిపేర్, సర్వీసింగ్ మరియు గ్యాస్ రీఫిల్లింగ్‌తో సహా పూర్తి AC సొల్యూషన్స్.',
