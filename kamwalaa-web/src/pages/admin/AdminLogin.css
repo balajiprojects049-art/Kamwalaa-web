@@ -113,8 +113,8 @@
 
 /* Updated Label Styles */
 .form-label {
-    color: #e2e8f0;
-    /* Very light slate for high visibility */
+    color: #ffffff;
+    /* Absolute white for maximum visibility */
     font-size: 0.95rem;
     font-weight: 600;
     display: block;
