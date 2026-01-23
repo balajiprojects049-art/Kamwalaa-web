@@ -663,6 +663,7 @@ export const servicesData = {
         color: '#EF4444',
         bgColor: '#FEE2E2',
         gradient: 'linear-gradient(135deg, #EF4444, #DC2626)',
+        image: '/assets/images/services/dismantling/main-dismantle.jpg',
         description: {
             en: 'Safe and efficient dismantling of kitchen, wardrobes, false ceiling, and old fittings.',
             te: 'కిచెన్, వార్డ్‌రోబ్స్, ఫాల్స్ సీలింగ్ మరియు పాత ఫిట్టింగ్‌ల యొక్క సురక్షితమైన మరియు సమర్థవంతమైన డిస్మాంటిలింగ్.',
