@@ -1,4 +1,13 @@
-# 📚 URBAN SEVA ANALYSIS - QUICK REFERENCE SUMMARY
+# Kamwalaa - Professional Home Services Platform
+
+## 🚀 Deployment Note (Vercel)
+This project is located in the `kamwalaa-web` subdirectory. When deploying to Vercel:
+1. Go to **Settings** > **General** > **Root Directory**.
+2. Click **Edit** and set it to `kamwalaa-web`.
+3. Ensure **Framework Preset** is set to `Vite`.
+4. Ensure **Output Directory** is `dist`.
+
+
 
 ## 🎯 Project Overview
 
