@@ -59,32 +59,28 @@ const SignUp = () => {
                             <div className="form-group">
                                 <label className="form-label">Full Name</label>
                                 <div className="input-wrapper">
-                                    <FiUser className="input-icon" />
-                                    <input type="text" className="form-input" />
+                                    <input type="text" className="form-input no-icon" />
                                 </div>
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label">Email Address</label>
+                                <label className="form-label">Email Address (Optional)</label>
                                 <div className="input-wrapper">
-                                    <FiMail className="input-icon" />
-                                    <input type="email" className="form-input" />
+                                    <input type="email" className="form-input no-icon" />
                                 </div>
                             </div>
 
                             <div className="form-group">
                                 <label className="form-label">Phone Number</label>
                                 <div className="input-wrapper">
-                                    <FiPhone className="input-icon" />
-                                    <input type="tel" className="form-input" />
+                                    <input type="tel" className="form-input no-icon" />
                                 </div>
                             </div>
 
                             <div className="form-group">
                                 <label className="form-label">Password</label>
                                 <div className="input-wrapper">
-                                    <FiLock className="input-icon" />
-                                    <input type="password" className="form-input" />
+                                    <input type="password" className="form-input no-icon" />
                                 </div>
                             </div>
 

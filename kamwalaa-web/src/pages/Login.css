@@ -166,6 +166,13 @@
     box-shadow: 0 0 0 3px rgba(0, 100, 175, 0.1);
 }
 
+.form-input.no-icon {
+    padding-left: 1rem;
+    background-color: white !important;
+    color: #111827 !important;
+    /* Force black text */
+}
+
 .password-toggle {
     position: absolute;
     right: 1rem;
