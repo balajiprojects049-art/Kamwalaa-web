@@ -49,9 +49,6 @@ const AdminLogin = () => {
                     <div className="form-group">
                         <label className="form-label">Email Address</label>
                         <div className="input-wrapper">
-                            <div className="input-icon">
-                                <FaEnvelope />
-                            </div>
                             <input
                                 type="email"
                                 value={email}
@@ -66,9 +63,6 @@ const AdminLogin = () => {
                     <div className="form-group">
                         <label className="form-label">Password</label>
                         <div className="input-wrapper">
-                            <div className="input-icon">
-                                <FaLock />
-                            </div>
                             <input
                                 type="password"
                                 value={password}

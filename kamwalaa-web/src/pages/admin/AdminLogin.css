@@ -5,13 +5,13 @@
     align-items: center;
     justify-content: center;
     background-color: #0f172a;
-    /* Slate 900 for deeper contrast */
+    /* Slate 900 */
     position: relative;
     overflow: hidden;
     font-family: 'Inter', sans-serif;
 }
 
-/* Background Decorations */
+/* Background Decorations (Keep existing) */
 .admin-bg-decoration {
     position: absolute;
     top: 0;
@@ -46,16 +46,14 @@
 
 /* Login Card */
 .admin-login-card {
-    background: rgba(30, 41, 59, 0.7);
-    /* Slate 800 with transparency */
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(30, 41, 59, 0.9);
+    /* Darker, less transparent for better contrast */
     border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 2.5rem;
-    border-radius: 1.5rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border-radius: 1rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
     width: 100%;
-    max-width: 26rem;
+    max-width: 25rem;
     z-index: 10;
     position: relative;
     color: white;
@@ -64,23 +62,23 @@
 /* Header Section */
 .admin-login-header {
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
 }
 
 .admin-icon-circle {
-    width: 4.5rem;
-    height: 4.5rem;
+    width: 4rem;
+    height: 4rem;
     border-radius: 50%;
     background: linear-gradient(135deg, #3b82f6, #8b5cf6);
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 1.25rem auto;
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .admin-icon-circle svg {
-    font-size: 2rem;
+    font-size: 1.75rem;
     color: white;
 }
 
@@ -88,15 +86,12 @@
     font-size: 1.75rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
-    color: #f8fafc;
-    /* Slate 50 */
-    letter-spacing: -0.025em;
+    color: #fff;
 }
 
 .admin-login-header p {
-    color: #94a3b8;
-    /* Slate 400 */
-    line-height: 1.5;
+    color: #cbd5e1;
+    /* Slate 300 */
     font-size: 0.95rem;
 }
 
@@ -111,61 +106,49 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    /* Space between label and input */
+    position: relative;
+    /* Ensure stacking context */
 }
 
+/* Updated Label Styles */
 .form-label {
     color: #e2e8f0;
-    /* Slate 200 - High contrast vs dark bg */
-    font-size: 0.9rem;
+    /* Very light slate for high visibility */
+    font-size: 0.95rem;
     font-weight: 600;
-    margin-left: 0.25rem;
     display: block;
-    /* Ensure it takes up space */
+    opacity: 1;
+    /* Force opacity */
+    margin-bottom: 0.25rem;
 }
 
 .input-wrapper {
     position: relative;
-    display: flex;
-    align-items: center;
+    width: 100%;
 }
 
-.input-icon {
-    position: absolute;
-    left: 1rem;
-    color: #94a3b8;
-    /* Slate 400 */
-    display: flex;
-    /* Fix alignment */
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    pointer-events: none;
-    font-size: 1.1rem;
-    z-index: 2;
-    /* Ensure icon is above input bg */
-}
-
+/* Updated Input Styles - No Icon padding */
 .form-input {
     width: 100%;
-    padding: 0.875rem 1rem 0.875rem 2.75rem;
-    /* More left padding for icon */
-    background-color: rgba(15, 23, 42, 0.6);
-    /* Darker input bg */
-    border: 1px solid #334155;
-    /* Slate 700 */
-    border-radius: 0.75rem;
-    color: #f8fafc;
-    /* Slate 50 */
+    padding: 0.875rem 1rem;
+    /* Standard padding, no left indent */
+    background-color: rgba(15, 23, 42, 0.8);
+    /* Dark background */
+    border: 1px solid #475569;
+    /* Slate 600 */
+    border-radius: 0.5rem;
+    color: #fff;
     font-size: 1rem;
-    transition: all 0.2s ease;
     box-sizing: border-box;
+    transition: border-color 0.2s;
 }
 
 .form-input:focus {
     outline: none;
-    border-color: #3b82f6;
-    background-color: rgba(15, 23, 42, 0.8);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    border-color: #60a5fa;
+    /* Blue 400 */
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
 }
 
 .form-input::placeholder {
@@ -181,25 +164,14 @@
     background: linear-gradient(135deg, #3b82f6, #6366f1);
     color: white;
     font-weight: 600;
-    border-radius: 0.75rem;
+    border-radius: 0.5rem;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-    transition: all 0.2s;
-    font-size: 1rem;
-    letter-spacing: 0.025em;
+    transition: transform 0.1s;
 }
 
 .admin-login-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.4);
     background: linear-gradient(135deg, #2563eb, #4f46e5);
-}
-
-.admin-login-btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    transform: none;
 }
 
 .loading-spinner {
@@ -234,16 +206,14 @@
 
 .back-link {
     color: #94a3b8;
-    /* Slate 400 */
     font-size: 0.9rem;
     text-decoration: none;
-    background: none;
+    background: transparent;
     border: none;
     cursor: pointer;
-    padding: 0.5rem;
-    transition: color 0.2s;
 }
 
 .back-link:hover {
-    color: #f8fafc;
+    color: #fff;
+    text-decoration: underline;
 }
