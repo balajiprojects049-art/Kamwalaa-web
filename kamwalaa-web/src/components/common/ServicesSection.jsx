@@ -52,7 +52,6 @@ const ServicesSection = () => {
                                 {/* Content */}
                                 <div className="service-content">
                                     <h3 className="service-title">{category.name[currentLanguage]}</h3>
-                                    <p className="service-description">{category.description[currentLanguage]}</p>
 
                                     {/* Service List */}
                                     <ul className="service-list">
