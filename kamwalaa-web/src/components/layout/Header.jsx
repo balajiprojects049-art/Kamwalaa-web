@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { FiMenu, FiX, FiChevronDown, FiMapPin } from 'react-icons/fi';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCity } from '../../context/CityContext';
+import { useAuth } from '../../context/AuthContext';
 import './Header.css';
 
 const Header = () => {
@@ -11,6 +12,7 @@ const Header = () => {
     const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
     const { currentLanguage, changeLanguage, t, languages } = useLanguage();
     const { selectedCity, changeCity } = useCity();
+    const { user, logout } = useAuth();
     const location = useLocation();
 
     useEffect(() => {
@@ -97,12 +99,28 @@ const Header = () => {
                         </div>
 
                         {/* Auth Buttons */}
-                        <Link to="/login" className="btn btn-ghost btn-sm">
-                            {t.nav.login}
-                        </Link>
-                        <Link to="/signup" className="btn btn-primary btn-sm">
-                            {t.nav.signup}
-                        </Link>
+                        {user ? (
+                            <div className="user-menu" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                <Link to="/profile" className="btn btn-ghost btn-sm" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#2563eb', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px' }}>
+                                        {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                                    </div>
+                                    <span>Profile</span>
+                                </Link>
+                                <button onClick={logout} className="btn btn-outline btn-sm">
+                                    Logout
+                                </button>
+                            </div>
+                        ) : (
+                            <>
+                                <Link to="/login" className="btn btn-ghost btn-sm">
+                                    {t.nav.login}
+                                </Link>
+                                <Link to="/signup" className="btn btn-primary btn-sm">
+                                    {t.nav.signup}
+                                </Link>
+                            </>
+                        )}
 
                         {/* Mobile Menu Toggle */}
                         <button
