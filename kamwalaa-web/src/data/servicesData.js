@@ -10,6 +10,7 @@ export const servicesData = {
         color: '#FFB800',
         bgColor: '#FFF8E6',
         gradient: 'linear-gradient(135deg, #FFB800, #FF9800)',
+        image: '/assets/images/services/electrical/main-electrical.jpg',
         description: {
             en: 'Professional electrical solutions for your home including fan services, house wiring, light installation, and decorative lighting.',
             te: 'ఫ్యాన్ సేవలు, హౌస్ వైరింగ్, లైట్ ఇన్‌స్టాలేషన్ మరియు డెకరేటివ్ లైటింగ్‌తో సహా మీ ఇంటి కోసం ప్రొఫెషనల్ ఎలక్ట్రికల్ సొల్యూషన్స్.',
