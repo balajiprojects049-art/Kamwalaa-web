@@ -565,6 +565,38 @@
     font-weight: 800;
 }
 
+/* Action Buttons Grid */
+.action-buttons-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 12px;
+}
+
+.modal-add-cart-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: white;
+    color: #0b6cff;
+    border: 2px solid #0b6cff;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.modal-add-cart-btn:hover {
+    background: #0b6cff;
+    color: white;
+}
+
+.modal-add-cart-btn svg {
+    font-size: 20px;
+}
+
 /* Responsive */
 @media (max-width: 600px) {
     .modal-content.enhanced {
@@ -577,6 +609,10 @@
     }
 
     .related-services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .action-buttons-grid {
         grid-template-columns: 1fr;
     }
 }

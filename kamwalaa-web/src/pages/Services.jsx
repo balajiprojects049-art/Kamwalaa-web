@@ -222,42 +222,6 @@ const Services = () => {
                 </div>
             </div>
 
-            {/* Trust Stats Banner */}
-            <div className="trust-stats-banner">
-                <div className="container">
-                    <div className="stats-grid">
-                        <div className="stat-item">
-                            <FiCheck className="stat-icon" />
-                            <div className="stat-content">
-                                <div className="stat-number">50,000+</div>
-                                <div className="stat-label">Happy Customers</div>
-                            </div>
-                        </div>
-                        <div className="stat-item">
-                            <FiStar className="stat-icon" />
-                            <div className="stat-content">
-                                <div className="stat-number">4.8/5.0</div>
-                                <div className="stat-label">Average Rating</div>
-                            </div>
-                        </div>
-                        <div className="stat-item">
-                            <FiShield className="stat-icon" />
-                            <div className="stat-content">
-                                <div className="stat-number">100%</div>
-                                <div className="stat-label">Verified Professionals</div>
-                            </div>
-                        </div>
-                        <div className="stat-item">
-                            <FiAward className="stat-icon" />
-                            <div className="stat-content">
-                                <div className="stat-number">30-Day</div>
-                                <div className="stat-label">Service Warranty</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div className="container main-content-area">
                 {searchQuery ? (
                     // Search Results View

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiMenu, FiX, FiChevronDown, FiMapPin } from 'react-icons/fi';
+import { FiMenu, FiX, FiChevronDown, FiMapPin, FiShoppingCart } from 'react-icons/fi';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCity } from '../../context/CityContext';
 import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
+import CartSidebar from '../cart/CartSidebar';
 import './Header.css';
 import './UserDropdown.css';
 
@@ -15,6 +17,7 @@ const Header = () => {
     const { currentLanguage, changeLanguage, t, languages } = useLanguage();
     const { selectedCity, changeCity } = useCity();
     const { user, logout } = useAuth();
+    const { getCartCount, toggleCart } = useCart();
     const location = useLocation();
 
     useEffect(() => {
@@ -140,6 +143,16 @@ const Header = () => {
                             </>
                         )}
 
+                        {/* Cart Button */}
+                        <div className="cart-btn-wrapper">
+                            <button className="cart-btn" onClick={toggleCart}>
+                                <FiShoppingCart />
+                                {getCartCount() > 0 && (
+                                    <span className="cart-badge">{getCartCount()}</span>
+                                )}
+                            </button>
+                        </div>
+
                         {/* Mobile Menu Toggle */}
                         <button
                             className="mobile-menu-toggle"
@@ -178,6 +191,8 @@ const Header = () => {
                     </nav>
                 </div>
             )}
+            {/* Cart Sidebar */}
+            <CartSidebar />
         </header>
     );
 };

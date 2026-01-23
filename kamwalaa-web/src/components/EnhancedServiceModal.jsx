@@ -1,5 +1,6 @@
 import React from 'react';
-import { FiStar, FiUser, FiCalendar, FiClock, FiCheck, FiChevronDown, FiChevronUp, FiDollarSign, FiShield, FiHeart, FiShare2, FiAward, FiInfo } from 'react-icons/fi';
+import { FiStar, FiUser, FiCalendar, FiClock, FiCheck, FiChevronDown, FiChevronUp, FiDollarSign, FiShield, FiHeart, FiShare2, FiAward, FiInfo, FiShoppingCart } from 'react-icons/fi';
+import { useCart } from '../context/CartContext';
 import '../pages/EnhancedModal.css';
 
 const EnhancedServiceModal = ({
@@ -26,6 +27,19 @@ const EnhancedServiceModal = ({
     handleShare,
     calculateTotal
 }) => {
+    const { addToCart, setIsCartOpen } = useCart();
+
+    const handleAddToCart = () => {
+        addToCart({
+            ...modalService,
+            quantity,
+            selectedTimeSlot,
+            selectedAddOns
+        });
+        setIsCartOpen(true);
+        handleCloseModal();
+    };
+
     if (!modalService) return null;
 
     return (
@@ -257,9 +271,14 @@ const EnhancedServiceModal = ({
 
                     {/* 14. Action Button */}
                     <div className="modal-action-section">
-                        <button className="modal-book-btn-full" onClick={handleBookService}>
-                            Book This Service - ₹{calculateTotal()}
-                        </button>
+                        <div className="action-buttons-grid">
+                            <button className="modal-add-cart-btn" onClick={handleAddToCart}>
+                                <FiShoppingCart /> Add to Cart
+                            </button>
+                            <button className="modal-book-btn-full" onClick={handleBookService}>
+                                Book Now - ₹{calculateTotal()}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
