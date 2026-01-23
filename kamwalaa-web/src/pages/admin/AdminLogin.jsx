@@ -54,7 +54,6 @@ const AdminLogin = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="form-input"
-                                placeholder="admin@kamwalaa.com"
                                 required
                             />
                         </div>
@@ -68,7 +67,6 @@ const AdminLogin = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="form-input"
-                                placeholder="••••••••"
                                 required
                             />
                         </div>
