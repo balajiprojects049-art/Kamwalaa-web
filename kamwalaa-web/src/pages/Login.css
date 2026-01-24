@@ -21,12 +21,15 @@
 
 /* Left Side - Branding */
 .login-brand {
-    background: linear-gradient(135deg, var(--primary-700), var(--primary-900));
+    background: linear-gradient(135deg, rgba(8, 24, 66, 0.90), rgba(10, 30, 80, 0.85)), url('/assets/images/hero/login-hero.jpg');
+    background-size: cover;
+    background-position: center;
     padding: var(--spacing-4xl);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 .brand-content {

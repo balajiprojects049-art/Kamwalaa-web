@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FiMapPin, FiCalendar, FiClock, FiCreditCard, FiCheckCircle } from 'react-icons/fi';
+import PageHero from '../components/common/PageHero';
 import { useLanguage } from '../context/LanguageContext';
 import { useToastContext } from '../context/ToastContext';
 import './Booking.css';
@@ -43,41 +44,41 @@ const Booking = () => {
 
     const validateStep = (stepNumber) => {
         const newErrors = {};
-        
+
         if (stepNumber === 1) {
             if (!formData.fullName.trim()) {
                 newErrors.fullName = 'Full name is required';
             } else if (formData.fullName.trim().length < 2) {
                 newErrors.fullName = 'Name must be at least 2 characters';
             }
-            
+
             if (!formData.phone.trim()) {
                 newErrors.phone = 'Phone number is required';
             } else if (!/^[6-9]\d{9}$/.test(formData.phone.replace(/\D/g, ''))) {
                 newErrors.phone = 'Please enter a valid 10-digit mobile number';
             }
-            
+
             if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
                 newErrors.email = 'Please enter a valid email address';
             }
-            
+
             if (!formData.address.trim()) {
                 newErrors.address = 'Address is required';
             } else if (formData.address.trim().length < 10) {
                 newErrors.address = 'Please provide a complete address';
             }
-            
+
             if (!formData.city.trim()) {
                 newErrors.city = 'City is required';
             }
-            
+
             if (!formData.pincode.trim()) {
                 newErrors.pincode = 'Pincode is required';
             } else if (!/^\d{6}$/.test(formData.pincode)) {
                 newErrors.pincode = 'Pincode must be 6 digits';
             }
         }
-        
+
         if (stepNumber === 2) {
             if (!formData.date) {
                 newErrors.date = 'Please select a date';
@@ -89,12 +90,12 @@ const Booking = () => {
                     newErrors.date = 'Please select a future date';
                 }
             }
-            
+
             if (!formData.timeSlot) {
                 newErrors.timeSlot = 'Please select a time slot';
             }
         }
-        
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -129,23 +130,23 @@ const Booking = () => {
 
     const handleSubmitBooking = async (e) => {
         e.preventDefault();
-        
+
         if (!validateStep(3)) {
             showError('Please complete all required fields');
             return;
         }
-        
+
         setIsSubmitting(true);
-        
+
         try {
             // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 1000));
-            
+
             // Here you would integrate with your backend API
             console.log('Booking submitted:', { ...formData, selectedServices, category });
-            
+
             success('Booking confirmed successfully!');
-            
+
             // Navigate to success page
             setTimeout(() => {
                 navigate('/booking-success', {
@@ -186,24 +187,25 @@ const Booking = () => {
 
     return (
         <div className="booking-page">
-            <div className="booking-header">
-                <div className="container">
-                    <h1>Complete Your Booking</h1>
-                    <div className="booking-steps">
-                        <div className={`step ${step >= 1 ? 'active' : ''}`}>
-                            <div className="step-number">1</div>
-                            <span>Address</span>
-                        </div>
-                        <div className="step-line"></div>
-                        <div className={`step ${step >= 2 ? 'active' : ''}`}>
-                            <div className="step-number">2</div>
-                            <span>Schedule</span>
-                        </div>
-                        <div className="step-line"></div>
-                        <div className={`step ${step >= 3 ? 'active' : ''}`}>
-                            <div className="step-number">3</div>
-                            <span>Payment</span>
-                        </div>
+            <PageHero
+                title="Complete Your Booking"
+                backgroundImage="/assets/images/hero/booking-hero.jpg"
+                bgPosition="center center"
+            >
+            </PageHero>
+
+            <div className="container" style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+                <div className="booking-steps">
+                    <div className={`step ${step >= 1 ? 'active' : ''}`}>
+                        <span>Address</span>
+                    </div>
+                    <div className="step-line"></div>
+                    <div className={`step ${step >= 2 ? 'active' : ''}`}>
+                        <span>Schedule</span>
+                    </div>
+                    <div className="step-line"></div>
+                    <div className={`step ${step >= 3 ? 'active' : ''}`}>
+                        <span>Payment</span>
                     </div>
                 </div>
             </div>

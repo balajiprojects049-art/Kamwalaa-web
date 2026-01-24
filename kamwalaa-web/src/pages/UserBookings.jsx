@@ -53,7 +53,12 @@ const UserBookings = () => {
 
     return (
         <div className="user-bookings-page">
-            <PageHero title="My Bookings" subtitle="Track your service history" />
+            <PageHero
+                title="My Bookings"
+                subtitle="Track your service history"
+                backgroundImage="/assets/images/hero/user-bookings-hero.jpg"
+                bgPosition="center center"
+            />
 
             <div className="container bookings-container">
                 {bookings.length === 0 ? (

@@ -3,62 +3,54 @@
     background: #f8f9fa;
 }
 
-.booking-header {
-    background: linear-gradient(135deg, #004976, #003D5C);
-    padding: 3rem 0 2rem;
-    color: white;
-}
-
-.booking-header h1 {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2rem;
-    font-weight: 700;
-}
-
 .booking-steps {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 1rem;
-    max-width: 600px;
-    margin: 0 auto;
+    max-width: 800px;
+    margin: -3rem auto 2rem;
+    /* Overlap hero slightly or just sit below */
+    background: white;
+    padding: 1.5rem 3rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    position: relative;
+    z-index: 10;
 }
 
 .step {
     display: flex;
-    flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    flex: 1;
-    opacity: 0.5;
-    transition: opacity 0.3s;
+    color: #94a3b8;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.3s;
+    position: relative;
 }
 
 .step.active {
+    color: #004976;
+    font-weight: 700;
     opacity: 1;
 }
 
-.step-number {
-    width: 40px;
-    height: 40px;
+/* Add a small dot for active/completed steps if desired, or just keep text */
+.step.active::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    background: #004976;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-}
-
-.step.active .step-number {
-    background: #FF9800;
 }
 
 .step-line {
     flex: 1;
     height: 2px;
-    background: rgba(255, 255, 255, 0.3);
-    margin-top: -1.5rem;
+    background: #e2e8f0;
+    margin: 0 1.5rem;
+    border-radius: 2px;
 }
 
 .booking-content {

@@ -1,7 +1,7 @@
 import React from 'react';
 import './PageHero.css';
 
-const PageHero = ({ title, subtitle, backgroundImage, bgPosition = 'center center' }) => {
+const PageHero = ({ title, subtitle, backgroundImage, bgPosition = 'center center', children }) => {
     return (
         <div className="page-hero">
             {backgroundImage && (
@@ -17,6 +17,7 @@ const PageHero = ({ title, subtitle, backgroundImage, bgPosition = 'center cente
                 <div className="page-hero-content animate-fade-in-up">
                     <h1 className="page-hero-title">{title}</h1>
                     {subtitle && <p className="page-hero-subtitle">{subtitle}</p>}
+                    {children}
                 </div>
             </div>
         </div>

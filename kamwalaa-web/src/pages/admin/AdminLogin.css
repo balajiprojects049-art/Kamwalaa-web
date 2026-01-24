@@ -112,8 +112,9 @@
 }
 
 /* Updated Label Styles */
-.form-label {
-    color: #ffffff;
+/* Updated Label Styles */
+.admin-login-form .form-label {
+    color: #ffffff !important;
     /* Absolute white for maximum visibility */
     font-size: 0.95rem;
     font-weight: 600;
