@@ -41,61 +41,81 @@
     background-color: white;
     padding: 1.5rem;
     border-radius: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    /* Softer shadow */
     border: 1px solid #f3f4f6;
-    transition: box-shadow 0.2s;
+    transition: all 0.2s ease;
 }
 
 .stat-card:hover {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .stat-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 1rem;
+    /* Prevent overlap */
 }
 
 .stat-header p {
-    color: #6b7280;
+    color: #64748b;
+    /* Slate 500 */
     font-size: 0.875rem;
-    font-weight: 500;
-    margin-bottom: 0.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
 }
 
 .stat-header h3 {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 700;
-    color: #1f2937;
+    color: #1e293b;
+    /* Slate 800 */
+    line-height: 1;
 }
 
 .stat-icon {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 0.75rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    /* Circle */
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-size: 1.25rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    /* Don't shrink */
 }
 
-/* Gradients for icons */
+/* Soft Icon Styles */
 .bg-blue {
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    background-color: #eff6ff;
+    /* Blue 50 */
+    color: #3b82f6;
+    /* Blue 500 */
 }
 
 .bg-green {
-    background: linear-gradient(135deg, #10b981, #059669);
+    background-color: #ecfdf5;
+    /* Green 50 */
+    color: #10b981;
+    /* Green 500 */
 }
 
 .bg-purple {
-    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    background-color: #f5f3ff;
+    /* Violet 50 */
+    color: #8b5cf6;
+    /* Violet 500 */
 }
 
 .bg-yellow {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background-color: #fffbeb;
+    /* Amber 50 */
+    color: #f59e0b;
+    /* Amber 500 */
 }
 
 .stat-footer {
