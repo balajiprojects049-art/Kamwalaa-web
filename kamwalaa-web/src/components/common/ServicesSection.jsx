@@ -37,18 +37,10 @@ const ServicesSection = () => {
                                     const IconComponent = getServiceIcon(category.id);
                                     if (category.image) {
                                         return (
-                                            <div className="service-image-full" style={{
-                                                width: 'calc(100% + 4rem)',
-                                                height: '220px',
-                                                margin: '-2rem -2rem 1.5rem -2rem',
-                                                borderTopLeftRadius: '1.5rem',
-                                                borderTopRightRadius: '1.5rem',
-                                                overflow: 'hidden'
-                                            }}>
+                                            <div className="service-image-full">
                                                 <img
                                                     src={category.image}
                                                     alt={category.name.en}
-                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                                 />
                                             </div>
                                         );

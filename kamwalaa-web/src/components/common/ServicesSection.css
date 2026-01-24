@@ -229,6 +229,21 @@
     text-align: center;
 }
 
+.service-image-full {
+    width: calc(100% + 4rem);
+    height: 220px;
+    margin: -2rem -2rem 1.5rem -2rem;
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+    overflow: hidden;
+}
+
+.service-image-full img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 /* Responsive */
 @media (max-width: 991px) {
     .services-grid {
@@ -274,5 +289,11 @@
 
     .service-feature {
         font-size: 11px;
+    }
+
+    .service-image-full {
+        width: calc(100% + 2rem);
+        margin: -1rem -1rem 1rem -1rem;
+        /* Adjust border radius if needed, but keeping it consistent is usually fine or slightly less */
     }
 }

@@ -681,10 +681,6 @@
         grid-template-columns: 200px 1fr;
     }
 
-    .categories-column {
-        display: none;
-        /* Consider a mobile selector */
-    }
 }
 
 @media (max-width: 768px) {
@@ -731,8 +727,9 @@
 .service-card .view-details-btn {
     margin-top: 16px;
     width: 100%;
-} 
- 
+}
+
+   
 /* MOBILE RESPONSIVE */
 @media (max-width: 1024px) {
     .three-column-layout {
@@ -745,13 +742,63 @@
         margin-top: 70px;
         padding: 0 16px 40px;
     }
+
     .three-column-layout {
         display: flex;
         flex-direction: column;
         gap: 20px;
     }
-    .categories-column, .subcategories-column, .services-column {
+
+    .categories-column,
+    .subcategories-column,
+    .services-column {
         width: 100%;
+    }
+
+    /* Horizontal scroll for categories on mobile */
+    .categories-column {
+        display: flex !important;
+        /* Override explicit hidden if any */
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 4px;
+        gap: 10px;
+        background: transparent;
+        box-shadow: none;
+        border: none;
+        scrollbar-width: none;
+        margin-bottom: -10px;
+    }
+
+    .categories-column::-webkit-scrollbar {
+        display: none;
+    }
+
+    .categories-column .category-item {
+        min-width: max-content;
+        margin: 0;
+        background: white;
+        border: 1px solid var(--border);
+        padding: 8px 16px;
+        border-radius: 50px;
+        /* Pill shape */
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .categories-column .category-item.active {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+    }
+
+    .categories-column .category-item.active .cat-icon-wrapper {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        box-shadow: none;
+    }
+
+    .categories-column .category-item .arrow-icon {
+        display: none;
     }
 }
 
@@ -759,9 +806,11 @@
     .container {
         padding: 0 12px;
     }
+
     .category-item {
         padding: 10px 8px;
     }
+
     .service-img-wrapper {
         height: 140px;
     }

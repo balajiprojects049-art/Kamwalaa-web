@@ -370,7 +370,7 @@
     }
 
     .mobile-menu-toggle {
-        display: flex;
+        display: flex !important;
     }
 
     .mobile-menu {
