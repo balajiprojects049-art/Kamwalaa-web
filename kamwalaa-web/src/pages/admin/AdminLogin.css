@@ -249,7 +249,7 @@
 
 .form-input {
     width: 100%;
-    padding: 1rem 1rem 1rem 3rem;
+    padding: 1rem 1.25rem;
     /* Left padding for icon */
     background: rgba(15, 23, 42, 0.5);
     border: 1px solid #334155;
