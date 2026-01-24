@@ -9,6 +9,8 @@ const Contact = () => {
             <PageHero
                 title="Contact Us"
                 subtitle="We are here to help you"
+                backgroundImage="/assets/images/hero/contact-hero.png"
+                bgPosition="center 40%"
             />
 
             <div className="section container">

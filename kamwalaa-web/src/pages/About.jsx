@@ -8,6 +8,8 @@ const About = () => {
             <PageHero
                 title="About Kamwalaa"
                 subtitle="Revolutionizing Home Services in India"
+                backgroundImage="/assets/images/hero/about-hero.png"
+                bgPosition="center 25%"
             />
 
             <div className="section container">

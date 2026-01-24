@@ -32,6 +32,8 @@ const BecomePartner = () => {
             <PageHero
                 title="Become a Partner"
                 subtitle="Join India's fastest growing home services platform"
+                backgroundImage="/assets/images/hero/partner-hero.png"
+                bgPosition="center 25%"
             />
 
             <div className="container partner-layout">

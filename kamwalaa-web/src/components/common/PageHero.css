@@ -1,18 +1,42 @@
 .page-hero {
-    height: 380px;
-    /* Increased to account for pull-up */
-    background-color: var(--primary-800);
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
+    height: 550px;
+    /* Increased height */
     position: relative;
     margin-top: -80px;
-    /* Pull up into the header space */
     padding-top: 80px;
-    /* Push content down so it's not behind header */
     margin-bottom: var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
     color: white;
+    /* White text */
+}
+
+.page-hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    z-index: 1;
+}
+
+.page-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Neutral dark overlay */
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 2;
+}
+
+/* Ensure content is above the overlay */
+.page-hero .container {
+    position: relative;
+    z-index: 3;
 }
 
 .page-hero-content {
@@ -20,9 +44,10 @@
 }
 
 .page-hero-title {
-    font-size: 3rem;
+    font-size: 3.5rem;
+    /* Larger font */
     font-weight: 800;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
     color: white;
 }
 
@@ -30,6 +55,7 @@
     font-size: 1.25rem;
     color: rgba(255, 255, 255, 0.9);
     margin: 0;
+    font-weight: 500;
 }
 
 @media (max-width: 768px) {

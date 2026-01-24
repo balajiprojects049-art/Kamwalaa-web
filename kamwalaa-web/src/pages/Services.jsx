@@ -205,6 +205,8 @@ const Services = () => {
             <PageHero
                 title={t.nav.services}
                 subtitle="Explore our professional home services"
+                backgroundImage="/assets/images/hero/services-hero.png"
+                bgPosition="center center"
             />
 
             {/* Search Header - Fixed at Top */}

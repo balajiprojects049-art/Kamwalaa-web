@@ -1,13 +1,18 @@
 import React from 'react';
 import './PageHero.css';
 
-const PageHero = ({ title, subtitle, backgroundImage }) => {
-    const style = backgroundImage
-        ? { backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${backgroundImage})` }
-        : {};
-
+const PageHero = ({ title, subtitle, backgroundImage, bgPosition = 'center center' }) => {
     return (
-        <div className="page-hero" style={style}>
+        <div className="page-hero">
+            {backgroundImage && (
+                <>
+                    <div className="page-hero-bg" style={{
+                        backgroundImage: `url(${backgroundImage})`,
+                        backgroundPosition: bgPosition
+                    }}></div>
+                    <div className="page-hero-overlay"></div>
+                </>
+            )}
             <div className="container">
                 <div className="page-hero-content animate-fade-in-up">
                     <h1 className="page-hero-title">{title}</h1>
