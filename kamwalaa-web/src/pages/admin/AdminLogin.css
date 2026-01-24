@@ -1,98 +1,216 @@
-/* Admin Login Page Stylings */
+/* Admin Login Page Stylings - Split Layout Premium */
 .admin-login-page {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #0f172a;
+    background: #0f172a;
     /* Slate 900 */
-    position: relative;
-    overflow: hidden;
     font-family: 'Inter', sans-serif;
+    padding: 2rem;
 }
 
-/* Background Decorations (Keep existing) */
+/* Glassmorphism Split Card */
+.admin-login-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #1e293b;
+    /* Slate 800 */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 1000px;
+    overflow: hidden;
+    position: relative;
+    animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Left Side: Branding --- */
+.admin-brand-section {
+    position: relative;
+    background: #0f172a;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: white;
+    text-align: center;
+}
+
+/* Animated Background (Blobs) */
 .admin-bg-decoration {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    z-index: 0;
+    z-index: 1;
+}
+
+.admin-blob-1,
+.admin-blob-2,
+.admin-blob-3 {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.5;
+    animation: floatBlob 20s infinite ease-in-out alternate;
 }
 
 .admin-blob-1 {
-    position: absolute;
-    top: -10%;
-    left: -10%;
-    width: 50%;
-    height: 50%;
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
-    border-radius: 50%;
-    filter: blur(80px);
+    top: -20%;
+    left: -20%;
+    width: 400px;
+    height: 400px;
+    background: #3b82f6;
+    animation-delay: 0s;
 }
 
 .admin-blob-2 {
-    position: absolute;
-    bottom: -10%;
-    right: -10%;
-    width: 50%;
-    height: 50%;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
-    border-radius: 50%;
-    filter: blur(80px);
+    bottom: -20%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    background: #8b5cf6;
+    animation-delay: -5s;
 }
 
-/* Login Card */
-.admin-login-card {
-    background: rgba(30, 41, 59, 0.9);
-    /* Darker, less transparent for better contrast */
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 2.5rem;
-    border-radius: 1rem;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-    width: 100%;
-    max-width: 25rem;
-    z-index: 10;
+.admin-blob-3 {
+    top: 40%;
+    left: 40%;
+    width: 250px;
+    height: 250px;
+    background: #06b6d4;
+    animation-delay: -10s;
+}
+
+@keyframes floatBlob {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(30px, -50px) scale(1.1);
+    }
+
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+}
+
+/* Branding Content */
+.brand-content-wrapper {
     position: relative;
-    color: white;
-}
-
-/* Header Section */
-.admin-login-header {
-    text-align: center;
-    margin-bottom: 2rem;
+    z-index: 10;
 }
 
 .admin-icon-circle {
-    width: 4rem;
-    height: 4rem;
+    width: 5rem;
+    height: 5rem;
     border-radius: 50%;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 1.25rem auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .admin-icon-circle svg {
-    font-size: 1.75rem;
+    font-size: 2.5rem;
     color: white;
 }
 
-.admin-login-header h2 {
-    font-size: 1.75rem;
-    font-weight: 700;
+.admin-brand-section h2 {
+    font-size: 2.25rem;
+    font-weight: 800;
     margin-bottom: 0.5rem;
-    color: #fff;
+    background: linear-gradient(135deg, white, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.admin-login-header p {
-    color: #cbd5e1;
-    /* Slate 300 */
-    font-size: 0.95rem;
+.admin-brand-section p {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+}
+
+.admin-features {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.admin-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.75rem 1.25rem;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+}
+
+.feature-dot {
+    width: 8px;
+    height: 8px;
+    background: #3b82f6;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #3b82f6;
+}
+
+.admin-feature span {
+    font-size: 0.9rem;
+    color: #e2e8f0;
+}
+
+/* --- Right Side: Form --- */
+.admin-form-section {
+    padding: 4rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #1e293b;
+    /* Dark card bg */
+}
+
+.form-header {
+    margin-bottom: 2rem;
+}
+
+.form-header h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.form-header p {
+    color: #94a3b8;
 }
 
 /* Form Styles */
@@ -106,86 +224,82 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    /* Space between label and input */
-    position: relative;
-    /* Ensure stacking context */
 }
 
-/* Updated Label Styles */
-/* Updated Label Styles */
-.admin-login-form .form-label {
+.form-label {
     color: #ffffff !important;
-    /* Absolute white for maximum visibility */
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    display: block;
-    opacity: 1;
-    /* Force opacity */
-    margin-bottom: 0.25rem;
+    margin-left: 0.25rem;
 }
 
 .input-wrapper {
     position: relative;
-    width: 100%;
+    display: flex;
+    align-items: center;
 }
 
-/* Updated Input Styles - No Icon padding */
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    color: #64748b;
+    font-size: 1.1rem;
+    z-index: 1;
+}
+
 .form-input {
     width: 100%;
-    padding: 0.875rem 1rem;
-    /* Standard padding, no left indent */
-    background-color: rgba(15, 23, 42, 0.8);
-    /* Dark background */
-    border: 1px solid #475569;
-    /* Slate 600 */
-    border-radius: 0.5rem;
-    color: #fff;
+    padding: 1rem 1rem 1rem 3rem;
+    /* Left padding for icon */
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid #334155;
+    border-radius: 0.75rem;
+    color: white;
     font-size: 1rem;
-    box-sizing: border-box;
-    transition: border-color 0.2s;
+    transition: all 0.3s ease;
 }
 
 .form-input:focus {
     outline: none;
-    border-color: #60a5fa;
-    /* Blue 400 */
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+    background: rgba(15, 23, 42, 0.8);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
 }
 
 .form-input::placeholder {
     color: #64748b;
-    /* Slate 500 */
 }
 
-/* Button */
 .admin-login-btn {
     width: 100%;
-    padding: 0.875rem;
-    margin-top: 0.5rem;
-    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    padding: 1rem;
+    margin-top: 1rem;
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
     color: white;
-    font-weight: 600;
-    border-radius: 0.5rem;
+    font-weight: 700;
+    border-radius: 0.75rem;
     border: none;
     cursor: pointer;
-    transition: transform 0.1s;
+    transition: all 0.3s;
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
 }
 
 .admin-login-btn:hover {
-    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #1d4ed8, #4338ca);
 }
 
 .loading-spinner {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 0.5rem;
 }
 
 .spinner-svg {
-    animation: spin 1s linear infinite;
-    margin-right: 0.75rem;
     height: 1.25rem;
     width: 1.25rem;
+    animation: spin 1s linear infinite;
     color: white;
 }
 
@@ -199,22 +313,41 @@
     }
 }
 
-/* Footer Link */
 .admin-login-footer {
     margin-top: 2rem;
     text-align: center;
 }
 
 .back-link {
-    color: #94a3b8;
-    font-size: 0.9rem;
-    text-decoration: none;
-    background: transparent;
+    color: #64748b;
+    background: none;
     border: none;
     cursor: pointer;
+    font-size: 0.9rem;
+    transition: color 0.3s;
 }
 
 .back-link:hover {
-    color: #fff;
-    text-decoration: underline;
+    color: #94a3b8;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .admin-login-card {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+    }
+
+    .admin-brand-section {
+        padding: 2rem;
+        display: none;
+        /* Hide brand on mobile or stack it */
+    }
+
+    /* Option: Show brand but smaller */
+    /* .admin-brand-section { display: flex; height: 200px; } */
+
+    .admin-form-section {
+        padding: 2.5rem;
+    }
 }
