@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
+import { sendOTP, verifyOTP } from '../services/apiService';
 import './Login.css';
 
 const Login = () => {
@@ -10,34 +11,47 @@ const Login = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
-    const [useOtpLogin, setUseOtpLogin] = useState(false); // Toggle between Password/OTP
+    const [useOtpLogin, setUseOtpLogin] = useState(true); // OTP login as default
+    const [otpSent, setOtpSent] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
     const [formData, setFormData] = useState({
         phone: '',
+        name: '',
         password: '',
         otp: ''
     });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+        setLoading(true);
 
-        // Simulate Login Logic
-        const mockUser = {
-            name: 'Demo User',
-            phone: formData.phone,
-            email: 'user@example.com',
-            address: '123, Green Park, Hyderabad'
-        };
+        try {
+            if (useOtpLogin) {
+                // OTP Login
+                if (!otpSent) {
+                    setError('Please request OTP first');
+                    setLoading(false);
+                    return;
+                }
 
-        if (useOtpLogin) {
-            console.log('Logging in with OTP:', formData.phone, formData.otp);
-        } else {
-            console.log('Logging in with Password:', formData.phone, formData.password);
+                const response = await verifyOTP(formData.phone, formData.otp, formData.name);
+
+                if (response.success) {
+                    login(response.user);
+                    localStorage.setItem('user', JSON.stringify(response.user));
+                    navigate('/');
+                }
+            } else {
+                // Password login (for future implementation)
+                setError('Password login coming soon. Please use OTP login.');
+            }
+        } catch (err) {
+            setError(err.response?.data?.message || 'Login failed. Please try again.');
+        } finally {
+            setLoading(false);
         }
-
-        // Perform login action
-        login(mockUser);
-        alert('Login Successful!');
-        navigate('/'); // Redirect to Home
     };
 
     const handleChange = (e) => {
@@ -45,11 +59,30 @@ const Login = () => {
             ...formData,
             [e.target.name]: e.target.value
         });
+        setError('');
     };
 
-    const handleSendOtp = () => {
-        if (!formData.phone) return alert('Please enter phone number');
-        alert('OTP Sent to: ' + formData.phone);
+    const handleSendOtp = async () => {
+        if (!formData.phone || formData.phone.length !== 10) {
+            setError('Please enter a valid 10-digit phone number');
+            return;
+        }
+
+        setLoading(true);
+        setError('');
+
+        try {
+            const response = await sendOTP(formData.phone);
+
+            if (response.success) {
+                setOtpSent(true);
+                alert(`OTP sent successfully to ${formData.phone}!\n\n${response.otp ? `Development OTP: ${response.otp}` : 'Check your SMS'}`);
+            }
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to send OTP. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -91,6 +124,19 @@ const Login = () => {
                             <p className="form-subtitle">Enter your phone number to continue</p>
                         </div>
 
+                        {error && (
+                            <div style={{
+                                padding: '0.75rem',
+                                marginBottom: '1rem',
+                                backgroundColor: '#fee',
+                                color: '#c00',
+                                borderRadius: '8px',
+                                fontSize: '0.9rem'
+                            }}>
+                                {error}
+                            </div>
+                        )}
+
                         <form onSubmit={handleSubmit} className="login-form">
                             {/* Phone Field */}
                             <div className="form-group">
@@ -105,11 +151,34 @@ const Login = () => {
                                         value={formData.phone}
                                         onChange={handleChange}
                                         className="form-input no-icon"
-                                        placeholder="+91"
+                                        placeholder="10-digit mobile number"
+                                        maxLength="10"
                                         required
+                                        disabled={otpSent}
                                     />
                                 </div>
                             </div>
+
+                            {/* Name Field - Only for OTP login */}
+                            {useOtpLogin && (
+                                <div className="form-group">
+                                    <label htmlFor="name" className="form-label">
+                                        Your Name
+                                    </label>
+                                    <div className="input-wrapper">
+                                        <input
+                                            type="text"
+                                            id="name"
+                                            name="name"
+                                            value={formData.name}
+                                            onChange={handleChange}
+                                            className="form-input no-icon"
+                                            placeholder="Enter your full name"
+                                            required={useOtpLogin}
+                                        />
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Password or OTP Field */}
                             {!useOtpLogin ? (
@@ -165,15 +234,20 @@ const Login = () => {
                                             type="button"
                                             className="btn btn-secondary"
                                             onClick={handleSendOtp}
+                                            disabled={loading || otpSent}
                                             style={{ whiteSpace: 'nowrap' }}
                                         >
-                                            Get OTP
+                                            {loading ? 'Sending...' : otpSent ? 'OTP Sent' : 'Get OTP'}
                                         </button>
                                     </div>
                                     <div style={{ textAlign: 'right', marginTop: '0.5rem' }}>
                                         <button
                                             type="button"
-                                            onClick={() => setUseOtpLogin(false)}
+                                            onClick={() => {
+                                                setUseOtpLogin(false);
+                                                setOtpSent(false);
+                                                setError('');
+                                            }}
                                             style={{ background: 'none', border: 'none', color: '#2563eb', cursor: 'pointer', fontWeight: 600 }}
                                         >
                                             Login with Password instead?
@@ -196,8 +270,12 @@ const Login = () => {
                             )}
 
                             {/* Submit Button */}
-                            <button type="submit" className="btn btn-primary btn-lg submit-btn">
-                                {useOtpLogin ? 'Verify & Login' : 'Login'}
+                            <button
+                                type="submit"
+                                className="btn btn-primary btn-lg submit-btn"
+                                disabled={loading}
+                            >
+                                {loading ? 'Please wait...' : (useOtpLogin ? 'Verify & Login' : 'Login')}
                             </button>
 
                             {/* Sign Up Link */}
