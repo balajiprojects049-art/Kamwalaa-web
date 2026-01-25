@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import './Login.css'; // Reusing Login CSS
 
 const SignUp = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
+    const toast = useToast();
 
     // Standard Signup State
     const [formData, setFormData] = useState({
@@ -34,7 +36,7 @@ const SignUp = () => {
 
         console.log('Signing up with:', newUser);
         login(newUser);
-        alert('Account created successfully! Welcome ' + newUser.name);
+        toast.success(`Account created successfully! Welcome ${newUser.name}`);
         navigate('/'); // Redirect to Home
     };
 

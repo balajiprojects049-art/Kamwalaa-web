@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
+import { useModal } from '../context/ModalContext';
 import PageHero from '../components/common/PageHero';
 import RateServiceModal from '../components/common/RateServiceModal';
 import { Link } from 'react-router-dom';
@@ -8,16 +10,21 @@ import './UserBookings.css';
 
 const UserBookings = () => {
     const { user } = useAuth();
+    const toast = useToast();
+    const modal = useModal();
     const [selectedBookingForReview, setSelectedBookingForReview] = useState(null);
 
     const handleReviewSubmit = (reviewData) => {
         console.log('Review Submitted:', reviewData);
-        alert('Thank you for your feedback!');
+        toast.success('Thank you for your feedback!');
         setSelectedBookingForReview(null);
     };
 
     const handleInvoice = (booking) => {
-        alert(`Downloading Invoice for Booking #${booking.id}...\n(In a real app, this would download a PDF)`);
+        modal.alert(
+            '📄 Invoice',
+            `Downloading Invoice for Booking #${booking.id}...\n\n(In a real app, this would download a PDF)`
+        );
     };
 
     // Mock Data - In real app, fetch from API

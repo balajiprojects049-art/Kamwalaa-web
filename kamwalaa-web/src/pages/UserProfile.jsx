@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import PageHero from '../components/common/PageHero';
 import { FiUser, FiMail, FiPhone, FiMapPin, FiSave } from 'react-icons/fi';
 import './UserProfile.css';
 
 const UserProfile = () => {
     const { user, updateUser } = useAuth();
+    const toast = useToast();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -34,7 +36,7 @@ const UserProfile = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         updateUser(formData);
-        alert('Profile updated successfully!');
+        toast.success('Profile updated successfully!');
     };
 
     if (!user) {

@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
+import { useModal } from '../context/ModalContext';
 import { sendOTP, verifyOTP } from '../services/apiService';
 import './Login.css';
 
@@ -10,6 +12,8 @@ const Login = () => {
     const { t } = useLanguage();
     const { login } = useAuth();
     const navigate = useNavigate();
+    const toast = useToast();
+    const modal = useModal();
     const [showPassword, setShowPassword] = useState(false);
     const [useOtpLogin, setUseOtpLogin] = useState(true); // OTP login as default
     const [otpSent, setOtpSent] = useState(false);
@@ -41,6 +45,7 @@ const Login = () => {
                 if (response.success) {
                     login(response.user);
                     localStorage.setItem('user', JSON.stringify(response.user));
+                    toast.success('Login successful! Welcome back.');
                     navigate('/');
                 }
             } else {
@@ -76,7 +81,15 @@ const Login = () => {
 
             if (response.success) {
                 setOtpSent(true);
-                alert(`OTP sent successfully to ${formData.phone}!\n\n${response.otp ? `Development OTP: ${response.otp}` : 'Check your SMS'}`);
+                toast.success(`OTP sent successfully to ${formData.phone}`);
+
+                // Show OTP in modal for development
+                if (response.otp) {
+                    modal.alert(
+                        '🔐 OTP Sent',
+                        `Your OTP is: ${response.otp}\n\nThis is only shown in development mode.`
+                    );
+                }
             }
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to send OTP. Please try again.');

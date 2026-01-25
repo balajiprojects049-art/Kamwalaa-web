@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import { useToast } from '../context/ToastContext';
+import { useModal } from '../context/ModalContext';
 import PageHero from '../components/common/PageHero';
 import { FiTrendingUp, FiClock, FiDollarSign } from 'react-icons/fi';
 import { getAllCategories } from '../data/servicesData';
 import './BecomePartner.css';
 
 const BecomePartner = () => {
+    const toast = useToast();
+    const modal = useModal();
     const categories = getAllCategories();
     const [formData, setFormData] = useState({
         name: '',
@@ -23,7 +27,15 @@ const BecomePartner = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Partner Registration:', formData);
-        alert('Thank you for registering! Our team will verify your details and contact you shortly.');
+
+        modal.alert(
+            '✅ Registration Successful',
+            'Thank you for registering! Our team will verify your details and contact you shortly.',
+            () => {
+                toast.success('Welcome to Kamwalaa Partner Network!');
+            }
+        );
+
         setFormData({ name: '', phone: '', city: '', serviceCategory: '' });
     };
 
