@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { getServiceCategories } from '../services/apiService';
 import Hero from '../components/common/Hero';
 import ServiceCategoriesSlider from '../components/common/ServiceCategoriesSlider';
 import FeaturedServices from '../components/home/FeaturedServices';
@@ -6,69 +7,109 @@ import ServicesSection from '../components/common/ServicesSection';
 import WhyChooseUs from '../components/common/WhyChooseUs';
 import HowItWorks from '../components/common/HowItWorks';
 import Testimonials from '../components/common/Testimonials';
-import { servicesData } from '../data/servicesData';
+import { useLanguage } from '../context/LanguageContext';
 
 const Home = () => {
-    // Helper to extract image from a category/subcategory
+    const { currentLanguage } = useLanguage();
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await getServiceCategories();
+                if (response.success) {
+                    setCategories(response.data);
+                }
+            } catch (error) {
+                console.error("Error loading home data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchCategories();
+    }, []);
+
+    // Helper to extract image
     const getRepresentativeImage = (item) => {
+        // Backend data structure: item might have image_url or nested services with images
+        if (item.icon_url) return item.icon_url; // Categories have icon_url
         if (item.subcategories && item.subcategories.length > 0) {
-            return item.subcategories[0]?.services?.[0]?.images?.[0];
-        }
-        if (item.services && item.services.length > 0) {
-            return item.services?.[0]?.images?.[0];
+            // Try to find an image in subcategories -> services
+            const sub = item.subcategories[0];
+            if (sub.services && sub.services.length > 0 && sub.services[0].image_url) {
+                return sub.services[0].image_url;
+            }
         }
         return null;
     };
 
-    // 1. Main Services -> Top Level Categories (Electrical, Plumbing, etc.)
+    const getName = (item) => {
+        if (!item) return '';
+        // Handle database format (simple string) or local format (object)
+        if (typeof item.name === 'string') return item.name;
+        return item.name[currentLanguage] || item.name.en || '';
+    };
+
+    // 1. Main Services -> Top Level Categories
     const mainServices = useMemo(() => {
-        return Object.values(servicesData).map(cat => ({
+        return categories.map(cat => ({
             id: cat.id,
-            name: cat.name,
+            name: { en: getName(cat) }, // FeaturedServices expects object with en/te key
             price: 'View Services',
-            images: [getRepresentativeImage(cat)],
+            images: [cat.icon_url || getRepresentativeImage(cat)],
             type: 'category',
             categoryId: cat.id
         })).slice(0, 4);
-    }, []);
+    }, [categories, currentLanguage]);
 
-    // Helper to get specific subcategory
-    const getSubcategory = (catId, subId) => {
-        const cat = servicesData[catId];
-        if (!cat) return null;
-        const sub = cat.subcategories?.find(s => s.id === subId);
-        if (!sub) return null;
-        return {
-            id: sub.id,
-            name: sub.name,
-            price: 'From ₹299', // Generic starting price
-            images: [getRepresentativeImage(sub)],
-            type: 'subcategory',
-            categoryId: cat.id,
-            subcategoryId: sub.id
-        };
-    };
-
-    // 2. Recommended -> Popular Subcategories
+    // 2. Recommended -> Popular Subcategories (Just picking some for now)
     const recommendedServices = useMemo(() => {
-        return [
-            getSubcategory('electrical', 'fans'),
-            getSubcategory('plumbing', 'washbasin'),
-            getSubcategory('cleaning', 'home-clean'),
-            getSubcategory('painting', 'painting-walls')
-        ].filter(Boolean);
-    }, []);
+        const recs = [];
+        categories.forEach(cat => {
+            if (cat.subcategories) {
+                cat.subcategories.slice(0, 1).forEach(sub => {
+                    recs.push({
+                        id: sub.id,
+                        name: { en: getName(sub) },
+                        price: 'From ₹249',
+                        images: sub.services?.[0]?.image_url ? [sub.services[0].image_url] : [],
+                        type: 'subcategory',
+                        categoryId: cat.id,
+                        subcategoryId: sub.id
+                    });
+                });
+            }
+        });
+        return recs.slice(0, 4);
+    }, [categories, currentLanguage]);
 
-    // 3. Special -> Niche Subcategories (using IDs from servicesData)
+    // 3. Special -> More Subcategories
     const specialServices = useMemo(() => {
-        return [
-            getSubcategory('waterPurifier', 'ro-install'), // Note: ID might be ro-install in category too
-            getSubcategory('cleaning', 'kitchen-bath'),
-            getSubcategory('gardening', 'garden-maintain'),
-            getSubcategory('gas', 'gas-pipeline') // Assuming subcat id exists or similar
-        ].filter(Boolean);
-        // Fallback if some subcats don't match, we might need to verify IDs but this is best effort
-    }, []);
+        const specs = [];
+        // Flatten all subcategories and pick from middle
+        const allSubs = [];
+        categories.forEach(cat => {
+            if (cat.subcategories) {
+                cat.subcategories.forEach(sub => {
+                    allSubs.push({ sub, cat });
+                });
+            }
+        });
+        // Just pick some random/different ones
+        allSubs.slice(2, 6).forEach(({ sub, cat }) => {
+            specs.push({
+                id: sub.id,
+                name: { en: getName(sub) },
+                price: 'Best Price',
+                images: sub.services?.[0]?.image_url ? [sub.services[0].image_url] : [],
+                type: 'subcategory',
+                categoryId: cat.id,
+                subcategoryId: sub.id
+            });
+        });
+        return specs;
+    }, [categories, currentLanguage]);
 
     return (
         <div className="home-page">

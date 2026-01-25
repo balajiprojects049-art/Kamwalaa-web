@@ -9,7 +9,7 @@ const AdminLogin = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const { showToast } = useToast();
+    const { success, error } = useToast();
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -19,10 +19,10 @@ const AdminLogin = () => {
         setTimeout(() => {
             if (email === 'admin@kamwalaa.com' && password === 'admin123') {
                 localStorage.setItem('adminToken', 'mock-token-12345');
-                showToast('Welcome back, Admin!', 'success');
+                success('Welcome back, Admin!');
                 navigate('/admin/dashboard');
             } else {
-                showToast('Invalid credentials. Please try again.', 'error');
+                error('Invalid credentials. Please try again.');
             }
             setLoading(false);
         }, 1500);

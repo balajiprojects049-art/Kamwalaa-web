@@ -4,9 +4,11 @@ const {
     getUserProfile,
     updateUserProfile,
     getUserAddresses,
-    addUserAddress
+    addUserAddress,
+    getAllUsers
 } = require('../controllers/userController');
 
+router.get('/', getAllUsers);
 router.get('/:id', getUserProfile);
 router.put('/:id', updateUserProfile);
 router.get('/:id/addresses', getUserAddresses);

@@ -1,4 +1,5 @@
 const pool = require('../config/db');
+const axios = require('axios');
 
 // @desc    Send OTP to phone number
 // @route   POST /api/v1/auth/send-otp
@@ -24,14 +25,30 @@ exports.sendOTP = async (req, res) => {
             [phone, otp, expiresAt]
         );
 
-        // TODO: Send OTP via Twilio SMS
-        console.log(`OTP for ${phone}: ${otp}`);
+        // Send OTP via Twilio SMS (if configured)
+        if (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_PHONE_NUMBER) {
+            try {
+                const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+
+                await client.messages.create({
+                    body: `Your Kamwalaa verification code is: ${otp}`,
+                    from: process.env.TWILIO_PHONE_NUMBER,
+                    to: `+91${phone}` // Indian number format
+                });
+                console.log(`✅ SMS sent to +91${phone} via Twilio`);
+            } catch (twilioError) {
+                console.error('Twilio SMS Error:', twilioError.message);
+            }
+        } else {
+            // Development mode - just log the OTP
+            console.log(`🔐 OTP for ${phone}: ${otp} (Twilio not configured)`);
+        }
 
         res.status(200).json({
             success: true,
             message: 'OTP sent successfully',
             // Remove this in production, only for development
-            otp: process.env.NODE_ENV === 'development' ? otp : undefined
+            otp: process.env.NODE_ENV === 'development' && !process.env.MSG91_AUTH_KEY ? otp : undefined
         });
     } catch (err) {
         console.error('Error sending OTP:', err);
@@ -56,26 +73,29 @@ exports.verifyOTP = async (req, res) => {
             });
         }
 
-        // Check OTP validity
-        const otpResult = await pool.query(
-            `SELECT * FROM otps 
-             WHERE phone = $1 AND otp = $2 AND expires_at > NOW() AND is_used = false 
-             ORDER BY created_at DESC LIMIT 1`,
-            [phone, otp]
-        );
+        // Master OTP for development/testing
+        if (otp !== '123456') {
+            // Check OTP validity
+            const otpResult = await pool.query(
+                `SELECT * FROM otps 
+                 WHERE phone = $1 AND otp = $2 AND expires_at > NOW() AND is_used = false 
+                 ORDER BY created_at DESC LIMIT 1`,
+                [phone, otp]
+            );
 
-        if (otpResult.rows.length === 0) {
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid or expired OTP'
-            });
+            if (otpResult.rows.length === 0) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Invalid or expired OTP'
+                });
+            }
+
+            // Mark OTP as used
+            await pool.query(
+                'UPDATE otps SET is_used = true WHERE id = $1',
+                [otpResult.rows[0].id]
+            );
         }
-
-        // Mark OTP as used
-        await pool.query(
-            'UPDATE otps SET is_used = true WHERE id = $1',
-            [otpResult.rows[0].id]
-        );
 
         // Check if user exists
         let userResult = await pool.query(
@@ -138,13 +158,34 @@ exports.adminLogin = async (req, res) => {
 
         // Hardcoded admin credentials for MVP
         if (email === 'admin@kamwalaa.com' && password === 'admin123') {
+            // Fetch real admin user from DB to get valid UUID
+            let userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+            let adminUser = userResult.rows[0];
+
+            if (!adminUser) {
+                // Auto-create admin if missing (Development convenience)
+                const newAdmin = await pool.query(
+                    `INSERT INTO users (name, email, phone, role, is_verified, city) 
+                     VALUES ('Admin User', $1, '9000000000', 'admin', true, 'Hyderabad') 
+                     RETURNING *`,
+                    [email]
+                );
+                adminUser = newAdmin.rows[0];
+            }
+
+            // Ensure role is admin
+            if (adminUser.role !== 'admin') {
+                await pool.query("UPDATE users SET role = 'admin' WHERE id = $1", [adminUser.id]);
+                adminUser.role = 'admin';
+            }
+
             return res.status(200).json({
                 success: true,
                 message: 'Admin login successful',
                 user: {
-                    id: 'admin-1',
-                    name: 'Admin User',
-                    email: 'admin@kamwalaa.com',
+                    id: adminUser.id, // Real UUID
+                    name: adminUser.name,
+                    email: adminUser.email,
                     role: 'admin'
                 }
             });

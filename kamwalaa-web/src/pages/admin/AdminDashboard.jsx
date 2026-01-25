@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaCalendarCheck, FaMoneyBillWave, FaUserPlus, FaStar } from 'react-icons/fa';
+import { getAllBookings } from '../../services/apiService';
 import './AdminDashboard.css';
 
 const StatCard = ({ title, value, change, icon, colorClass }) => (
@@ -23,33 +24,63 @@ const StatCard = ({ title, value, change, icon, colorClass }) => (
 );
 
 const AdminDashboard = () => {
+    const [stats, setStats] = useState({
+        totalBookings: 0,
+        totalRevenue: 0,
+        recentBookings: []
+    });
+
+    useEffect(() => {
+        const fetchDashboardData = async () => {
+            try {
+                const response = await getAllBookings();
+                if (response.success && response.data) {
+                    const bookings = response.data;
+                    const totalRev = bookings.reduce((acc, curr) => acc + (parseFloat(curr.total_amount) || 0), 0);
+
+                    setStats({
+                        totalBookings: bookings.length,
+                        totalRevenue: totalRev,
+                        recentBookings: bookings.slice(0, 5), // Top 5 recent
+                        newCustomers: 0, // Placeholder until user API is connected
+                        popularServices: [] // Placeholder
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to fetch dashboard data:', error);
+            }
+        };
+
+        fetchDashboardData();
+    }, []);
+
     return (
         <div className="dashboard-container">
             <div className="dashboard-header">
                 <h1>Dashboard Overview</h1>
-                <p>Welcome back, here's what's happening efficiently.</p>
+                <p>Real-time analytics and booking insights.</p>
             </div>
 
             {/* Stats Grid */}
             <div className="stats-grid">
                 <StatCard
                     title="Total Bookings"
-                    value="1,248"
-                    change="+12.5%"
+                    value={stats.totalBookings}
+                    change="--%"
                     icon={<FaCalendarCheck />}
                     colorClass="bg-blue"
                 />
                 <StatCard
                     title="Total Revenue"
-                    value="₹8.4L"
-                    change="+8.2%"
+                    value={`₹${stats.totalRevenue.toLocaleString()}`}
+                    change="--%"
                     icon={<FaMoneyBillWave />}
                     colorClass="bg-green"
                 />
                 <StatCard
                     title="New Customers"
-                    value="384"
-                    change="+5.4%"
+                    value={stats.newCustomers || 0}
+                    change="--%"
                     icon={<FaUserPlus />}
                     colorClass="bg-purple"
                 />
@@ -83,26 +114,37 @@ const AdminDashboard = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {[1, 2, 3, 4, 5].map((item) => (
-                                    <tr key={item}>
-                                        <td>
-                                            <div className="user-cell">
-                                                <div className="user-avatar-small">
-                                                    C{item}
+
+                                {stats.recentBookings.length > 0 ? (
+                                    stats.recentBookings.map((booking) => (
+                                        <tr key={booking.id}>
+                                            <td>
+                                                <div className="user-cell">
+                                                    <div className="user-avatar-small">
+                                                        {booking.customer_name ? booking.customer_name.charAt(0) : 'U'}
+                                                    </div>
+                                                    <span className="user-name">{booking.customer_name}</span>
                                                 </div>
-                                                <span className="user-name">John Doe</span>
-                                            </div>
+                                            </td>
+                                            <td className="text-cell">{booking.service_name}</td>
+                                            <td className="date-cell">
+                                                {booking.booking_date ? new Date(booking.booking_date).toLocaleDateString() : 'N/A'}
+                                            </td>
+                                            <td>
+                                                <span className={`status-badge status-${booking.status.toLowerCase()}`}>
+                                                    {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                                                </span>
+                                            </td>
+                                            <td className="amount-cell">₹{booking.total_amount}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="5" style={{ textAlign: 'center', padding: '1rem' }}>
+                                            No recent bookings
                                         </td>
-                                        <td className="text-cell">AC Repair Service</td>
-                                        <td className="date-cell">23 Jan, 2026</td>
-                                        <td>
-                                            <span className="status-badge status-pending">
-                                                Pending
-                                            </span>
-                                        </td>
-                                        <td className="amount-cell">₹450</td>
                                     </tr>
-                                ))}
+                                )}
                             </tbody>
                         </table>
                     </div>
@@ -115,25 +157,26 @@ const AdminDashboard = () => {
                     </div>
 
                     <div className="service-list">
-                        {[
-                            { name: 'AC Services', count: 320, colorClass: 'bg-blue-fill' },
-                            { name: 'Plumbing', count: 215, colorClass: 'bg-indigo-fill' },
-                            { name: 'Electrical', count: 180, colorClass: 'bg-yellow-fill' },
-                            { name: 'Cleaning', count: 124, colorClass: 'bg-green-fill' },
-                        ].map((service, index) => (
-                            <div key={index} className="service-item">
-                                <div className="service-item-header">
-                                    <span className="service-name">{service.name}</span>
-                                    <span className="service-count">{service.count} bookings</span>
+                        {stats.popularServices && stats.popularServices.length > 0 ? (
+                            stats.popularServices.map((service, index) => (
+                                <div key={index} className="service-item">
+                                    <div className="service-item-header">
+                                        <span className="service-name">{service.name}</span>
+                                        <span className="service-count">{service.count} bookings</span>
+                                    </div>
+                                    <div className="progress-bar-bg">
+                                        <div
+                                            className={`progress-bar-fill ${service.colorClass || 'bg-blue-fill'}`}
+                                            style={{ width: `${(service.count / 10) * 100}%` }}
+                                        ></div>
+                                    </div>
                                 </div>
-                                <div className="progress-bar-bg">
-                                    <div
-                                        className={`progress-bar-fill ${service.colorClass}`}
-                                        style={{ width: `${(service.count / 350) * 100}%` }}
-                                    ></div>
-                                </div>
-                            </div>
-                        ))}
+                            ))
+                        ) : (
+                            <p style={{ textAlign: 'center', padding: '1rem', color: '#666' }}>
+                                No data available yet
+                            </p>
+                        )}
                     </div>
 
                     <button className="service-analysis-btn">

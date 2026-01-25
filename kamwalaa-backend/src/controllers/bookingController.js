@@ -45,6 +45,20 @@ exports.createBooking = async (req, res) => {
         const service = serviceResult.rows[0];
         const totalAmount = service.price;
 
+        // Ensure user exists before inserting (Fail fast)
+        const userCheck = await pool.query('SELECT id FROM users WHERE id = $1', [user_id]);
+        if (userCheck.rows.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'User account not found. Please re-login.'
+            });
+        }
+
+        console.log('Inserting booking with data:', {
+            user_id, service_id, booking_date, booking_time,
+            price: service.price
+        });
+
         // Create booking
         const result = await pool.query(
             `INSERT INTO bookings (
@@ -125,10 +139,12 @@ exports.getAllBookings = async (req, res) => {
                 u.name as customer_name,
                 u.phone as customer_phone,
                 s.name as service_name,
+                c.name as service_category,
                 p.business_name as partner_name
             FROM bookings b
-            JOIN users u ON b.user_id = u.id
-            JOIN services s ON b.service_id = s.id
+            LEFT JOIN users u ON b.user_id = u.id
+            LEFT JOIN services s ON b.service_id = s.id
+            LEFT JOIN categories c ON s.category_id = c.id
             LEFT JOIN partners p ON b.partner_id = p.id
         `;
 
@@ -151,7 +167,9 @@ exports.getAllBookings = async (req, res) => {
         console.error('Error fetching bookings:', err);
         res.status(500).json({
             success: false,
-            message: 'Server Error'
+            message: 'Server Error',
+            error: err.toString(),
+            stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
         });
     }
 };

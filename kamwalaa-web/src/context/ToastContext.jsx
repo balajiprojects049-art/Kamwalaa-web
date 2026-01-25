@@ -48,7 +48,7 @@ export const ToastProvider = ({ children }) => {
     }, [showToast]);
 
     return (
-        <ToastContext.Provider value={{ success, error, info, warning }}>
+        <ToastContext.Provider value={{ showToast, success, error, info, warning }}>
             {children}
             <div className="toast-container">
                 {toasts.map(toast => (

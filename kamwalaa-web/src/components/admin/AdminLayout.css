@@ -13,10 +13,11 @@
     /* w-64 */
     background-color: white;
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05);
+    /* Fixed on mobile, relative on desktop via media query */
     position: fixed;
-    top: 0;
-    bottom: 0;
+    height: 100vh;
     left: 0;
+    top: 0;
     z-index: 50;
     transition: transform 0.3s ease-in-out;
     display: flex;

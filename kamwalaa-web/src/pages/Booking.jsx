@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FiMapPin, FiCalendar, FiClock, FiCreditCard, FiCheckCircle } from 'react-icons/fi';
 import PageHero from '../components/common/PageHero';
 import { useLanguage } from '../context/LanguageContext';
 import { useToast } from '../context/ToastContext';
+import { useAuth } from '../context/AuthContext';
+import { createBooking } from '../services/apiService';
 import './Booking.css';
 
 const Booking = () => {
@@ -12,7 +14,27 @@ const Booking = () => {
     const { currentLanguage } = useLanguage();
     const toast = useToast();
     const { success, error: showError } = toast;
+    const { user } = useAuth();
     const { selectedServices = [], category } = location.state || {};
+
+    // Redirect if no services selected
+    useEffect(() => {
+        if (!selectedServices || selectedServices.length === 0) {
+            navigate('/services');
+        }
+    }, [selectedServices, navigate]);
+
+    // Pre-fill user data
+    useEffect(() => {
+        if (user) {
+            setFormData(prev => ({
+                ...prev,
+                fullName: user.name || prev.fullName,
+                phone: user.phone || prev.phone,
+                email: user.email || prev.email
+            }));
+        }
+    }, [user]);
 
     const [step, setStep] = useState(1);
     const [errors, setErrors] = useState({});
@@ -77,6 +99,15 @@ const Booking = () => {
                 newErrors.pincode = 'Pincode is required';
             } else if (!/^\d{6}$/.test(formData.pincode)) {
                 newErrors.pincode = 'Pincode must be 6 digits';
+            } else {
+                // Check if pincode varies by city prefix
+                // Hyderabad: 500xxx, Warangal: 506xxx, Nalgonda: 508xxx, Ranchi: 834xxx
+                const allowedPrefixes = ['500', '506', '508', '834'];
+                const isServiceable = allowedPrefixes.some(prefix => formData.pincode.startsWith(prefix));
+
+                if (!isServiceable) {
+                    newErrors.pincode = 'Service not available in this area yet. We serve Hyderabad, Warangal, and Nalgonda.';
+                }
             }
         }
 
@@ -137,14 +168,52 @@ const Booking = () => {
             return;
         }
 
+        if (!user) {
+            showError('Please login to verify your booking');
+            // Save state and redirect to login
+            navigate('/login', { state: { from: location.pathname, bookingState: location.state } });
+            return;
+        }
+
         setIsSubmitting(true);
 
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            // Create a booking for each selected service
+            // Note: In a real app, you might want a 'cart' concept or single booking with items.
+            // For now, we loop.
+            const bookingPromises = selectedServices.map(service => {
+                console.log('Processing service:', service);
 
-            // Here you would integrate with your backend API
-            console.log('Booking submitted:', { ...formData, selectedServices, category });
+                // Format time slot to valid Time format for DB
+                // Input: "08:00 AM - 10:00 AM" => Output: "08:00 AM" (Postgres handles this) or convert to 24h
+                const formatTime = (slot) => {
+                    if (!slot) return '10:00:00';
+                    return slot.split(' - ')[0]; // returns "08:00 AM" etc.
+                };
+
+                const bookingPayload = {
+                    user_id: user.id,
+                    service_id: service.id,
+                    booking_date: formData.date,
+                    booking_time: formatTime(formData.timeSlot),
+                    address_line1: formData.address,
+                    address_line2: '', // Optional field
+                    city: formData.city,
+                    state: 'Telangana', // Default for now
+                    pincode: formData.pincode,
+                    landmark: formData.landmark,
+                    special_instructions: formData.specialInstructions,
+                    payment_method: formData.paymentMethod
+                };
+                return createBooking(bookingPayload);
+            });
+
+            const responses = await Promise.all(bookingPromises);
+            console.log('Create Booking Response:', responses);
+
+            // Get the real booking number from backend response
+            // response.data holds the DB row
+            const bookingId = responses[0]?.data?.booking_number || `BK-${Date.now()}`;
 
             success('Booking confirmed successfully!');
 
@@ -152,17 +221,25 @@ const Booking = () => {
             setTimeout(() => {
                 navigate('/booking-success', {
                     state: {
-                        bookingId: `KAM${Date.now()}`,
+                        bookingId: bookingId,
                         ...formData,
                         selectedServices
                     }
                 });
             }, 500);
-        } catch (err) {
-            showError('Failed to submit booking. Please try again.');
+
+        } catch (error) {
+            console.error('Booking error:', error);
+            if (error.response?.status === 500) {
+                showError('Booking failed. Your session appears to be invalid or expired. Please Logout and Login again.');
+            } else {
+                showError(error.response?.data?.message || 'Failed to create booking. Please try again.');
+            }
+        } finally {
             setIsSubmitting(false);
         }
     };
+
 
     const isStepValid = () => {
         if (step === 1) {

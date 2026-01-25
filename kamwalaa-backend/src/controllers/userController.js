@@ -138,3 +138,38 @@ exports.addUserAddress = async (req, res) => {
         });
     }
 };
+
+
+// @desc    Get all users (Admin)
+// @route   GET /api/v1/users
+// @access  Private (Admin)
+exports.getAllUsers = async (req, res) => {
+    try {
+        const result = await pool.query(`
+            SELECT 
+                u.id, 
+                u.name, 
+                u.email, 
+                u.phone, 
+                u.city as location,
+                u.created_at as joined_date,
+                u.role,
+                (SELECT COUNT(*) FROM bookings b WHERE b.user_id = u.id) as total_bookings,
+                COALESCE((SELECT SUM(CAST(b.total_amount AS NUMERIC)) FROM bookings b WHERE b.user_id = u.id), 0) as total_spent
+            FROM users u
+            ORDER BY u.created_at DESC
+        `);
+
+        res.status(200).json({
+            success: true,
+            count: result.rows.length,
+            data: result.rows
+        });
+    } catch (err) {
+        console.error('Error fetching users:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Server Error'
+        });
+    }
+};

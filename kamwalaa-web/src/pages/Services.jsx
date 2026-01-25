@@ -3,7 +3,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import PageHero from '../components/common/PageHero';
 import { FiSearch, FiChevronRight, FiClock, FiCheck, FiStar, FiUser, FiCalendar, FiInfo, FiShield, FiHeart, FiShare2, FiChevronDown, FiChevronUp, FiDollarSign, FiAward } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
-import { getAllCategories, getAllServicesFlat } from '../data/servicesData';
+import { getServiceCategories } from '../services/apiService';
 import { getServiceIcon } from '../utils/serviceIcons';
 import EnhancedServiceModal from '../components/EnhancedServiceModal';
 import './Services.css';
@@ -15,12 +15,11 @@ const Services = () => {
     const { categoryId } = useParams();
     const location = useLocation();
 
-    // Data
-    const allCategories = getAllCategories();
-
     // State
-    const [selectedCategory, setSelectedCategory] = useState(allCategories[0]);
-    const [selectedSubcategory, setSelectedSubcategory] = useState(allCategories[0]?.subcategories[0]);
+    const [allCategories, setAllCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
 
@@ -36,40 +35,45 @@ const Services = () => {
     const [quantity, setQuantity] = useState(1);
     const [isFavorite, setIsFavorite] = useState(false);
 
-    // Initial Route Handling
+    // Initial Data Fetch
     useEffect(() => {
-        if (categoryId) {
-            const category = allCategories.find(c => c.id === categoryId);
-            if (category) {
-                // If the selected category is different, update it
-                setSelectedCategory(category);
+        const fetchData = async () => {
+            try {
+                const response = await getServiceCategories();
+                if (response.success) {
+                    const categories = response.data;
+                    setAllCategories(categories);
 
-                // Handle specific service selection from state
-                const selectedServiceId = location.state?.selectedServiceId;
-                if (selectedServiceId && category.subcategories) {
-                    // Find which subcategory contains this service
-                    const subcat = category.subcategories.find(sc =>
-                        sc.services.some(s => s.id === selectedServiceId)
-                    );
+                    // Default selection logic
+                    if (categories.length > 0) {
+                        const targetCategory = categoryId
+                            ? categories.find(c => c.id === categoryId)
+                            : categories[0];
 
-                    if (subcat) {
-                        setSelectedSubcategory(subcat);
-                        // Auto-open the modal for that service
-                        const serviceToOpen = subcat.services.find(s => s.id === selectedServiceId);
-                        if (serviceToOpen) {
-                            setModalService(serviceToOpen);
-                            setIsModalOpen(true);
+                        if (targetCategory) {
+                            setSelectedCategory(targetCategory);
+                            // Select first subcategory if available
+                            if (targetCategory.subcategories && targetCategory.subcategories.length > 0) {
+                                setSelectedSubcategory(targetCategory.subcategories[0]);
+                            }
                         }
                     }
-                } else if (!selectedSubcategory || selectedSubcategory.id.indexOf(category.id) === -1) {
-                    // If no specific service, and current subcat doesn't match new category, select first
-                    if (category.subcategories && category.subcategories.length > 0) {
-                        setSelectedSubcategory(category.subcategories[0]);
-                    }
                 }
+            } catch (error) {
+                console.error('Failed to load services:', error);
+            } finally {
+                setIsLoading(false);
             }
-        }
-    }, [categoryId, location.state]);
+        };
+        fetchData();
+    }, [categoryId]); // Depend only on categoryId for now
+
+    // Helper for localised names
+    const getName = (item) => {
+        if (!item || !item.name) return '';
+        if (typeof item.name === 'string') return item.name;
+        return item.name[currentLanguage] || item.name.en || '';
+    };
 
     const handleViewDetails = (service) => {
         setModalService(service);
@@ -104,11 +108,16 @@ const Services = () => {
     useEffect(() => {
         if (searchQuery.trim()) {
             const query = searchQuery.toLowerCase();
-            const allServices = getAllServicesFlat();
-            const results = allServices.filter(service =>
-                service.name[currentLanguage]?.toLowerCase().includes(query) ||
-                service.name.en?.toLowerCase().includes(query)
-            );
+            const results = [];
+            // Flat search on backend data structure
+            allCategories.forEach(cat => {
+                cat.subcategories?.forEach(sub => {
+                    sub.services?.forEach(svc => {
+                        const name = getName(svc).toLowerCase();
+                        if (name.includes(query)) results.push(svc);
+                    });
+                });
+            });
             setSearchResults(results);
         } else {
             setSearchResults([]);
@@ -233,8 +242,8 @@ const Services = () => {
                             {searchResults.map((service, idx) => (
                                 <div key={idx} className="service-card" onClick={() => handleServiceClick(service)}>
                                     <div className="service-info">
-                                        <h4>{service.name[currentLanguage] || service.name.en}</h4>
-                                        <span className="price">{service.price}</span>
+                                        <h4>{getName(service)}</h4>
+                                        <span className="price">₹{service.price}</span>
                                     </div>
                                     <button className="view-details-btn" onClick={(e) => { e.stopPropagation(); handleViewDetails(service); }}>
                                         View Details
@@ -264,7 +273,7 @@ const Services = () => {
                                         <div className="cat-icon-wrapper">
                                             <Icon />
                                         </div>
-                                        <span>{category.name[currentLanguage] || category.name.en}</span>
+                                        <span>{getName(category)}</span>
                                         <FiChevronRight className="arrow-icon" />
                                     </div>
                                 );
@@ -274,7 +283,7 @@ const Services = () => {
                         {/* Column 2: Subcategories */}
                         <div className="column subcategories-column">
                             <div className="column-header">
-                                <h3>{selectedCategory?.name[currentLanguage] || selectedCategory?.name.en}</h3>
+                                <h3>{getName(selectedCategory)}</h3>
                             </div>
                             <div className="subcategories-list">
                                 {selectedCategory?.subcategories?.map(subcat => (
@@ -284,7 +293,7 @@ const Services = () => {
                                         onClick={() => setSelectedSubcategory(subcat)}
                                     >
                                         <div className="subcat-content">
-                                            <h4>{subcat.name[currentLanguage] || subcat.name.en}</h4>
+                                            <h4>{getName(subcat)}</h4>
                                             <span className="service-count">{subcat.services?.length} Services</span>
                                         </div>
                                         <FiChevronRight className="arrow-icon" />
@@ -296,11 +305,11 @@ const Services = () => {
                         {/* Column 3: Services */}
                         <div className="column services-column">
                             <div className="column-header">
-                                <h3>{selectedSubcategory?.name[currentLanguage] || selectedSubcategory?.name.en}</h3>
+                                <h3>{getName(selectedSubcategory)}</h3>
                             </div>
                             <div className="services-list-grid">
                                 {selectedSubcategory?.services?.map((service, idx) => (
-                                    <div key={idx} className="service-card-item">
+                                    <div key={service.id} className="service-card-item">
                                         {/* Popular Badge */}
                                         {idx < 2 && (
                                             <div className="popular-badge">
@@ -322,7 +331,7 @@ const Services = () => {
                                         <div className="service-card-content">
                                             <div className="service-main-info">
                                                 <div className="service-title-row">
-                                                    <h4>{service.name[currentLanguage] || service.name.en}</h4>
+                                                    <h4>{getName(service)}</h4>
                                                     <FiShield className="verified-icon" title="Verified Service" />
                                                 </div>
 
@@ -333,12 +342,14 @@ const Services = () => {
                                                     <span className="rating-count">({150 + (idx * 23)} reviews)</span>
                                                 </div>
 
-                                                <div className="price-tag">{service.price}</div>
+                                                <div className="price-tag">
+                                                    {String(service.price).startsWith('₹') ? '' : '₹'}{service.price}
+                                                </div>
 
                                                 {/* Service Description */}
                                                 {service.description && (
                                                     <p className="service-description">
-                                                        {service.description[currentLanguage] || service.description.en}
+                                                        {typeof service.description === 'string' ? service.description : (service.description?.[currentLanguage] || service.description?.en)}
                                                     </p>
                                                 )}
                                             </div>

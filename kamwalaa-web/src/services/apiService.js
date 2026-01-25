@@ -62,6 +62,11 @@ export const updateBookingStatus = async (bookingId, status) => {
 };
 
 // Users
+export const getAllUsers = async () => {
+    const response = await api.get('/users');
+    return response.data;
+};
+
 export const getUserProfile = async (userId) => {
     const response = await api.get(`/users/${userId}`);
     return response.data;
@@ -71,6 +76,8 @@ export const updateUserProfile = async (userId, userData) => {
     const response = await api.put(`/users/${userId}`, userData);
     return response.data;
 };
+
+
 
 export const getUserAddresses = async (userId) => {
     const response = await api.get(`/users/${userId}/addresses`);

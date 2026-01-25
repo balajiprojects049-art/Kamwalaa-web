@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useToast } from '../../context/ToastContext';
 import {
     FaSearch,
@@ -10,74 +10,50 @@ import {
     FaClock,
     FaMapMarkerAlt
 } from 'react-icons/fa';
+import { getAllBookings, updateBookingStatus } from '../../services/apiService';
 import './AdminBookings.css';
 
 const AdminBookings = () => {
     const { showToast } = useToast();
 
     // Mock Bookings Data
-    const [bookings, setBookings] = useState([
-        {
-            id: 'BK-1001',
-            customerName: 'Rajesh Kumar',
-            service: 'AC Repair & Service',
-            category: 'Appliance Repair',
-            date: '2025-01-24',
-            time: '10:00 AM',
-            status: 'Pending',
-            amount: '₹499',
-            address: 'H.No 12-3, Gachibowli, Hyderabad',
-            phone: '+91 98765 43210'
-        },
-        {
-            id: 'BK-1002',
-            customerName: 'Sneha Reddy',
-            service: 'Full House Cleaning',
-            category: 'Cleaning',
-            date: '2025-01-23',
-            time: '02:00 PM',
-            status: 'Confirmed',
-            amount: '₹2,499',
-            address: 'Flat 404, Sunshine Apts, Madhapur',
-            phone: '+91 98765 12345'
-        },
-        {
-            id: 'BK-1003',
-            customerName: 'Amit Shah',
-            service: 'Plumbing Repair',
-            category: 'Plumbing',
-            date: '2025-01-22',
-            time: '11:30 AM',
-            status: 'Completed',
-            amount: '₹350',
-            address: 'Plot 45, Jubliee Hills',
-            phone: '+91 99887 76655'
-        },
-        {
-            id: 'BK-1004',
-            customerName: 'Priya Singh',
-            service: 'Salon at Home',
-            category: 'Beauty',
-            date: '2025-01-25',
-            time: '04:00 PM',
-            status: 'Pending',
-            amount: '₹1,200',
-            address: 'Villa 12, Palm Meadows',
-            phone: '+91 88776 65544'
-        },
-        {
-            id: 'BK-1005',
-            customerName: 'David John',
-            service: 'Carpenter Work',
-            category: 'Carpentry',
-            date: '2025-01-21',
-            time: '09:00 AM',
-            status: 'Cancelled',
-            amount: '₹800',
-            address: 'Secunderabad',
-            phone: '+91 77665 54433'
+    const [bookings, setBookings] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchBookings = async () => {
+        try {
+            setLoading(true);
+            const response = await getAllBookings();
+            if (response.success) {
+                // Transform data to match existing component structure
+                const formattedBookings = response.data.map(b => ({
+                    id: b.id.toString(), // Ensure string (UUID)
+                    displayId: b.booking_number, // User friendly ID
+                    customerName: b.customer_name || 'Guest',
+                    service: b.service_name || 'Unknown Service',
+                    category: b.service_category || 'General',
+                    date: b.booking_date ? new Date(b.booking_date).toISOString().split('T')[0] : 'N/A',
+                    time: b.booking_time,
+                    status: b.status.charAt(0).toUpperCase() + b.status.slice(1), // Capitalize
+                    amount: `₹${b.total_amount}`,
+                    address: `${b.address_line1}, ${b.city}`,
+                    phone: b.customer_phone || 'N/A',
+                    paymentMethod: b.payment_method || 'Cash',
+                    instructions: b.special_instructions || 'None'
+                }));
+                setBookings(formattedBookings);
+            }
+        } catch (error) {
+            console.error('Error fetching bookings:', error);
+            showToast('Failed to fetch bookings', 'error');
+        } finally {
+            setLoading(false);
         }
-    ]);
+    };
+
+    useEffect(() => {
+        fetchBookings();
+    }, []);
 
     const [filterStatus, setFilterStatus] = useState('All');
     const [searchTerm, setSearchTerm] = useState('');
@@ -94,18 +70,28 @@ const AdminBookings = () => {
     });
 
     // Action Handlers
-    const handleStatusUpdate = (id, newStatus) => {
-        setBookings(prev => prev.map(b =>
-            b.id === id ? { ...b, status: newStatus } : b
-        ));
+    const handleStatusUpdate = async (id, newStatus) => {
+        try {
+            const apiStatus = newStatus.toLowerCase(); // Backend expects lowercase
+            const response = await updateBookingStatus(id, apiStatus);
 
-        let msgType = 'info';
-        if (newStatus === 'Confirmed') msgType = 'success';
-        if (newStatus === 'Cancelled') msgType = 'error';
-        if (newStatus === 'Completed') msgType = 'success';
+            if (response.success) {
+                setBookings(prev => prev.map(b =>
+                    b.id === id ? { ...b, status: newStatus } : b
+                ));
 
-        showToast(`Booking ${id} marked as ${newStatus}`, msgType);
-        if (selectedBooking) setSelectedBooking(null); // Close modal if open
+                let msgType = 'info';
+                if (newStatus === 'Confirmed') msgType = 'success';
+                if (newStatus === 'Cancelled') msgType = 'error';
+                if (newStatus === 'Completed') msgType = 'success';
+
+                showToast(`Booking marked as ${newStatus}`, msgType);
+                if (selectedBooking) setSelectedBooking(null); // Close modal if open
+            }
+        } catch (error) {
+            console.error('Error updating status:', error);
+            showToast('Failed to update status', 'error');
+        }
     };
 
     const getStatusColor = (status) => {
@@ -180,10 +166,16 @@ const AdminBookings = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredBookings.length > 0 ? (
+                            {loading ? (
+                                <tr>
+                                    <td colSpan="7" style={{ textAlign: 'center', padding: '2rem' }}>
+                                        Loading bookings...
+                                    </td>
+                                </tr>
+                            ) : filteredBookings.length > 0 ? (
                                 filteredBookings.map((booking) => (
                                     <tr key={booking.id}>
-                                        <td className="id-cell">{booking.id}</td>
+                                        <td className="id-cell">{booking.displayId}</td>
                                         <td>
                                             <div className="customer-info">
                                                 <span className="customer-name">{booking.customerName}</span>
@@ -276,7 +268,7 @@ const AdminBookings = () => {
                         <div className="booking-details-grid">
                             <div className="detail-group">
                                 <label>Booking ID</label>
-                                <p className="highlight-text">{selectedBooking.id}</p>
+                                <p className="highlight-text">{selectedBooking.displayId}</p>
                             </div>
                             <div className="detail-group">
                                 <label>Status</label>
@@ -313,6 +305,24 @@ const AdminBookings = () => {
                             <div className="detail-group">
                                 <label>Total Amount</label>
                                 <p className="price-text">{selectedBooking.amount}</p>
+                            </div>
+                            <div className="detail-group">
+                                <label>Payment Method</label>
+                                <p style={{ textTransform: 'capitalize', fontWeight: 'bold' }}>
+                                    {selectedBooking.paymentMethod === 'online' ? 'Online (Prepaid)' : 'Cash on Service'}
+                                </p>
+                            </div>
+                            <div className="detail-group full-width">
+                                <label>Special Instructions</label>
+                                <p style={{
+                                    backgroundColor: '#f9fafb',
+                                    padding: '0.75rem',
+                                    borderRadius: '0.5rem',
+                                    border: '1px solid #e5e7eb',
+                                    marginTop: '0.25rem'
+                                }}>
+                                    {selectedBooking.instructions}
+                                </p>
                             </div>
                         </div>
 

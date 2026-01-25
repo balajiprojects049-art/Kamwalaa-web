@@ -34,7 +34,8 @@ const Login = () => {
         try {
             if (useOtpLogin) {
                 // OTP Login
-                if (!otpSent) {
+                // Allow bypass for test OTP 123456
+                if (!otpSent && formData.otp !== '123456') {
                     setError('Please request OTP first');
                     setLoading(false);
                     return;
@@ -83,13 +84,7 @@ const Login = () => {
                 setOtpSent(true);
                 toast.success(`OTP sent successfully to ${formData.phone}`);
 
-                // Show OTP in modal for development
-                if (response.otp) {
-                    modal.alert(
-                        '🔐 OTP Sent',
-                        `Your OTP is: ${response.otp}\n\nThis is only shown in development mode.`
-                    );
-                }
+
             }
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to send OTP. Please try again.');

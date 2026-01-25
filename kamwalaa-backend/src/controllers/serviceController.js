@@ -9,13 +9,30 @@ exports.getCategories = async (req, res) => {
             'SELECT * FROM categories WHERE is_active = true ORDER BY display_order'
         );
 
+        const servicesResult = await pool.query(
+            'SELECT * FROM services WHERE is_active = true ORDER BY name'
+        );
+        const services = servicesResult.rows;
+
         // Build the category tree (handle subcategories)
         const categories = result.rows;
         const rootCategories = categories.filter(c => c.parent_id === null);
 
         const populatedCategories = rootCategories.map(root => {
-            const subcategories = categories.filter(c => c.parent_id === root.id);
-            return { ...root, subcategories };
+            // Find services strictly for the root category (if any)
+            const rootServices = services.filter(s => s.category_id === root.id);
+
+            const subcategories = categories.filter(c => c.parent_id === root.id).map(sub => ({
+                ...sub,
+                // Attach services to subcategory
+                services: services.filter(s => s.category_id === sub.id)
+            }));
+
+            return {
+                ...root,
+                subcategories,
+                services: rootServices
+            };
         });
 
         res.status(200).json({
