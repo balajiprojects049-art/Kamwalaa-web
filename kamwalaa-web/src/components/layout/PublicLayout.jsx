@@ -3,7 +3,6 @@ import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import ScrollToTop from '../common/ScrollToTop';
-import ToastContainer from '../common/ToastContainer';
 import CitySelector from '../common/CitySelector';
 import FloatingActionButton from '../common/FloatingActionButton';
 import ScrollToTopButton from '../common/ScrollToTopButton';
@@ -17,7 +16,6 @@ const PublicLayout = () => {
                 <Outlet />
             </main>
             <Footer />
-            <ToastContainer />
             <CitySelector />
             <FloatingActionButton />
             <ScrollToTopButton />

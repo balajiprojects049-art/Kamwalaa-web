@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useToastContext as useToast } from '../../context/ToastContext';
+import { useToast } from '../../context/ToastContext';
 import { FaUserShield, FaLock, FaEnvelope } from 'react-icons/fa';
 import './AdminLogin.css';
 

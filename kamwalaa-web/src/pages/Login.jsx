@@ -291,12 +291,9 @@ const Login = () => {
                                 {loading ? 'Please wait...' : (useOtpLogin ? 'Verify & Login' : 'Login')}
                             </button>
 
-                            {/* Sign Up Link */}
-                            <p className="signup-text">
-                                Don't have an account?{' '}
-                                <Link to="/signup" className="signup-link">
-                                    {t.nav.signup}
-                                </Link>
+                            {/* Info text for new users */}
+                            <p className="signup-text" style={{ textAlign: 'center', color: '#6b7280' }}>
+                                New user? Just enter your details and verify OTP to get started! 🎉
                             </p>
                         </form>
                     </div>

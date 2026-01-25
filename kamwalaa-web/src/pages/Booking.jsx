@@ -3,14 +3,15 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { FiMapPin, FiCalendar, FiClock, FiCreditCard, FiCheckCircle } from 'react-icons/fi';
 import PageHero from '../components/common/PageHero';
 import { useLanguage } from '../context/LanguageContext';
-import { useToastContext } from '../context/ToastContext';
+import { useToast } from '../context/ToastContext';
 import './Booking.css';
 
 const Booking = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { currentLanguage } = useLanguage();
-    const { success, error: showError } = useToastContext();
+    const toast = useToast();
+    const { success, error: showError } = toast;
     const { selectedServices = [], category } = location.state || {};
 
     const [step, setStep] = useState(1);

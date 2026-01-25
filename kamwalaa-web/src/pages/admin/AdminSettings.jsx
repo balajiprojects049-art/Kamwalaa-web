@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useToastContext as useToast } from '../../context/ToastContext';
+import { useToast } from '../../context/ToastContext';
 import {
     FaUserCog,
     FaLock,

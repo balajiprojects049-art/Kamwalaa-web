@@ -134,11 +134,8 @@ const Header = () => {
                             </div>
                         ) : (
                             <>
-                                <Link to="/login" className="btn btn-ghost btn-sm">
+                                <Link to="/login" className="btn btn-primary btn-sm">
                                     {t.nav.login}
-                                </Link>
-                                <Link to="/signup" className="btn btn-primary btn-sm">
-                                    {t.nav.signup}
                                 </Link>
                             </>
                         )}
@@ -180,11 +177,8 @@ const Header = () => {
                         ))}
                         {!user && (
                             <div className="mobile-auth-buttons">
-                                <Link to="/login" className="btn btn-outline" onClick={() => setIsMobileMenuOpen(false)}>
+                                <Link to="/login" className="btn btn-primary" onClick={() => setIsMobileMenuOpen(false)}>
                                     {t.nav.login}
-                                </Link>
-                                <Link to="/signup" className="btn btn-primary" onClick={() => setIsMobileMenuOpen(false)}>
-                                    {t.nav.signup}
                                 </Link>
                             </div>
                         )}
