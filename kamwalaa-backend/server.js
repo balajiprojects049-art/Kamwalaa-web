@@ -1,16 +1,48 @@
 require('dotenv').config();
 const app = require('./src/app');
 const pool = require('./src/config/db');
+const http = require('http');
+const { Server } = require('socket.io');
 
 const PORT = process.env.PORT || 5000;
+
+// Create HTTP server
+const server = http.createServer(app);
+
+// Initialize Socket.io
+const io = new Server(server, {
+    cors: {
+        origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+        methods: ["GET", "POST"],
+        credentials: true
+    }
+});
+
+// Make io accessible globally via app
+app.set('io', io);
+
+io.on('connection', (socket) => {
+    console.log('🔌 New Client Connected:', socket.id);
+
+    // Admin joins a specific room
+    socket.on('join_admin_room', () => {
+        socket.join('admin_notifications');
+        console.log('🔔 Admin joined notification channel');
+    });
+
+    socket.on('disconnect', () => {
+        console.log('❌ Client Disconnected:', socket.id);
+    });
+});
 
 // Test Database Connection
 pool.connect()
     .then(() => {
         console.log('✅ Database connected successfully');
-        app.listen(PORT, () => {
+        server.listen(PORT, () => {
             console.log(`🚀 Server running on port ${PORT}`);
             console.log(`📡 API URL: http://localhost:${PORT}/api`);
+            console.log(`⚡ Socket.io ready for real-time updates`);
         });
     })
     .catch((err) => {

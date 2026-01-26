@@ -4,12 +4,15 @@ import {
     FaSearch,
     FaFilter,
     FaEye,
-    FaCheck,
+    FaCheckCircle,
+    FaBan,
     FaTimes,
+    FaTrash,
     FaCalendarAlt,
     FaClock,
     FaMapMarkerAlt
 } from 'react-icons/fa';
+import { MdCancel } from 'react-icons/md';
 import { getAllBookings, updateBookingStatus } from '../../services/apiService';
 import './AdminBookings.css';
 
@@ -217,14 +220,16 @@ const AdminBookings = () => {
                                                             onClick={() => handleStatusUpdate(booking.id, 'Confirmed')}
                                                             title="Confirm Booking"
                                                         >
-                                                            <FaCheck />
+                                                            <FaCheckCircle />
                                                         </button>
                                                         <button
-                                                            className="icon-btn cancel-btn"
+                                                            className="icon-btn reject-btn"
                                                             onClick={() => handleStatusUpdate(booking.id, 'Cancelled')}
                                                             title="Reject Booking"
                                                         >
-                                                            <FaTimes />
+                                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                                                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                                                            </svg>
                                                         </button>
                                                     </>
                                                 )}
@@ -235,7 +240,7 @@ const AdminBookings = () => {
                                                         onClick={() => handleStatusUpdate(booking.id, 'Completed')}
                                                         title="Mark as Completed"
                                                     >
-                                                        <FaCheck />
+                                                        <FaCheckCircle />
                                                     </button>
                                                 )}
                                             </div>

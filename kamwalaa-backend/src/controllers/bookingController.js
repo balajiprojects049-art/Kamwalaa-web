@@ -76,10 +76,27 @@ exports.createBooking = async (req, res) => {
             ]
         );
 
+        const savedBooking = result.rows[0];
+
+        // Notify Admin via Real-Time Socket
+        // Notify Admin via Real-Time Socket
+        const io = req.app.get('io');
+        if (io) {
+            io.to('admin_notifications').emit('new_booking', {
+                title: 'New Service Request',
+                message: `New Booking #${savedBooking.booking_number} for ${service.name}`,
+                bookingId: savedBooking.id, // UUID for link
+                displayId: savedBooking.booking_number,
+                serviceName: service.name,
+                amount: totalAmount
+            });
+            console.log(`🔔 Notification sent for ${savedBooking.booking_number}`);
+        }
+
         res.status(201).json({
             success: true,
             message: 'Booking created successfully',
-            data: result.rows[0]
+            data: savedBooking
         });
     } catch (err) {
         console.error('Error creating booking:', err);

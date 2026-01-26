@@ -240,6 +240,13 @@
     transition: all 0.2s;
 }
 
+.icon-btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    display: block;
+    fill: currentColor;
+}
+
 .view-btn {
     background-color: #f3f4f6;
     color: #4b5563;
@@ -251,10 +258,16 @@
     color: #059669;
 }
 
-.cancel-btn {
+.reject-btn {
     background-color: #fef2f2;
     color: #ef4444;
 }
+
+.reject-btn svg {
+    fill: currentColor;
+}
+
+/* Remove the aggressive SVG override which might be causing issues */
 
 .icon-btn:hover {
     transform: translateY(-1px);

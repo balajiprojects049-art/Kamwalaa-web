@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { useModal } from '../context/ModalContext';
+import { getUserBookings } from '../services/apiService';
+import { useNavigate } from 'react-router-dom';
+import { generateInvoice } from '../utils/generateInvoice';
 import PageHero from '../components/common/PageHero';
 import RateServiceModal from '../components/common/RateServiceModal';
 import { Link } from 'react-router-dom';
@@ -20,34 +23,50 @@ const UserBookings = () => {
         setSelectedBookingForReview(null);
     };
 
-    const handleInvoice = (booking) => {
-        modal.alert(
-            '📄 Invoice',
-            `Downloading Invoice for Booking #${booking.id}...\n\n(In a real app, this would download a PDF)`
-        );
+    const handleInvoice = async (booking) => {
+        try {
+            // Check if booking is completed/paid (optional logic)
+            toast.info('Generating invoice...', 2000);
+            await generateInvoice(booking, user);
+            toast.success('Invoice downloaded successfully');
+        } catch (error) {
+            console.error('Invoice generation failed:', error);
+            toast.error('Could not generate invoice');
+        }
     };
 
-    // Mock Data - In real app, fetch from API
-    const bookings = [
-        {
-            id: 'BK1001',
-            service: 'AC Repair',
-            status: 'Completed',
-            date: '2023-10-15',
-            time: '10:00 AM',
-            amount: '₹499',
-            professional: 'Rahul Kumar'
-        },
-        {
-            id: 'BK1002',
-            service: 'Home Cleaning',
-            status: 'Upcoming',
-            date: '2023-11-20',
-            time: '02:00 PM',
-            amount: '₹1499',
-            professional: 'Assigning...'
-        }
-    ];
+    const [bookings, setBookings] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchBookings = async () => {
+            if (user?.id) {
+                try {
+                    const response = await getUserBookings(user.id);
+                    if (response.success) {
+                        const formatted = response.data.map(b => ({
+                            id: b.booking_number,
+                            service: b.service_name || 'Service',
+                            status: b.status.charAt(0).toUpperCase() + b.status.slice(1),
+                            date: new Date(b.booking_date).toLocaleDateString(),
+                            time: b.booking_time,
+                            amount: `₹${b.total_amount}`,
+                            professional: b.partner_name || 'Assigning...'
+                        }));
+                        setBookings(formatted);
+                    }
+                } catch (error) {
+                    console.error('Error loading bookings:', error);
+                } finally {
+                    setLoading(false);
+                }
+            } else {
+                setLoading(false);
+            }
+        };
+
+        fetchBookings();
+    }, [user]);
 
     if (!user) {
         return (
@@ -68,7 +87,11 @@ const UserBookings = () => {
             />
 
             <div className="container bookings-container">
-                {bookings.length === 0 ? (
+                {loading ? (
+                    <div className="no-bookings">
+                        <h3>Loading your bookings...</h3>
+                    </div>
+                ) : bookings.length === 0 ? (
                     <div className="no-bookings">
                         <h3>No bookings yet</h3>
                         <Link to="/services" className="btn btn-primary">Book a Service</Link>

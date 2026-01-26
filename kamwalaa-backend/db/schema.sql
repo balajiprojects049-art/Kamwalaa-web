@@ -359,8 +359,8 @@ FOR EACH ROW EXECUTE FUNCTION update_partner_rating();
 CREATE OR REPLACE FUNCTION generate_booking_number()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.booking_number := 'BK' || TO_CHAR(CURRENT_DATE, 'YYYYMMDD') || 
-                          LPAD(nextval('booking_number_seq')::TEXT, 4, '0');
+    NEW.booking_number := 'KM-' || TO_CHAR(CURRENT_DATE, 'YYYY') || 
+                          LPAD(nextval('booking_number_seq')::TEXT, 3, '0');
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

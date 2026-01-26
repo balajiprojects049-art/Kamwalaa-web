@@ -52,7 +52,7 @@ const Booking = () => {
         date: '',
         timeSlot: '',
         // Payment
-        paymentMethod: 'cash',
+        paymentMethod: '',
         specialInstructions: ''
     });
 
@@ -247,6 +247,9 @@ const Booking = () => {
         }
         if (step === 2) {
             return formData.date && formData.timeSlot;
+        }
+        if (step === 3) {
+            return !!formData.paymentMethod;
         }
         return true;
     };
@@ -521,7 +524,7 @@ const Booking = () => {
                                     <button
                                         type="submit"
                                         className="btn btn-primary"
-                                        disabled={isSubmitting}
+                                        disabled={isSubmitting || !isStepValid()}
                                     >
                                         {isSubmitting ? 'Processing...' : 'Confirm Booking'}
                                     </button>
