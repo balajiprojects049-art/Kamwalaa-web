@@ -36,9 +36,9 @@ export const LanguageProvider = ({ children }) => {
         changeLanguage,
         t,
         languages: [
-            { code: 'en', name: 'English', flag: '🇬🇧' },
-            { code: 'te', name: 'తెలుగు', flag: '🇮🇳' },
-            { code: 'hi', name: 'हिंदी', flag: '🇮🇳' }
+            { code: 'en', name: 'English' },
+            { code: 'te', name: 'తెలుగు' },
+            { code: 'hi', name: 'हिंदी' }
         ]
     };
 

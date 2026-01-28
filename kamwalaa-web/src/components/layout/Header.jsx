@@ -79,8 +79,8 @@ const Header = () => {
                                 className="language-btn"
                                 onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
                             >
-                                <span className="language-flag">
-                                    {languages.find(l => l.code === currentLanguage)?.flag}
+                                <span className="language-name">
+                                    {languages.find(l => l.code === currentLanguage)?.name}
                                 </span>
                                 <FiChevronDown className={`dropdown-icon ${isLangDropdownOpen ? 'rotate' : ''}`} />
                             </button>
@@ -96,7 +96,6 @@ const Header = () => {
                                                 setIsLangDropdownOpen(false);
                                             }}
                                         >
-                                            <span className="language-flag">{lang.flag}</span>
                                             <span>{lang.name}</span>
                                         </button>
                                     ))}
