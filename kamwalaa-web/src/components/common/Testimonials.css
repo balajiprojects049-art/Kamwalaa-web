@@ -1,5 +1,6 @@
 .testimonials {
     background: white;
+    padding-top: var(--spacing-xl);
 }
 
 .testimonials-grid {

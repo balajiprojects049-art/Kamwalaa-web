@@ -52,7 +52,7 @@ function App() {
                         <Route element={<PublicLayout />}>
                           <Route path="/" element={<Home />} />
                           <Route path="/services" element={<Services />} />
-                          <Route path="/services/:categoryId" element={<ServiceDetail />} />
+                          <Route path="/services/:categoryId" element={<Services />} />
                           <Route path="/about" element={<About />} />
                           <Route path="/contact" element={<Contact />} />
                           <Route path="/login" element={<Login />} />

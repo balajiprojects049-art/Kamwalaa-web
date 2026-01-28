@@ -28,7 +28,7 @@ const ServicesSection = () => {
                     {categories.map((category, index) => (
                         <div
                             key={category.id}
-                            className="service-card"
+                            className="services-section-card"
                             style={{ animationDelay: `${index * 0.1}s` }}
                         >
                             <div className="service-card-inner">

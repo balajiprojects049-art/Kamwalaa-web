@@ -69,8 +69,7 @@ const ServiceCategoriesSlider = () => {
                     <div
                         className="slider-track"
                         style={{
-                            // Simplified transform for gap logic, better to use flexible calculation
-                            transform: `translateX(calc(-${currentIndex} * (100% / ${cardsToShow} + 1.5rem / ${cardsToShow})))`
+                            transform: `translateX(calc(-${currentIndex} * (100% / ${cardsToShow} + 0.75rem / ${cardsToShow})))`
                         }}
                     >
                         {categories.map((category) => (

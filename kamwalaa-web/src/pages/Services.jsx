@@ -3,7 +3,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import PageHero from '../components/common/PageHero';
 import { FiSearch, FiChevronRight, FiClock, FiCheck, FiStar, FiUser, FiCalendar, FiInfo, FiShield, FiHeart, FiShare2, FiChevronDown, FiChevronUp, FiDollarSign, FiAward } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
-import { getServiceCategories } from '../services/apiService';
+import { getAllCategories } from '../data/servicesData';
 import { getServiceIcon } from '../utils/serviceIcons';
 import EnhancedServiceModal from '../components/EnhancedServiceModal';
 import './Services.css';
@@ -37,35 +37,24 @@ const Services = () => {
 
     // Initial Data Fetch
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await getServiceCategories();
-                if (response.success) {
-                    const categories = response.data;
-                    setAllCategories(categories);
+        const categories = getAllCategories();
+        setAllCategories(categories);
 
-                    // Default selection logic
-                    if (categories.length > 0) {
-                        const targetCategory = categoryId
-                            ? categories.find(c => c.id === categoryId)
-                            : categories[0];
+        // Default selection logic
+        if (categories.length > 0) {
+            const targetCategory = categoryId
+                ? categories.find(c => c.id === categoryId)
+                : categories[0];
 
-                        if (targetCategory) {
-                            setSelectedCategory(targetCategory);
-                            // Select first subcategory if available
-                            if (targetCategory.subcategories && targetCategory.subcategories.length > 0) {
-                                setSelectedSubcategory(targetCategory.subcategories[0]);
-                            }
-                        }
-                    }
+            if (targetCategory) {
+                setSelectedCategory(targetCategory);
+                // Select first subcategory if available
+                if (targetCategory.subcategories && targetCategory.subcategories.length > 0) {
+                    setSelectedSubcategory(targetCategory.subcategories[0]);
                 }
-            } catch (error) {
-                console.error('Failed to load services:', error);
-            } finally {
-                setIsLoading(false);
             }
-        };
-        fetchData();
+        }
+        setIsLoading(false);
     }, [categoryId]); // Depend only on categoryId for now
 
     // Helper for localised names

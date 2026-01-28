@@ -1,12 +1,13 @@
 .how-it-works {
     background: #f8fafc;
+    padding-top: var(--spacing-xl) !important;
 }
 
 .steps-container {
     display: flex;
     justify-content: space-between;
     gap: var(--spacing-2xl);
-    margin-top: var(--spacing-4xl);
+    margin-top: var(--spacing-xl);
     position: relative;
 }
 

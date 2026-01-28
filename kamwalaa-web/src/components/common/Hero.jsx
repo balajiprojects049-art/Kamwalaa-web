@@ -16,12 +16,7 @@ const Hero = () => {
         return () => clearInterval(interval);
     }, []);
 
-    const features = [
-        { icon: 'sparkles', text: 'Professional Service Providers', te: 'ప్రొఫెషనల్ సర్వీస్ ప్రొవైడర్లు', hi: 'पेशेवर सेवा प्रदाता' },
-        { icon: 'dollar', text: 'Transparent Pricing', te: 'పారదర్శక ధరలు', hi: 'पारदर्शी मूल्य निर्धारण' },
-        { icon: 'zap', text: 'Quick & Reliable Service', te: 'త్వరిత & నమ్మకమైన సేవ', hi: 'त्वरित और विश्वसनीय सेवा' },
-        { icon: 'target', text: '54+ Services Available', te: '54+ సేవలు అందుబాటులో', hi: '54+ सेवाएं उपलब्ध' }
-    ];
+
 
     return (
         <section className="hero">
@@ -45,42 +40,9 @@ const Hero = () => {
                             {t.hero.subtitle}
                         </p>
 
-                        {/* Search Bar */}
-                        <div className="hero-search-container animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                            <HeroSearch />
-                        </div>
 
-                        <div className="hero-features">
-                            {features.map((feature, index) => {
-                                let IconComponent;
-                                switch (feature.icon) {
-                                    case 'sparkles':
-                                        IconComponent = FiStar;
-                                        break;
-                                    case 'dollar':
-                                        IconComponent = FiDollarSign;
-                                        break;
-                                    case 'zap':
-                                        IconComponent = FiZap;
-                                        break;
-                                    case 'target':
-                                        IconComponent = FiTarget;
-                                        break;
-                                    default:
-                                        IconComponent = FiCheckCircle;
-                                }
-                                return (
-                                    <div
-                                        key={index}
-                                        className="hero-feature animate-fade-in-up"
-                                        style={{ animationDelay: `${index * 0.1}s` }}
-                                    >
-                                        <IconComponent className="feature-icon" />
-                                        <span className="feature-text">{feature.text}</span>
-                                    </div>
-                                );
-                            })}
-                        </div>
+
+
 
                         <div className="hero-cta-group animate-fade-in-up">
                             <Link to="/services" className="btn btn-primary btn-lg">
@@ -92,27 +54,16 @@ const Hero = () => {
                             </Link>
                         </div>
 
-                        {/* Trust Indicators */}
-                        <div className="hero-stats animate-fade-in">
-                            <div className="stat-item">
-                                <div className="stat-number">10K+</div>
-                                <div className="stat-label">Happy Customers</div>
-                            </div>
-                            <div className="stat-divider"></div>
-                            <div className="stat-item">
-                                <div className="stat-number">54+</div>
-                                <div className="stat-label">Services</div>
-                            </div>
-                            <div className="stat-divider"></div>
-                            <div className="stat-item">
-                                <div className="stat-number">500+</div>
-                                <div className="stat-label">Service Providers</div>
-                            </div>
-                        </div>
+
                     </div>
 
                     {/* Right Visual */}
                     <div className="hero-visual">
+                        {/* Search Bar */}
+                        <div className="hero-search-container animate-fade-in-up" style={{ animationDelay: '0.2s', width: '100%', maxWidth: '600px', marginBottom: '2rem', marginTop: '-40px', zIndex: 10 }}>
+                            <HeroSearch />
+                        </div>
+
                         <div className="hero-image-wrapper animate-float">
                             {/* Slideshow Images */}
                             {[

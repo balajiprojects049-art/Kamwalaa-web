@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { getServiceCategories } from '../services/apiService';
+import { getAllCategories } from '../data/servicesData';
 import Hero from '../components/common/Hero';
 import ServiceCategoriesSlider from '../components/common/ServiceCategoriesSlider';
 import FeaturedServices from '../components/home/FeaturedServices';
@@ -14,31 +14,23 @@ const Home = () => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Initial Data Fetch
     useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await getServiceCategories();
-                if (response.success) {
-                    setCategories(response.data);
-                }
-            } catch (error) {
-                console.error("Error loading home data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchCategories();
+        // Use local data instead of API to ensure consistency
+        const localCategories = getAllCategories();
+        setCategories(localCategories);
+        setLoading(false);
     }, []);
 
     // Helper to extract image
     const getRepresentativeImage = (item) => {
-        // Backend data structure: item might have image_url or nested services with images
-        if (item.icon_url) return item.icon_url; // Categories have icon_url
+        if (item.image) return item.image;
+        if (item.iconPath) return item.iconPath;
+
         if (item.subcategories && item.subcategories.length > 0) {
-            // Try to find an image in subcategories -> services
             const sub = item.subcategories[0];
-            if (sub.services && sub.services.length > 0 && sub.services[0].image_url) {
-                return sub.services[0].image_url;
+            if (sub.services && sub.services.length > 0 && sub.services[0].images && sub.services[0].images.length > 0) {
+                return sub.services[0].images[0];
             }
         }
         return null;
@@ -46,34 +38,38 @@ const Home = () => {
 
     const getName = (item) => {
         if (!item) return '';
-        // Handle database format (simple string) or local format (object)
-        if (typeof item.name === 'string') return item.name;
-        return item.name[currentLanguage] || item.name.en || '';
+        if (item.name && typeof item.name === 'object') {
+            return item.name[currentLanguage] || item.name.en || '';
+        }
+        return item.name || '';
     };
 
     // 1. Main Services -> Top Level Categories
     const mainServices = useMemo(() => {
         return categories.map(cat => ({
             id: cat.id,
-            name: { en: getName(cat) }, // FeaturedServices expects object with en/te key
+            name: { en: getName(cat) },
             price: 'View Services',
-            images: [cat.icon_url || getRepresentativeImage(cat)],
+            images: [getRepresentativeImage(cat)],
             type: 'category',
             categoryId: cat.id
         })).slice(0, 4);
     }, [categories, currentLanguage]);
 
-    // 2. Recommended -> Popular Subcategories (Just picking some for now)
+    // 2. Recommended -> Popular Subcategories
     const recommendedServices = useMemo(() => {
         const recs = [];
         categories.forEach(cat => {
             if (cat.subcategories) {
                 cat.subcategories.slice(0, 1).forEach(sub => {
+                    // Find a service image
+                    const serviceImage = sub.services?.[0]?.images?.[0] || null;
+
                     recs.push({
                         id: sub.id,
                         name: { en: getName(sub) },
-                        price: 'From ₹249',
-                        images: sub.services?.[0]?.image_url ? [sub.services[0].image_url] : [],
+                        price: null,
+                        images: serviceImage ? [serviceImage] : [],
                         type: 'subcategory',
                         categoryId: cat.id,
                         subcategoryId: sub.id
@@ -87,7 +83,6 @@ const Home = () => {
     // 3. Special -> More Subcategories
     const specialServices = useMemo(() => {
         const specs = [];
-        // Flatten all subcategories and pick from middle
         const allSubs = [];
         categories.forEach(cat => {
             if (cat.subcategories) {
@@ -96,13 +91,15 @@ const Home = () => {
                 });
             }
         });
-        // Just pick some random/different ones
+        // Pick from index 2 to 6
         allSubs.slice(2, 6).forEach(({ sub, cat }) => {
+            const serviceImage = sub.services?.[0]?.images?.[0] || null;
+
             specs.push({
                 id: sub.id,
                 name: { en: getName(sub) },
-                price: 'Best Price',
-                images: sub.services?.[0]?.image_url ? [sub.services[0].image_url] : [],
+                price: null,
+                images: serviceImage ? [serviceImage] : [],
                 type: 'subcategory',
                 categoryId: cat.id,
                 subcategoryId: sub.id

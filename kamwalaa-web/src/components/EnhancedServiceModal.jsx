@@ -109,43 +109,7 @@ const EnhancedServiceModal = ({
                         </div>
                     </div>
 
-                    {/* 6. Time Slot Selection */}
-                    <div className="modal-timeslot-section">
-                        <h3><FiCalendar /> Select Time Slot</h3>
-                        <div className="timeslot-grid">
-                            {mockTimeSlots.map(slot => (
-                                <div
-                                    key={slot.id}
-                                    className={`timeslot-card ${selectedTimeSlot === slot.id ? 'selected' : ''} ${!slot.available ? 'disabled' : ''}`}
-                                    onClick={() => slot.available && setSelectedTimeSlot(slot.id)}
-                                >
-                                    <div className="slot-date">{slot.date}</div>
-                                    <div className="slot-time">{slot.time}</div>
-                                    {slot.isPeak && <span className="peak-badge">Peak</span>}
-                                    {!slot.available && <span className="unavailable-badge">Booked</span>}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* 7. Add-ons */}
-                    <div className="modal-addons-section">
-                        <h3>Add-on Services</h3>
-                        {mockAddOns.map(addon => (
-                            <div key={addon.id} className="addon-item">
-                                <input
-                                    type="checkbox"
-                                    id={`addon-${addon.id}`}
-                                    checked={selectedAddOns.includes(addon.id)}
-                                    onChange={() => handleAddOnToggle(addon.id)}
-                                />
-                                <label htmlFor={`addon-${addon.id}`}>
-                                    <span className="addon-name">{addon.name}</span>
-                                    <span className="addon-price">{addon.price}</span>
-                                </label>
-                            </div>
-                        ))}
-                    </div>
+                    {/* 7. Add-ons - REMOVED */}
 
                     {/* 8. Description */}
                     <div className="modal-description-section">
@@ -195,26 +159,7 @@ const EnhancedServiceModal = ({
                         </div>
                     </div>
 
-                    {/* 10. Customer Reviews */}
-                    <div className="modal-reviews-section">
-                        <h3>Customer Reviews</h3>
-                        {mockReviews.map(review => (
-                            <div key={review.id} className="review-card">
-                                <div className="review-header">
-                                    <div className="reviewer-info">
-                                        <strong>{review.name}</strong>
-                                        <span className="review-date">{review.date}</span>
-                                    </div>
-                                    <div className="review-rating">
-                                        {[...Array(5)].map((_, i) => (
-                                            <FiStar key={i} className={i < review.rating ? 'star filled' : 'star'} />
-                                        ))}
-                                    </div>
-                                </div>
-                                <p className="review-comment">{review.comment}</p>
-                            </div>
-                        ))}
-                    </div>
+                    {/* 10. Customer Reviews - REMOVED */}
 
                     {/* 11. FAQs */}
                     <div className="modal-faq-section">
@@ -255,19 +200,7 @@ const EnhancedServiceModal = ({
                         </div>
                     </div>
 
-                    {/* 13. Related Services */}
-                    <div className="modal-related-section">
-                        <h3>Related Services</h3>
-                        <div className="related-services-grid">
-                            {mockRelatedServices.map(service => (
-                                <div key={service.id} className="related-service-card">
-                                    <img src={service.image} alt={service.name} />
-                                    <h4>{service.name}</h4>
-                                    <p className="related-price">{service.price}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    {/* 13. Related Services - REMOVED */}
 
                     {/* 14. Action Button */}
                     <div className="modal-action-section">
