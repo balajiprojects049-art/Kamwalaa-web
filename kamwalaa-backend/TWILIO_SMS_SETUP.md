@@ -32,10 +32,11 @@ NODE_ENV=development
 PORT=5000
 
 # Database (already configured)
-DATABASE_URL=postgresql://postgres.tqvlborrpiecddfiikvz:Kamwala%409030@aws-1-ap-south-1.pooler.supabase.com:6543/postgres
+# Database (already configured)
+DATABASE_URL=postgresql://user:password@hostname:port/dbname
 
 # JWT Secret
-JWT_SECRET=your_super_secret_jwt_key_change_this
+JWT_SECRET=your_super_secret_jwt_key_here
 
 # ⭐ ADD THESE THREE LINES (replace with your Twilio values)
 TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
