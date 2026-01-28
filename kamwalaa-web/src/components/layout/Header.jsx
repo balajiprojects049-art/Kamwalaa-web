@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FiMenu, FiX, FiChevronDown, FiMapPin, FiShoppingCart } from 'react-icons/fi';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCity } from '../../context/CityContext';
@@ -19,6 +19,7 @@ const Header = () => {
     const { user, logout } = useAuth();
     const { getCartCount, toggleCart } = useCart();
     const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -126,7 +127,11 @@ const Header = () => {
                                             Profile Settings
                                         </Link>
                                         <div className="dropdown-divider"></div>
-                                        <button onClick={() => { logout(); setIsUserMenuOpen(false); }} className="dropdown-item logout-item">
+                                        <button onClick={() => {
+                                            logout();
+                                            setIsUserMenuOpen(false);
+                                            navigate('/login');
+                                        }} className="dropdown-item logout-item">
                                             Logout
                                         </button>
                                     </div>
