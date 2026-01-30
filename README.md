@@ -1,5 +1,9 @@
 # Kamwalaa - Professional Home Services Platform
 
+> **Last Updated:** January 30, 2026  
+> **Repository:** [github.com/balajiprojects049-art/Kamwalaa-web](https://github.com/balajiprojects049-art/Kamwalaa-web)  
+> **Status:** ✅ Active Development
+
 ## � Admin Panel Access
 - **URL**: `/admin/login`
 - **Email**: `admin@kamwalaa.com`
