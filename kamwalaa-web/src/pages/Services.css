@@ -412,24 +412,58 @@
 }
 
 .service-features {
-    margin: 8px 0 0;
+    margin: 12px 0 0;
     display: flex;
-    gap: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
     list-style: none;
     padding: 0;
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 500;
 }
 
 .service-features li {
     display: flex;
     align-items: center;
     gap: 6px;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
 }
 
-.service-features svg {
-    color: var(--accent);
+/* Professional Service Badge */
+.service-features li:first-child {
+    background: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #dcfce7;
+}
+
+.service-features li:first-child svg {
+    color: #16a34a;
+    filter: drop-shadow(0 0 2px rgba(22, 163, 74, 0.2));
+}
+
+/* Time Badge */
+.service-features li:last-child {
+    background: #eff6ff;
+    color: #3b82f6;
+    border: 1px solid #dbeafe;
+}
+
+.service-features li:last-child svg {
+    color: #3b82f6;
+    filter: drop-shadow(0 0 2px rgba(59, 130, 246, 0.2));
+}
+
+.service-card-item:hover .service-features li {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.service-features li:hover {
+    filter: brightness(0.95);
 }
 
 .service-card-action {

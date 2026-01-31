@@ -335,12 +335,6 @@ const Services = () => {
                                                     {String(service.price).startsWith('₹') ? '' : '₹'}{service.price}
                                                 </div>
 
-                                                {/* Service Description */}
-                                                {service.description && (
-                                                    <p className="service-description">
-                                                        {typeof service.description === 'string' ? service.description : (service.description?.[currentLanguage] || service.description?.en)}
-                                                    </p>
-                                                )}
                                             </div>
                                             <ul className="service-features">
                                                 <li><FiCheck /> Professional Service</li>
