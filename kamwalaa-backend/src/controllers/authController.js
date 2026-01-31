@@ -2,6 +2,22 @@ const pool = require('../config/db');
 const axios = require('axios');
 const bcrypt = require('bcryptjs');
 
+const validatePassword = (password) => {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (password.length < minLength) return "Password must be at least 8 characters long";
+    if (!hasUpperCase) return "Password must contain at least one uppercase letter";
+    if (!hasLowerCase) return "Password must contain at least one lowercase letter";
+    if (!hasNumber) return "Password must contain at least one number";
+    if (!hasSpecialChar) return "Password must contain at least one special character";
+
+    return null;
+};
+
 // @desc    Send OTP to phone number
 // @route   POST /api/v1/auth/send-otp
 // @access  Public
@@ -228,6 +244,15 @@ exports.register = async (req, res) => {
             });
         }
 
+        // Validate password strength
+        const passwordError = validatePassword(password);
+        if (passwordError) {
+            return res.status(400).json({
+                success: false,
+                message: passwordError
+            });
+        }
+
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -387,6 +412,100 @@ exports.pinLogin = async (req, res) => {
         });
     } catch (err) {
         console.error('Error in PIN login:', err);
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};
+// @desc    Reset Password using Passkey PIN
+// @route   POST /api/v1/auth/reset-password-pin
+// @access  Public
+exports.resetPasswordWithPin = async (req, res) => {
+    try {
+        const { phone, pin, newPassword } = req.body;
+
+        if (!phone || !pin || !newPassword) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide phone, pin and new password'
+            });
+        }
+
+        const userResult = await pool.query('SELECT * FROM users WHERE phone = $1', [phone]);
+        const user = userResult.rows[0];
+
+        if (!user || user.login_pin !== pin) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid Passkey PIN'
+            });
+        }
+
+        const passwordError = validatePassword(newPassword);
+        if (passwordError) {
+            return res.status(400).json({
+                success: false,
+                message: passwordError
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await pool.query(
+            'UPDATE users SET password = $1 WHERE phone = $2',
+            [hashedPassword, phone]
+        );
+
+        res.status(200).json({
+            success: true,
+            message: 'Password reset successful'
+        });
+    } catch (err) {
+        console.error('Error resetting password:', err);
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};
+
+// @desc    Reset Passkey PIN using Password
+// @route   POST /api/v1/auth/reset-pin-password
+// @access  Public
+exports.resetPinWithPassword = async (req, res) => {
+    try {
+        const { phone, password, newPin } = req.body;
+
+        if (!phone || !password || !newPin || newPin.length !== 4) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide phone, password and a new 4-digit PIN'
+            });
+        }
+
+        const userResult = await pool.query('SELECT * FROM users WHERE phone = $1', [phone]);
+        const user = userResult.rows[0];
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid password'
+            });
+        }
+
+        await pool.query(
+            'UPDATE users SET login_pin = $1 WHERE phone = $2',
+            [newPin, phone]
+        );
+
+        res.status(200).json({
+            success: true,
+            message: 'Passkey PIN reset successful'
+        });
+    } catch (err) {
+        console.error('Error resetting PIN:', err);
         res.status(500).json({ success: false, message: 'Server Error' });
     }
 };

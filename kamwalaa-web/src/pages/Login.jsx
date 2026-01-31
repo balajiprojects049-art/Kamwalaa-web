@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { login as phoneLogin, pinLogin, setPin, register } from '../services/apiService';
+import { login as phoneLogin, pinLogin, setPin, register, resetPasswordPin, resetPinPassword } from '../services/apiService';
 import './Login.css';
 
 const Login = () => {
@@ -36,6 +36,22 @@ const Login = () => {
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
         setError('');
+    };
+
+    const validatePassword = (password) => {
+        const minLength = 8;
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+        if (password.length < minLength) return "Password must be at least 8 characters long";
+        if (!hasUpperCase) return "Password must contain at least one uppercase letter";
+        if (!hasLowerCase) return "Password must contain at least one lowercase letter";
+        if (!hasNumber) return "Password must contain at least one number";
+        if (!hasSpecialChar) return "Password must contain at least one special character";
+
+        return null;
     };
 
     const handleFullLogin = async (e) => {
@@ -74,8 +90,10 @@ const Login = () => {
             return;
         }
 
-        if (formData.password.length < 6) {
-            setError('Password must be at least 6 characters');
+        const passError = validatePassword(formData.password);
+        if (passError) {
+            setError(passError);
+            toast.error(passError);
             return;
         }
 
@@ -149,6 +167,54 @@ const Login = () => {
         }
     };
 
+    const handleResetPassword = async (e) => {
+        e.preventDefault();
+        if (formData.pin.length !== 4) {
+            setError('Please enter your 4-digit passkey');
+            return;
+        }
+
+        const passError = validatePassword(formData.password);
+        if (passError) {
+            setError(passError);
+            toast.error(passError);
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const res = await resetPasswordPin(formData.phone, formData.pin, formData.password);
+            if (res.success) {
+                toast.success('Password updated! You can now login with your new password.');
+                setMode('full');
+            }
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to reset password. Check your Passkey.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleResetPin = async (e) => {
+        e.preventDefault();
+        if (formData.pin.length !== 4) {
+            setError('Please enter a new 4-digit passkey');
+            return;
+        }
+        setLoading(true);
+        try {
+            const res = await resetPinPassword(formData.phone, formData.password, formData.pin);
+            if (res.success) {
+                toast.success('Passkey updated! You can now login with your new passkey.');
+                setMode('pin');
+            }
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to reset passkey. Check your password.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleSkip = () => {
         toast.info('You can set your passkey later in Profile.');
         navigate('/');
@@ -161,7 +227,7 @@ const Login = () => {
                     <div className="brand-content">
                         <img src="/logo.png" alt="Kamwalaa" className="brand-logo" />
                         <h1 className="brand-title">
-                            {mode === 'setup' ? 'Secure Your Account' : mode === 'register' ? 'Join Us' : 'Easy Login'}
+                            {mode === 'setup' ? 'Secure Your Account' : mode === 'register' ? 'Join Us' : mode === 'forgot_password' ? 'Reset Password' : mode === 'forgot_pin' ? 'Reset Passkey' : 'Easy Login'}
                         </h1>
                         <p className="brand-subtitle">
                             {mode === 'pin'
@@ -176,10 +242,10 @@ const Login = () => {
                         {/* Header */}
                         <div className="form-header">
                             <h2 className="form-title">
-                                {mode === 'pin' ? 'Quick Access' : mode === 'setup' ? 'Set Passkey' : mode === 'register' ? 'Create Account' : 'Login'}
+                                {mode === 'pin' ? 'Quick Access' : mode === 'setup' ? 'Set Passkey' : mode === 'register' ? 'Create Account' : mode === 'forgot_password' ? 'Forgot Password?' : mode === 'forgot_pin' ? 'Forgot Passkey?' : 'Login'}
                             </h2>
                             <p className="form-subtitle">
-                                {mode === 'pin' ? `Welcome back, ${formData.phone}` : 'Enter your details to continue'}
+                                {mode === 'pin' ? `Welcome back, ${formData.phone}` : mode === 'forgot_password' ? 'Reset password using your 4-digit passkey' : mode === 'forgot_pin' ? 'Reset passkey using your password' : 'Enter your details to continue'}
                             </p>
                         </div>
 
@@ -206,6 +272,14 @@ const Login = () => {
                                 </div>
                                 <button type="submit" className="btn btn-primary btn-lg w-100" disabled={loading || formData.pin.length < 4}>
                                     {loading ? 'Verifying...' : 'Login'}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setMode('forgot_pin')}
+                                    className="btn-link"
+                                    style={{ marginTop: '0.5rem', width: '100%', color: '#6b7280', fontSize: '0.85rem' }}
+                                >
+                                    Forgot Passkey PIN?
                                 </button>
                                 <button
                                     type="button"
@@ -259,9 +333,9 @@ const Login = () => {
                                 <button type="submit" className="btn btn-primary btn-lg w-100" disabled={loading}>
                                     {loading ? 'Authenticating...' : 'Login'}
                                 </button>
-                                <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-                                    <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>Don't have an account? </span>
-                                    <button type="button" onClick={() => setMode('register')} className="btn-link">Sign Up</button>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0 4px', marginTop: '1rem' }}>
+                                    <button type="button" onClick={() => setMode('forgot_password')} className="btn-link" style={{ fontSize: '0.85rem', color: '#6b7280' }}>Forgot Password?</button>
+                                    <button type="button" onClick={() => setMode('register')} className="btn-link" style={{ fontSize: '0.85rem' }}>Create Account</button>
                                 </div>
                             </form>
                         )}
@@ -332,6 +406,100 @@ const Login = () => {
                                     <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>Already have an account? </span>
                                     <button type="button" onClick={() => setMode('full')} className="btn-link">Login</button>
                                 </div>
+                            </form>
+                        )}
+
+                        {/* FORGOT PASSWORD MODE (Reset via PIN) */}
+                        {mode === 'forgot_password' && (
+                            <form onSubmit={handleResetPassword} className="login-form">
+                                <div className="form-group">
+                                    <label className="form-label" style={{ display: 'block', marginBottom: '8px', color: '#000000', fontWeight: 'bold' }}>Phone Number</label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleChange}
+                                        className="form-input no-icon"
+                                        placeholder="Enter registered mobile number"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label" style={{ display: 'block', marginBottom: '8px', color: '#000000', fontWeight: 'bold' }}>Your 4-Digit Passkey</label>
+                                    <input
+                                        type="password"
+                                        name="pin"
+                                        value={formData.pin}
+                                        onChange={(e) => setFormData({ ...formData, pin: e.target.value.replace(/\D/g, '').slice(0, 4) })}
+                                        className="form-input pin-input no-icon"
+                                        placeholder="● ● ● ●"
+                                        style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '0.5rem' }}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label" style={{ display: 'block', marginBottom: '8px', color: '#000000', fontWeight: 'bold' }}>New Password</label>
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        className="form-input no-icon"
+                                        placeholder="Enter new password"
+                                        required
+                                    />
+                                </div>
+                                <button type="submit" className="btn btn-primary btn-lg w-100" disabled={loading}>
+                                    {loading ? 'Updating...' : 'Reset Password'}
+                                </button>
+                                <button type="button" onClick={() => setMode('full')} className="btn-link w-100" style={{ marginTop: '1rem' }}>Back to Login</button>
+                            </form>
+                        )}
+
+                        {/* FORGOT PIN MODE (Reset via Password) */}
+                        {mode === 'forgot_pin' && (
+                            <form onSubmit={handleResetPin} className="login-form">
+                                <div className="form-group">
+                                    <label className="form-label" style={{ display: 'block', marginBottom: '8px', color: '#000000', fontWeight: 'bold' }}>Phone Number</label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleChange}
+                                        className="form-input no-icon"
+                                        placeholder="Enter registered mobile number"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label" style={{ display: 'block', marginBottom: '8px', color: '#000000', fontWeight: 'bold' }}>Your Account Password</label>
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        className="form-input no-icon"
+                                        placeholder="Enter your password"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label" style={{ display: 'block', marginBottom: '8px', color: '#000000', fontWeight: 'bold' }}>New 4-Digit Passkey</label>
+                                    <input
+                                        type="password"
+                                        name="pin"
+                                        value={formData.pin}
+                                        onChange={(e) => setFormData({ ...formData, pin: e.target.value.replace(/\D/g, '').slice(0, 4) })}
+                                        className="form-input pin-input no-icon"
+                                        placeholder="● ● ● ●"
+                                        style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '0.5rem' }}
+                                        required
+                                    />
+                                </div>
+                                <button type="submit" className="btn btn-primary btn-lg w-100" disabled={loading}>
+                                    {loading ? 'Updating...' : 'Reset Passkey'}
+                                </button>
+                                <button type="button" onClick={() => setMode('pin')} className="btn-link w-100" style={{ marginTop: '1rem' }}>Back to Pin Login</button>
                             </form>
                         )}
 

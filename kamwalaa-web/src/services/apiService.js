@@ -42,6 +42,16 @@ export const adminLogin = async (email, password) => {
     return response.data;
 };
 
+export const resetPasswordPin = async (phone, pin, newPassword) => {
+    const response = await api.post('/auth/reset-password-pin', { phone, pin, newPassword });
+    return response.data;
+};
+
+export const resetPinPassword = async (phone, password, newPin) => {
+    const response = await api.post('/auth/reset-pin-password', { phone, password, newPin });
+    return response.data;
+};
+
 // Services
 export const getAllServices = async () => {
     const response = await api.get('/services');
