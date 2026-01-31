@@ -25,7 +25,7 @@ export const servicesData = {
                         id: 'fan-install',
                         name: { en: 'Fan Installation', te: 'ఫ్యాన్ ఇన్‌స్టాలేషన్', hi: 'पंखा इंस्टालेशन' },
                         price: '₹250',
-                        images: ['/assets/images/services/electrical/fan-install-1.jpg', '/assets/images/services/electrical/fan-install-2.jpg'],
+                        images: ['/images/services/fan-service.png'],
                         description: {
                             en: 'Professional installation of ceiling fans using insulated safety tools. We ensure secure mounting to prevent wobbling, check regulator compatibility, and perform a full speed test. Includes post-installation cleanup.',
                             te: 'ఇన్సులేటెడ్ సేఫ్టీ టూల్స్ ఉపయోగించి సీలింగ్ ఫ్యాన్ల ప్రొఫెషనల్ ఇన్‌స్టాలేషన్. వణుకు రాకుండా సురక్షిత మౌంటింగ్, రెగ్యులేటర్ కాంపాబిలిటీ తనిఖీ మరియు పూర్తి స్పీడ్ టెస్ట్ చేస్తాము. పని పూర్తయ్యాక శుభ్రపరచడం ఉంటుంది.',
@@ -47,7 +47,7 @@ export const servicesData = {
                         id: 'fan-repair',
                         name: { en: 'Fan Repair', te: 'ఫ్యాన్ రిపేర్', hi: 'पंखा मरम्मत' },
                         price: '₹200',
-                        images: ['/assets/images/services/electrical/fan-repair-1.jpg', '/assets/images/services/electrical/fan-repair-2.jpg'],
+                        images: ['/images/services/fan-service.png'],
                         description: {
                             en: 'Diagnosis and repair of fan noise, wobble, or speed issues.',
                             te: 'ఫ్యాన్ శబ్దం, వణుకు లేదా వేగ సమస్యల నిర్ధారణ మరియు మరమ్మత్తు.',
@@ -58,7 +58,7 @@ export const servicesData = {
                         id: 'regulator',
                         name: { en: 'Regulator Replacement', te: 'రెగ్యులేటర్ రీప్లేస్‌మెంట్', hi: 'नियामक प्रतिस्थापन' },
                         price: '₹150',
-                        images: ['/assets/images/services/electrical/wiring-work.jpg'],
+                        images: ['/images/services/electrical-service.png'],
                         description: {
                             en: 'Replacement of faulty fan regulators for smooth speed control.',
                             te: 'స్మూత్ స్పీడ్ కంట్రోల్ కోసం పాడైపోయిన ఫ్యాన్ రెగ్యులేటర్ల మార్పిడి.',
@@ -75,7 +75,7 @@ export const servicesData = {
                         id: 'house-wiring',
                         name: { en: 'House Wiring', te: 'హౌస్ వైరింగ్', hi: 'घर की वायरिंग' },
                         price: 'Custom',
-                        images: ['/assets/images/services/electrical/wiring-work.jpg'],
+                        images: ['/images/services/electrical-service.png'],
                         description: {
                             en: 'Complete electrical wiring for new homes or renovation projects.',
                             te: 'కొత్త ఇళ్లు లేదా రినోవేషన్ ప్రాజెక్టుల కోసం పూర్తి ఎలక్ట్రికల్ వైరింగ్.',
@@ -86,21 +86,21 @@ export const servicesData = {
                         id: 'partial-wiring',
                         name: { en: 'Partial Wiring', te: 'పార్శియల్ వైరింగ్', hi: 'आंशिक वायरिंग' },
                         price: '₹3,000+',
-                        images: ['/assets/images/services/electrical/wiring-work.jpg'],
+                        images: ['/images/services/electrical-service.png'],
                         description: { en: 'Wiring for specific rooms or additions.', te: 'నిర్దిష్ట గదుల కోసం వైరింగ్.', hi: 'विशिष्ट कमरों के लिए वायरिंग।' }
                     },
                     {
                         id: 'switchboard',
                         name: { en: 'Switchboard Wiring', te: 'స్విచ్‌బోర్డ్ వైరింగ్', hi: 'स्विचबोर्ड वायरिंग' },
                         price: '₹1,000',
-                        images: ['/assets/images/services/electrical/wiring-work.jpg'],
+                        images: ['/images/services/electrical-service.png'],
                         description: { en: 'Installation and wiring of switchboards.', te: 'స్విచ్‌బోర్డుల ఇన్‌స్టాలేషన్.', hi: 'स्विचबोर्ड का इंस्टालेशन।' }
                     },
                     {
                         id: 'earthing',
                         name: { en: 'Earthing Connection', te: 'ఎర్తింగ్ కనెక్షన్', hi: 'अर्थिंग कनेक्शन' },
                         price: '₹2,000',
-                        images: ['/assets/images/services/electrical/wiring-work.jpg'],
+                        images: ['/images/services/electrical-service.png'],
                         description: { en: 'Safety earthing for home electrical systems.', te: 'ఇంటి విద్యుత్ వ్యవస్థల కోసం ఎర్తింగ్.', hi: 'घरेलू विद्युत प्रणालियों के लिए अर्थिंग।' }
                     }
                 ]
@@ -124,7 +124,7 @@ export const servicesData = {
                         id: 'switch-replace',
                         name: { en: 'Switch Replacement', te: 'స్విచ్ రీప్లేస్‌మెంట్', hi: 'स्विच प्रतिस्थापन' },
                         price: '₹100',
-                        images: ['/assets/images/services/electrical/wiring-work.jpg'],
+                        images: ['/images/services/electrical-service.png'],
                         description: {
                             en: 'Quick replacement of burnt or stuck switches and loose sockets. We use high-quality, fire-retardant switches to prevent short circuits and ensure child safety.',
                             te: 'కాలిపోయిన లేదా ఇరుక్కుపోయిన స్విచ్‌లు మరియు లూజ్ సాకెట్ల త్వరిత మార్పిడి. షార్ట్ సర్క్యూట్‌లను నివారించడానికి మరియు పిల్లల భద్రతను నిర్ధారించడానికి మేము అధిక-నాణ్యత, ఫైర్-రిటార్డెంట్ స్విచ్‌లను ఉపయోగిస్తాము.',
@@ -135,7 +135,7 @@ export const servicesData = {
                         id: 'dimmer',
                         name: { en: 'Dimmer Switch Setup', te: 'డిమ్మర్ స్విచ్ సెటప్', hi: 'डिमर स्विच सेटअप' },
                         price: '₹250',
-                        images: ['/assets/images/services/electrical/wiring-work.jpg'],
+                        images: ['/images/services/electrical-service.png'],
                         description: { en: 'Installation of fan regulators and dimmers.', te: 'ఫ్యాన్ రెగ్యులేటర్ల ఇన్‌స్టాలేషన్.', hi: 'पंखे के नियामकों का इंस्टालेशन।' }
                     },
                     {
@@ -179,7 +179,7 @@ export const servicesData = {
                         id: 'sink-install',
                         name: { en: 'Sink Installation', te: 'సింక్ ఇన్‌స్టాలేషన్', hi: 'सिंक इंस्टालेशन' },
                         price: '₹500',
-                        images: ['/assets/images/services/plumbing/tap-repair.png'],
+                        images: ['/images/services/plumbing-service.png'],
                         description: {
                             en: 'Installation of new kitchen or bathroom sinks using high-grade sealants to prevent future leaks. We ensure proper leveling, secure waste pipe connection, and durability check. Includes removal of old sink debris.',
                             te: 'భవిష్యత్తులో లీక్‌లు రాకుండా ఉండేందుకు హై-గ్రేడ్ సీలెంట్‌లను ఉపయోగించి కొత్త వంటగది లేదా బాత్రూమ్ సింక్ల ఇన్‌స్టాలేషన్. మేము సరైన లెవలింగ్, సురక్షితమైన వేస్ట్ పైప్ కనెక్షన్ మరియు మన్నికను తనిఖీ చేస్తాము. పాత సింక్ చెత్తను తొలగించడం ఇందులో ఉంటుంది.',
@@ -200,7 +200,7 @@ export const servicesData = {
                         id: 'tap-repair',
                         name: { en: 'Tap Repair', te: 'ట్యాప్ రిపేర్', hi: 'नल मरम्मत' },
                         price: '₹200',
-                        images: ['/assets/images/services/plumbing/tap-repair.png'],
+                        images: ['/images/services/plumbing-service.png'],
                         description: {
                             en: 'Precision repair for dripping taps. We replace worn-out washers, re-seat the spindle, and check for thread damage. Ensures zero water wastage and smooth operation.',
                             te: 'చుక్కలు పడే కుళాయిలకు ఖచ్చితమైన మరమ్మత్తు. మేము అరిగిపోయిన వాషర్లను మారుస్తాము, స్పిండిల్‌ను సరిచేస్తాము మరియు థ్రెడ్ డ్యామేజ్ కోసం తనిఖీ చేస్తాము. నీటి వృధా లేకుండా మరియు సులభంగా తిరిగేలా చూస్తాము.',
@@ -227,7 +227,7 @@ export const servicesData = {
                         id: 'tank-clean',
                         name: { en: 'Overhead Tank Cleaning', te: 'ఓవర్‌హెడ్ ట్యాంక్ క్లీనింగ్', hi: 'ओवरहेड टैंक सफाई' },
                         price: '₹1,200',
-                        images: ['/assets/images/services/plumbing/water-tank.png'],
+                        images: ['/images/services/plumbing-service.png'],
                         description: {
                             en: 'Full 6-stage mechanized cleaning process: Dewatering, sludge removal, high-pressure scrubbing, vacuum cleaning, anti-bacterial spray, and UV radiation treatment for 100% hygiene.',
                             te: 'పూర్తి 6-దశల మెకనైజ్డ్ క్లీనింగ్ ప్రాసెస్: నీటిని తొలగించడం, బురద తీయడం, అధిక ఒత్తిడితో రుద్దడం, వాక్యూమ్ క్లీనింగ్, యాంటీ బాక్టీరియల్ స్ప్రే మరియు 100% పరిశుభ్రత కోసం UV రేడియేషన్ చికిత్స.',
@@ -274,7 +274,7 @@ export const servicesData = {
                         id: 'pipe-leak',
                         name: { en: 'Pipe Leakage Repair', te: 'పైప్ లీకేజ్ రిపేర్', hi: 'पाइप रिसाव मरम्मत' },
                         price: '₹500',
-                        images: ['/assets/images/services/plumbing/pipe-fix.png'],
+                        images: ['/images/services/plumbing-service.png'],
                         description: {
                             en: 'Advanced leak detection using moisture meters for concealed pipes. We surgically open walls only where necessary to fix leaks, minimizing structural damage, and re-seal pipes securely.',
                             te: 'దాగి ఉన్న పైపుల కోసం తేమ మీటర్లను ఉపయోగించి అధునాతన లీక్ గుర్తింపు. లీక్‌లను సరిచేయడానికి అవసరమైన చోట మాత్రమే మేము గోడలను తెరుస్తాము, నిర్మాణ నష్టాన్ని తగ్గిస్తాము మరియు పైపులను సురక్షితంగా రీ-సీల్ చేస్తాము.',
@@ -328,7 +328,7 @@ export const servicesData = {
                         id: 'split-ac-install',
                         name: { en: 'Split AC Installation', te: 'స్ప్లిట్ AC ఇన్‌స్టాలేషన్', hi: 'स्प्लिट AC इंस्टालेशन' },
                         price: '₹1,500',
-                        images: ['/assets/images/services/ac/ac-install.jpg'],
+                        images: ['/images/services/ac-service.png'],
                         description: {
                             en: 'Professional installation of split AC units with proper copper piping, drainage setup, and electrical connection. Includes wall mounting, testing, and cleanup.',
                             te: 'సరైన కాపర్ పైపింగ్, డ్రైనేజ్ సెటప్ మరియు ఎలక్ట్రికల్ కనెక్షన్‌తో స్ప్లిట్ AC యూనిట్ల ప్రొఫెషనల్ ఇన్‌స్టాలేషన్. వాల్ మౌంటింగ్, టెస్టింగ్ మరియు క్లీనప్ ఉంటుంది.',
@@ -355,7 +355,7 @@ export const servicesData = {
                         id: 'ac-service',
                         name: { en: 'AC Deep Cleaning Service', te: 'AC డీప్ క్లీనింగ్ సర్వీస్', hi: 'AC डीप क्लीनिंग सेवा' },
                         price: '₹499',
-                        images: ['/assets/images/services/ac/ac-service.jpg'],
+                        images: ['/images/services/ac-service.png'],
                         description: {
                             en: 'Complete AC servicing including filter cleaning, coil washing, drain cleaning, and gas pressure check. Improves cooling efficiency and reduces power consumption.',
                             te: 'ఫిల్టర్ క్లీనింగ్, కాయిల్ వాషింగ్, డ్రైన్ క్లీనింగ్ మరియు గ్యాస్ ప్రెజర్ చెక్‌తో సహా పూర్తి AC సర్వీసింగ్. శీతలీకరణ సామర్థ్యాన్ని మెరుగుపరుస్తుంది.',
@@ -500,7 +500,7 @@ export const servicesData = {
                         id: 'interior-paint',
                         name: { en: 'Interior Wall Painting', te: 'ఇంటీరియర్ వాల్ పెయింటింగ్', hi: 'आंतरिक दीवार पेंटिंग' },
                         price: '₹12-18/sq.ft',
-                        images: ['/assets/images/services/painting/interior.png'],
+                        images: ['/images/services/painting-service.png'],
                         description: {
                             en: 'Premium interior makeover including scraping, sanding, 1 coat of primer, 2 coats of putty, and 2-3 coats of luxury emulsion paint. We cover furniture and floors to prevent spills and ensure a perfectly smooth finish.',
                             te: 'స్క్రాపింగ్, ఇసుకతో చదును చేయడం, 1 కోట్ ప్రైమర్, 2 కోట్లు పుట్టి మరియు 2-3 కోట్లు లగ్జరీ ఎమల్షన్ పెయింట్‌తో ప్రీమియం ఇంటీరియర్ మేక్ఓవర్. మేము ఫర్నిచర్ మరియు ఫ్లోర్లపై చుక్కలు పడకుండా కవర్ చేస్తాము మరియు అద్భుతమైన స్మూత్ ఫినిషింగ్ ఇస్తాము.',
