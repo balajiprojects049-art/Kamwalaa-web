@@ -256,19 +256,28 @@ const Login = () => {
                             <form onSubmit={handlePinLogin} className="login-form">
                                 <div className="form-group">
                                     <label className="form-label" style={{ display: 'block', marginBottom: '8px', color: '#000000', fontWeight: 'bold' }}>4-Digit Passkey</label>
-                                    <input
-                                        type="password"
-                                        name="pin"
-                                        value={formData.pin}
-                                        onChange={(e) => {
-                                            const val = e.target.value.replace(/\D/g, '').slice(0, 4);
-                                            setFormData({ ...formData, pin: val });
-                                        }}
-                                        className="form-input pin-input no-icon"
-                                        placeholder="● ● ● ●"
-                                        style={{ textAlign: 'center', fontSize: '2rem', letterSpacing: '1rem', width: '100%', height: '60px', borderRadius: '12px' }}
-                                        autoFocus
-                                    />
+                                    <div className="input-wrapper">
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            name="pin"
+                                            value={formData.pin}
+                                            onChange={(e) => {
+                                                const val = e.target.value.replace(/\D/g, '').slice(0, 4);
+                                                setFormData({ ...formData, pin: val });
+                                            }}
+                                            className="form-input pin-input no-icon"
+                                            placeholder="● ● ● ●"
+                                            style={{ textAlign: 'center', fontSize: '2rem', letterSpacing: '1rem', width: '100%', height: '60px', borderRadius: '12px' }}
+                                            autoFocus
+                                        />
+                                        <button
+                                            type="button"
+                                            className="password-toggle"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                                        </button>
+                                    </div>
                                 </div>
                                 <button type="submit" className="btn btn-primary btn-lg w-100" disabled={loading || formData.pin.length < 4}>
                                     {loading ? 'Verifying...' : 'Login'}
@@ -380,9 +389,16 @@ const Login = () => {
                                             value={formData.password}
                                             onChange={handleChange}
                                             className="form-input no-icon"
-                                            placeholder="Minimum 6 characters"
+                                            placeholder="Minimum 8 characters"
                                             required
                                         />
+                                        <button
+                                            type="button"
+                                            className="password-toggle"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                                        </button>
                                     </div>
                                 </div>
                                 <div className="form-group">
@@ -397,6 +413,13 @@ const Login = () => {
                                             placeholder="Retype your password"
                                             required
                                         />
+                                        <button
+                                            type="button"
+                                            className="password-toggle"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                                        </button>
                                     </div>
                                 </div>
                                 <button type="submit" className="btn btn-primary btn-lg w-100" disabled={loading}>
@@ -426,28 +449,46 @@ const Login = () => {
                                 </div>
                                 <div className="form-group">
                                     <label className="form-label" style={{ display: 'block', marginBottom: '8px', color: '#000000', fontWeight: 'bold' }}>Your 4-Digit Passkey</label>
-                                    <input
-                                        type="password"
-                                        name="pin"
-                                        value={formData.pin}
-                                        onChange={(e) => setFormData({ ...formData, pin: e.target.value.replace(/\D/g, '').slice(0, 4) })}
-                                        className="form-input pin-input no-icon"
-                                        placeholder="● ● ● ●"
-                                        style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '0.5rem' }}
-                                        required
-                                    />
+                                    <div className="input-wrapper">
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            name="pin"
+                                            value={formData.pin}
+                                            onChange={(e) => setFormData({ ...formData, pin: e.target.value.replace(/\D/g, '').slice(0, 4) })}
+                                            className="form-input pin-input no-icon"
+                                            placeholder="● ● ● ●"
+                                            style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '0.5rem' }}
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            className="password-toggle"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                                        </button>
+                                    </div>
                                 </div>
                                 <div className="form-group">
                                     <label className="form-label" style={{ display: 'block', marginBottom: '8px', color: '#000000', fontWeight: 'bold' }}>New Password</label>
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        className="form-input no-icon"
-                                        placeholder="Enter new password"
-                                        required
-                                    />
+                                    <div className="input-wrapper">
+                                        <input
+                                            type={showPassword ? 'text' : 'password'}
+                                            name="password"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            className="form-input no-icon"
+                                            placeholder="Enter new password"
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            className="password-toggle"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                                        </button>
+                                    </div>
                                 </div>
                                 <button type="submit" className="btn btn-primary btn-lg w-100" disabled={loading}>
                                     {loading ? 'Updating...' : 'Reset Password'}
@@ -473,28 +514,46 @@ const Login = () => {
                                 </div>
                                 <div className="form-group">
                                     <label className="form-label" style={{ display: 'block', marginBottom: '8px', color: '#000000', fontWeight: 'bold' }}>Your Account Password</label>
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        className="form-input no-icon"
-                                        placeholder="Enter your password"
-                                        required
-                                    />
+                                    <div className="input-wrapper">
+                                        <input
+                                            type={showPassword ? 'text' : 'password'}
+                                            name="password"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            className="form-input no-icon"
+                                            placeholder="Enter your password"
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            className="password-toggle"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                                        </button>
+                                    </div>
                                 </div>
                                 <div className="form-group">
                                     <label className="form-label" style={{ display: 'block', marginBottom: '8px', color: '#000000', fontWeight: 'bold' }}>New 4-Digit Passkey</label>
-                                    <input
-                                        type="password"
-                                        name="pin"
-                                        value={formData.pin}
-                                        onChange={(e) => setFormData({ ...formData, pin: e.target.value.replace(/\D/g, '').slice(0, 4) })}
-                                        className="form-input pin-input no-icon"
-                                        placeholder="● ● ● ●"
-                                        style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '0.5rem' }}
-                                        required
-                                    />
+                                    <div className="input-wrapper">
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            name="pin"
+                                            value={formData.pin}
+                                            onChange={(e) => setFormData({ ...formData, pin: e.target.value.replace(/\D/g, '').slice(0, 4) })}
+                                            className="form-input pin-input no-icon"
+                                            placeholder="● ● ● ●"
+                                            style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '0.5rem' }}
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            className="password-toggle"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                                        </button>
+                                    </div>
                                 </div>
                                 <button type="submit" className="btn btn-primary btn-lg w-100" disabled={loading}>
                                     {loading ? 'Updating...' : 'Reset Passkey'}
@@ -511,16 +570,25 @@ const Login = () => {
                                 </p>
                                 <div className="form-group">
                                     <label className="form-label" style={{ display: 'block', marginBottom: '8px', color: '#000000', fontWeight: 'bold' }}>Create 4-Digit Passkey</label>
-                                    <input
-                                        type="password"
-                                        name="pin"
-                                        value={formData.pin}
-                                        onChange={(e) => setFormData({ ...formData, pin: e.target.value.replace(/\D/g, '').slice(0, 4) })}
-                                        className="form-input pin-input no-icon"
-                                        placeholder="0 0 0 0"
-                                        style={{ textAlign: 'center', fontSize: '2rem', letterSpacing: '1rem', width: '100%', height: '60px' }}
-                                        required
-                                    />
+                                    <div className="input-wrapper">
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            name="pin"
+                                            value={formData.pin}
+                                            onChange={(e) => setFormData({ ...formData, pin: e.target.value.replace(/\D/g, '').slice(0, 4) })}
+                                            className="form-input pin-input no-icon"
+                                            placeholder="0 0 0 0"
+                                            style={{ textAlign: 'center', fontSize: '2rem', letterSpacing: '1rem', width: '100%', height: '60px' }}
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            className="password-toggle"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                        >
+                                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                                        </button>
+                                    </div>
                                 </div>
                                 <button type="submit" className="btn btn-primary btn-lg w-100" disabled={loading || formData.pin.length < 4}>
                                     {loading ? 'Saving PIN...' : 'Save & Continue'}
