@@ -17,6 +17,26 @@ export const verifyOTP = async (phone, otp, name) => {
     return response.data;
 };
 
+export const register = async (userData) => {
+    const response = await api.post('/auth/register', userData);
+    return response.data;
+};
+
+export const login = async (phone, password) => {
+    const response = await api.post('/auth/login', { phone, password });
+    return response.data;
+};
+
+export const setPin = async (phone, pin) => {
+    const response = await api.post('/auth/set-pin', { phone, pin });
+    return response.data;
+};
+
+export const pinLogin = async (phone, pin) => {
+    const response = await api.post('/auth/pin-login', { phone, pin });
+    return response.data;
+};
+
 export const adminLogin = async (email, password) => {
     const response = await api.post('/auth/admin/login', { email, password });
     return response.data;

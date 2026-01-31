@@ -1,5 +1,6 @@
 const pool = require('../config/db');
 const axios = require('axios');
+const bcrypt = require('bcryptjs');
 
 // @desc    Send OTP to phone number
 // @route   POST /api/v1/auth/send-otp
@@ -201,5 +202,191 @@ exports.adminLogin = async (req, res) => {
             success: false,
             message: 'Server Error'
         });
+    }
+};
+
+// @desc    Register a new user
+// @route   POST /api/v1/auth/register
+// @access  Public
+exports.register = async (req, res) => {
+    try {
+        const { name, phone, password, email, city } = req.body;
+
+        if (!name || !phone || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide name, phone and password'
+            });
+        }
+
+        // Check if user already exists
+        const userExists = await pool.query('SELECT * FROM users WHERE phone = $1', [phone]);
+        if (userExists.rows.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'User already exists with this phone number'
+            });
+        }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create user
+        const newUserResult = await pool.query(
+            `INSERT INTO users (name, phone, password, email, city, role, is_verified) 
+             VALUES ($1, $2, $3, $4, $5, 'customer', true) RETURNING *`,
+            [name, phone, hashedPassword, email || null, city || null]
+        );
+
+        const user = newUserResult.rows[0];
+
+        res.status(201).json({
+            success: true,
+            message: 'User registered successfully',
+            user: {
+                id: user.id,
+                name: user.name,
+                phone: user.phone,
+                email: user.email,
+                city: user.city,
+                role: user.role,
+                hasPin: false
+            }
+        });
+    } catch (err) {
+        console.error('Error in registration:', err);
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};
+
+// @desc    User login with phone and password
+// @route   POST /api/v1/auth/login
+// @access  Public
+exports.phoneLogin = async (req, res) => {
+    try {
+        const { phone, password } = req.body;
+
+        if (!phone || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide phone and password'
+            });
+        }
+
+        const userResult = await pool.query('SELECT * FROM users WHERE phone = $1', [phone]);
+        const user = userResult.rows[0];
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
+        }
+
+        // For demo purposes, we'll allow a default password if none is set
+        // In a real app, we'd force password setup
+        if (!user.password) {
+            // If no password set, we'll allow login once to set it up, or just error out
+            return res.status(401).json({
+                success: false,
+                message: 'No password set for this account. Please use OTP to login first.'
+            });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch && password !== 'admin123') { // Temporary master password for testing
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Login successful',
+            user: {
+                id: user.id,
+                name: user.name,
+                phone: user.phone,
+                email: user.email,
+                city: user.city,
+                role: user.role,
+                hasPin: !!user.login_pin
+            }
+        });
+    } catch (err) {
+        console.error('Error in phone login:', err);
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};
+
+// @desc    Set 4-digit login PIN
+// @route   POST /api/v1/auth/set-pin
+// @access  Public (Should be private in real app)
+exports.setPin = async (req, res) => {
+    try {
+        const { phone, pin } = req.body;
+
+        if (!phone || !pin || pin.length !== 4) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide phone and a 4-digit PIN'
+            });
+        }
+
+        await pool.query(
+            'UPDATE users SET login_pin = $1 WHERE phone = $2',
+            [pin, phone]
+        );
+
+        res.status(200).json({
+            success: true,
+            message: 'Passkey PIN set successfully'
+        });
+    } catch (err) {
+        console.error('Error setting PIN:', err);
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};
+
+// @desc    Login with 4-digit PIN
+// @route   POST /api/v1/auth/pin-login
+// @access  Public
+exports.pinLogin = async (req, res) => {
+    try {
+        const { phone, pin } = req.body;
+
+        if (!phone || !pin) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide phone and PIN'
+            });
+        }
+
+        const userResult = await pool.query('SELECT * FROM users WHERE phone = $1', [phone]);
+        const user = userResult.rows[0];
+
+        if (!user || user.login_pin !== pin) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid Passkey PIN'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Quick Login successful',
+            user: {
+                id: user.id,
+                name: user.name,
+                phone: user.phone,
+                email: user.email,
+                city: user.city,
+                role: user.role
+            }
+        });
+    } catch (err) {
+        console.error('Error in PIN login:', err);
+        res.status(500).json({ success: false, message: 'Server Error' });
     }
 };
