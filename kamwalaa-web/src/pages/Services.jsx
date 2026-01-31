@@ -332,7 +332,7 @@ const Services = () => {
                                                 </div>
 
                                                 <div className="price-tag">
-                                                    {String(service.price).startsWith('₹') ? '' : '₹'}{service.price}
+                                                    Price: {String(service.price).startsWith('₹') ? '' : '₹'}{service.price}
                                                 </div>
 
                                             </div>
