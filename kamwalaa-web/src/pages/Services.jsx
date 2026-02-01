@@ -3,7 +3,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import PageHero from '../components/common/PageHero';
 import { FiSearch, FiChevronRight, FiClock, FiCheck, FiStar, FiUser, FiCalendar, FiInfo, FiShield, FiHeart, FiShare2, FiChevronDown, FiChevronUp, FiDollarSign, FiAward } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
-import { getAllCategories } from '../data/servicesData';
+import { getServiceCategories } from '../services/apiService';
 import { getServiceIcon } from '../utils/serviceIcons';
 import EnhancedServiceModal from '../components/EnhancedServiceModal';
 import './Services.css';
@@ -22,6 +22,7 @@ const Services = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+    const [error, setError] = useState(null);
 
     // Modal State
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,27 +36,42 @@ const Services = () => {
     const [quantity, setQuantity] = useState(1);
     const [isFavorite, setIsFavorite] = useState(false);
 
-    // Initial Data Fetch
+    // Fetch categories from API
     useEffect(() => {
-        const categories = getAllCategories();
-        setAllCategories(categories);
+        const fetchCategories = async () => {
+            try {
+                setIsLoading(true);
+                setError(null);
+                const response = await getServiceCategories();
 
-        // Default selection logic
-        if (categories.length > 0) {
-            const targetCategory = categoryId
-                ? categories.find(c => c.id === categoryId)
-                : categories[0];
+                if (response.success && response.data) {
+                    setAllCategories(response.data);
 
-            if (targetCategory) {
-                setSelectedCategory(targetCategory);
-                // Select first subcategory if available
-                if (targetCategory.subcategories && targetCategory.subcategories.length > 0) {
-                    setSelectedSubcategory(targetCategory.subcategories[0]);
+                    // Default selection logic
+                    if (response.data.length > 0) {
+                        const targetCategory = categoryId
+                            ? response.data.find(c => c.id === categoryId)
+                            : response.data[0];
+
+                        if (targetCategory) {
+                            setSelectedCategory(targetCategory);
+                            // Select first subcategory if available
+                            if (targetCategory.subcategories && targetCategory.subcategories.length > 0) {
+                                setSelectedSubcategory(targetCategory.subcategories[0]);
+                            }
+                        }
+                    }
                 }
+            } catch (err) {
+                console.error('Error fetching categories:', err);
+                setError('Failed to load services. Please try again later.');
+            } finally {
+                setIsLoading(false);
             }
-        }
-        setIsLoading(false);
-    }, [categoryId]); // Depend only on categoryId for now
+        };
+
+        fetchCategories();
+    }, [categoryId]);
 
     // Helper for localised names
     const getName = (item) => {
@@ -222,140 +238,189 @@ const Services = () => {
                 </div>
             </div>
 
-            <div className="container main-content-area">
-                {searchQuery ? (
-                    // Search Results View
-                    <div className="search-results-view">
-                        <h3>Search Results ({searchResults.length})</h3>
-                        <div className="services-grid">
-                            {searchResults.map((service, idx) => (
-                                <div key={idx} className="service-card" onClick={() => handleServiceClick(service)}>
-                                    <div className="service-info">
-                                        <h4>{getName(service)}</h4>
-                                        <span className="price">₹{service.price}</span>
-                                    </div>
-                                    <button className="view-details-btn" onClick={(e) => { e.stopPropagation(); handleViewDetails(service); }}>
-                                        View Details
-                                    </button>
-                                </div>
-                            ))}
-                            {searchResults.length === 0 && (
-                                <div className="no-results">
-                                    <p>No services found matching "{searchQuery}"</p>
-                                </div>
-                            )}
-                        </div>
+            {/* Loading State */}
+            {isLoading && (
+                <div className="container main-content-area">
+                    <div className="loading-state" style={{ textAlign: 'center', padding: '60px 20px' }}>
+                        <div className="spinner" style={{
+                            border: '4px solid #f3f3f3',
+                            borderTop: '4px solid #6B46C1',
+                            borderRadius: '50%',
+                            width: '50px',
+                            height: '50px',
+                            animation: 'spin 1s linear infinite',
+                            margin: '0 auto 20px'
+                        }}></div>
+                        <p>Loading services...</p>
                     </div>
-                ) : (
-                    // 3-Column Layout
-                    <div className="three-column-layout">
-                        {/* Column 1: Categories */}
-                        <div className="column categories-column">
-                            {allCategories.map(category => {
-                                const Icon = getServiceIcon(category.id);
-                                return (
-                                    <div
-                                        key={category.id}
-                                        className={`category-item ${selectedCategory?.id === category.id ? 'active' : ''}`}
-                                        onClick={() => handleCategoryClick(category)}
-                                    >
-                                        <div className="cat-icon-wrapper">
-                                            <Icon />
-                                        </div>
-                                        <span>{getName(category)}</span>
-                                        <FiChevronRight className="arrow-icon" />
-                                    </div>
-                                );
-                            })}
-                        </div>
+                </div>
+            )}
 
-                        {/* Column 2: Subcategories */}
-                        <div className="column subcategories-column">
-                            <div className="column-header">
-                                <h3>{getName(selectedCategory)}</h3>
-                            </div>
-                            <div className="subcategories-list">
-                                {selectedCategory?.subcategories?.map(subcat => (
-                                    <div
-                                        key={subcat.id}
-                                        className={`subcategory-item ${selectedSubcategory?.id === subcat.id ? 'active' : ''}`}
-                                        onClick={() => setSelectedSubcategory(subcat)}
-                                    >
-                                        <div className="subcat-content">
-                                            <h4>{getName(subcat)}</h4>
-                                            <span className="service-count">{subcat.services?.length} Services</span>
+            {/* Error State */}
+            {error && !isLoading && (
+                <div className="container main-content-area">
+                    <div className="error-state" style={{
+                        textAlign: 'center',
+                        padding: '60px 20px',
+                        background: '#fff3cd',
+                        borderRadius: '12px',
+                        margin: '20px 0'
+                    }}>
+                        <p style={{ color: '#856404', marginBottom: '20px' }}>{error}</p>
+                        <button
+                            onClick={() => window.location.reload()}
+                            style={{
+                                padding: '12px 30px',
+                                background: '#6B46C1',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '8px',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            Retry
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Main Content */}
+            {!isLoading && !error && (
+                <div className="container main-content-area">
+                    {searchQuery ? (
+                        // Search Results View
+                        <div className="search-results-view">
+                            <h3>Search Results ({searchResults.length})</h3>
+                            <div className="services-grid">
+                                {searchResults.map((service, idx) => (
+                                    <div key={idx} className="service-card" onClick={() => handleServiceClick(service)}>
+                                        <div className="service-info">
+                                            <h4>{getName(service)}</h4>
+                                            <span className="price">₹{service.price}</span>
                                         </div>
-                                        <FiChevronRight className="arrow-icon" />
+                                        <button className="view-details-btn" onClick={(e) => { e.stopPropagation(); handleViewDetails(service); }}>
+                                            View Details
+                                        </button>
                                     </div>
                                 ))}
-                            </div>
-                        </div>
-
-                        {/* Column 3: Services */}
-                        <div className="column services-column">
-                            <div className="column-header">
-                                <h3>{getName(selectedSubcategory)}</h3>
-                            </div>
-                            <div className="services-list-grid">
-                                {selectedSubcategory?.services?.map((service, idx) => (
-                                    <div key={service.id} className="service-card-item">
-                                        {/* Popular Badge */}
-                                        {idx < 2 && (
-                                            <div className="popular-badge">
-                                                <FiStar /> Popular
-                                            </div>
-                                        )}
-
-                                        {/* Service Image */}
-                                        {service.images && service.images.length > 0 && (
-                                            <div className="service-img-wrapper">
-                                                <img
-                                                    src={service.images[0]}
-                                                    alt={service.name[currentLanguage] || service.name.en}
-                                                    className="service-img"
-                                                />
-                                            </div>
-                                        )}
-
-                                        <div className="service-card-content">
-                                            <div className="service-main-info">
-                                                <div className="service-title-row">
-                                                    <h4>{getName(service)}</h4>
-                                                    <FiShield className="verified-icon" title="Verified Service" />
-                                                </div>
-
-                                                {/* Rating Display */}
-                                                <div className="service-rating">
-                                                    <FiStar className="star-filled" />
-                                                    <span className="rating-number">4.{8 - (idx % 3)}</span>
-                                                    <span className="rating-count">({150 + (idx * 23)} reviews)</span>
-                                                </div>
-
-                                                <div className="price-tag">
-                                                    Price: {String(service.price).startsWith('₹') ? '' : '₹'}{service.price}
-                                                </div>
-
-                                            </div>
-                                            <ul className="service-features">
-                                                <li><FiCheck /> Professional Service</li>
-                                                <li><FiClock /> 30-45 mins</li>
-                                            </ul>
-                                        </div>
-                                        <div className="service-card-action">
-                                            <button
-                                                className="view-details-btn"
-                                                onClick={() => handleViewDetails(service)}
-                                            >
-                                                View Details
-                                            </button>
-                                        </div>
+                                {searchResults.length === 0 && (
+                                    <div className="no-results">
+                                        <p>No services found matching "{searchQuery}"</p>
                                     </div>
-                                ))}
+                                )}
                             </div>
                         </div>
-                    </div>
-                )}
-            </div>
+                    ) : (
+                        // 3-Column Layout
+                        <div className="three-column-layout">
+                            {/* Column 1: Categories */}
+                            <div className="column categories-column">
+                                {allCategories.map(category => {
+                                    const Icon = getServiceIcon(category.id);
+                                    return (
+                                        <div
+                                            key={category.id}
+                                            className={`category-item ${selectedCategory?.id === category.id ? 'active' : ''}`}
+                                            onClick={() => handleCategoryClick(category)}
+                                        >
+                                            <div className="cat-icon-wrapper">
+                                                <Icon />
+                                            </div>
+                                            <span>{getName(category)}</span>
+                                            <FiChevronRight className="arrow-icon" />
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Column 2: Subcategories */}
+                            <div className="column subcategories-column">
+                                <div className="column-header">
+                                    <h3>{getName(selectedCategory)}</h3>
+                                </div>
+                                <div className="subcategories-list">
+                                    {selectedCategory?.subcategories?.map(subcat => (
+                                        <div
+                                            key={subcat.id}
+                                            className={`subcategory-item ${selectedSubcategory?.id === subcat.id ? 'active' : ''}`}
+                                            onClick={() => setSelectedSubcategory(subcat)}
+                                        >
+                                            <div className="subcat-content">
+                                                <h4>{getName(subcat)}</h4>
+                                                <span className="service-count">{subcat.services?.length} Services</span>
+                                            </div>
+                                            <FiChevronRight className="arrow-icon" />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Column 3: Services */}
+                            <div className="column services-column">
+                                <div className="column-header">
+                                    <h3>{getName(selectedSubcategory)}</h3>
+                                </div>
+                                <div className="services-list-grid">
+                                    {selectedSubcategory?.services?.map((service, idx) => (
+                                        <div key={service.id} className="service-card-item">
+                                            {/* Popular Badge */}
+                                            {idx < 2 && (
+                                                <div className="popular-badge">
+                                                    <FiStar /> Popular
+                                                </div>
+                                            )}
+
+                                            {/* Service Image */}
+                                            {service.images && service.images.length > 0 && (
+                                                <div className="service-img-wrapper">
+                                                    <img
+                                                        src={service.images[0]}
+                                                        alt={service.name[currentLanguage] || service.name.en}
+                                                        className="service-img"
+                                                    />
+                                                </div>
+                                            )}
+
+                                            <div className="service-card-content">
+                                                <div className="service-main-info">
+                                                    <div className="service-title-row">
+                                                        <h4>{getName(service)}</h4>
+                                                        <FiShield className="verified-icon" title="Verified Service" />
+                                                    </div>
+
+                                                    {/* Rating Display */}
+                                                    <div className="service-rating">
+                                                        <FiStar className="star-filled" />
+                                                        <span className="rating-number">4.{8 - (idx % 3)}</span>
+                                                        <span className="rating-count">({150 + (idx * 23)} reviews)</span>
+                                                    </div>
+
+                                                    <div className="price-tag">
+                                                        Price: {String(service.price).startsWith('₹') ? '' : '₹'}{service.price}
+                                                    </div>
+
+                                                </div>
+                                                <ul className="service-features">
+                                                    <li><FiCheck /> Professional Service</li>
+                                                    <li><FiClock /> 30-45 mins</li>
+                                                </ul>
+                                            </div>
+                                            <div className="service-card-action">
+                                                <button
+                                                    className="view-details-btn"
+                                                    onClick={() => handleViewDetails(service)}
+                                                >
+                                                    View Details
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
 
             {/* Enhanced Service Details Modal */}
             {isModalOpen && modalService && (
