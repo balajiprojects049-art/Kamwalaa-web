@@ -22,20 +22,27 @@ const AdminCustomers = () => {
         const fetchCustomers = async () => {
             try {
                 const response = await getAllUsers();
+                console.log('Users API Response:', response); // Debug log
+
                 if (response.success && response.data) {
-                    // Normalize data format
+                    // Normalize data format using actual database fields
                     const formattedUsers = response.data.map(user => ({
-                        id: user.id.toString(),
-                        name: user.name || 'Unknown',
+                        id: user.id?.toString() || Math.random().toString(),
+                        name: user.name || 'Unknown User',
                         email: user.email || 'No Email',
                         phone: user.phone ? `+91 ${user.phone}` : 'N/A',
-                        location: user.location || 'N/A',
-                        totalBookings: parseInt(user.total_bookings) || 0,
-                        totalSpent: `₹${parseFloat(user.total_spent) || 0}`,
-                        status: user.role === 'admin' ? 'Admin' : 'Active', // Simple logic for now
-                        joinedDate: new Date(user.joined_date).toLocaleDateString()
+                        location: user.city || user.location || 'N/A',
+                        totalBookings: 0, // Will be calculated from bookings
+                        totalSpent: '₹0', // Will be calculated from bookings
+                        status: user.role === 'admin' ? 'Admin' : 'Active',
+                        joinedDate: user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'
                     }));
+
+                    console.log('Formatted Users:', formattedUsers); // Debug log
                     setCustomers(formattedUsers);
+                } else {
+                    console.error('Invalid response format:', response);
+                    showToast('No customer data available', 'info');
                 }
             } catch (error) {
                 console.error('Error fetching customers:', error);

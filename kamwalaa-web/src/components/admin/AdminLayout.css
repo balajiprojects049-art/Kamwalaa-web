@@ -47,6 +47,7 @@
     font-size: 1.25rem;
     font-weight: 700;
     background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -278,6 +279,14 @@
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(4px);
     z-index: 40;
+    display: none;
+    /* Hidden by default, only show on mobile when sidebar is open */
+}
+
+@media (max-width: 1023px) {
+    .mobile-overlay {
+        display: block;
+    }
 }
 
 /* Notification Dropdown Styles */

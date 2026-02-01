@@ -10,7 +10,9 @@ import {
     FaBars,
     FaTimes,
     FaBell,
-    FaSearch
+    FaSearch,
+    FaChartLine,
+    FaFileAlt
 } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
@@ -121,6 +123,8 @@ const AdminLayout = () => {
 
     const menuItems = [
         { path: '/admin/dashboard', icon: <FaChartPie />, label: 'Dashboard' },
+        { path: '/admin/analytics', icon: <FaChartLine />, label: 'Analytics' },
+        { path: '/admin/reports', icon: <FaFileAlt />, label: 'Reports' },
         { path: '/admin/bookings', icon: <FaCalendarAlt />, label: 'Bookings' },
         { path: '/admin/services', icon: <FaTools />, label: 'Services' },
         { path: '/admin/customers', icon: <FaUsers />, label: 'Customers' },

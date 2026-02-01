@@ -32,6 +32,8 @@ import AdminServices from './pages/admin/AdminServices';
 import AdminBookings from './pages/admin/AdminBookings';
 import AdminCustomers from './pages/admin/AdminCustomers';
 import AdminSettings from './pages/admin/AdminSettings';
+import AdminAnalytics from './pages/admin/AdminAnalytics';
+import AdminReports from './pages/admin/AdminReports';
 
 import './index.css';
 import './App.css';
@@ -69,6 +71,8 @@ function App() {
                         <Route path="/admin" element={<AdminLayout />}>
                           <Route index element={<AdminDashboard />} />
                           <Route path="dashboard" element={<AdminDashboard />} />
+                          <Route path="analytics" element={<AdminAnalytics />} />
+                          <Route path="reports" element={<AdminReports />} />
                           <Route path="services" element={<AdminServices />} />
                           <Route path="bookings" element={<AdminBookings />} />
                           <Route path="customers" element={<AdminCustomers />} />
