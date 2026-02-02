@@ -50,24 +50,9 @@ exports.sendOTP = async (req, res) => {
             [phone, otp, expiresAt]
         );
 
-        // Send OTP via Twilio SMS (if configured)
-        if (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_PHONE_NUMBER) {
-            try {
-                const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-
-                await client.messages.create({
-                    body: `Your Kamwalaa verification code is: ${otp}`,
-                    from: process.env.TWILIO_PHONE_NUMBER,
-                    to: `+91${phone}` // Indian number format
-                });
-                console.log(`✅ SMS sent to +91${phone} via Twilio`);
-            } catch (twilioError) {
-                console.error('Twilio SMS Error:', twilioError.message);
-            }
-        } else {
-            // Development mode - just log the OTP
-            console.log(`🔐 OTP for ${phone}: ${otp} (Twilio not configured)`);
-        }
+        // Development mode - log OTP to console
+        // In production, integrate with SMS service like MSG91, Twilio, etc.
+        console.log(`🔐 OTP for ${phone}: ${otp}`);
 
         res.status(200).json({
             success: true,
