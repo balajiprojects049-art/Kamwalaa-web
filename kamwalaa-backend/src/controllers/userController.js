@@ -173,3 +173,38 @@ exports.getAllUsers = async (req, res) => {
         });
     }
 };
+
+// @desc    Delete user
+// @route   DELETE /api/v1/users/:id
+// @access  Private (Admin)
+exports.deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Check if user exists
+        const userCheck = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+        if (userCheck.rows.length === 0) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        // Prevent deleting yourself (if logged in as admin)
+        // Note: req.user comes from authMiddleware
+        if (req.user && req.user.id === id) {
+            return res.status(400).json({ success: false, message: 'Cannot delete your own admin account' });
+        }
+
+        await pool.query('DELETE FROM users WHERE id = $1', [id]);
+
+        res.status(200).json({
+            success: true,
+            message: 'User deleted successfully'
+        });
+    } catch (err) {
+        console.error('Error deleting user:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Server Error',
+            error: err.message
+        });
+    }
+};

@@ -126,72 +126,43 @@
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
+/* Revised Action Menu Styles */
 .card-header {
+    display: flex;
+    justify-content: space-between;
+    /* Ensure space between info and menu */
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.user-info-wrapper {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    flex: 1;
+}
+
+.action-menu-wrapper {
     position: relative;
+    /* Ensure it doesn't get squashed */
+    flex-shrink: 0;
 }
 
-.user-avatar {
-    width: 3rem;
-    height: 3rem;
-    background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #4f46e5;
-    font-size: 1.25rem;
-}
-
-.user-basic-info h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    color: #111827;
-    margin-bottom: 0.25rem;
-}
-
-.status-dot {
-    font-size: 0.75rem;
-    padding: 0.15rem 0.5rem;
-    border-radius: 999px;
-    font-weight: 600;
-    display: inline-block;
-}
-
-.status-dot.active {
-    background-color: #ecfdf5;
-    color: #059669;
-}
-
-.status-dot.inactive {
-    background-color: #f3f4f6;
-    color: #6b7280;
-}
-
-.status-dot.blocked {
-    background-color: #fef2f2;
-    color: #ef4444;
-}
-
-.card-actions {
-    margin-left: auto;
-    position: relative;
-}
-
-.action-menu-btn {
+.action-btn {
     background: none;
     border: none;
     color: #9ca3af;
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 50%;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.action-menu-btn:hover {
+.action-btn:hover {
     background-color: #f3f4f6;
     color: #374151;
 }
@@ -203,16 +174,29 @@
     background: white;
     border: 1px solid #e5e7eb;
     border-radius: 0.5rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    min-width: 150px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    z-index: 20;
+    min-width: 140px;
     overflow: hidden;
+    animation: fadeIn 0.1s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .action-dropdown button {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
     width: 100%;
     padding: 0.75rem 1rem;
     border: none;
@@ -220,19 +204,24 @@
     text-align: left;
     cursor: pointer;
     font-size: 0.9rem;
-    color: #374151;
+    color: #4b5563;
+    font-weight: 500;
+    transition: background 0.15s;
 }
 
 .action-dropdown button:hover {
     background-color: #f9fafb;
+    color: #111827;
 }
 
-.action-dropdown button.delete-action {
+.action-dropdown button.delete-btn {
     color: #ef4444;
+    border-top: 1px solid #f3f4f6;
 }
 
-.action-dropdown button.delete-action:hover {
+.action-dropdown button.delete-btn:hover {
     background-color: #fef2f2;
+    color: #dc2626;
 }
 
 .card-body {

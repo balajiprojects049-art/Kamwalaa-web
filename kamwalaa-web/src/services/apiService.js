@@ -134,3 +134,9 @@ export const getPartnerReviews = async (partnerId) => {
     const response = await api.get(`/reviews/partner/${partnerId}`);
     return response.data;
 };
+
+// Delete User (Admin)
+export const deleteUser = async (id) => {
+    const response = await api.delete(`/users/${id}`);
+    return response.data;
+};

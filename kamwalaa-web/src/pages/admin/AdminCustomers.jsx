@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useToast } from '../../context/ToastContext';
-import { getAllUsers } from '../../services/apiService';
+import { getAllUsers, deleteUser } from '../../services/apiService';
 import {
     FaSearch,
     FaUser,
@@ -9,7 +9,8 @@ import {
     FaMapMarkerAlt,
     FaEllipsisV,
     FaBan,
-    FaTrash
+    FaTrash,
+    FaEdit
 } from 'react-icons/fa';
 import './AdminCustomers.css';
 
@@ -17,48 +18,42 @@ const AdminCustomers = () => {
     const { showToast } = useToast();
     const [customers, setCustomers] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchCustomers = async () => {
-            try {
-                const response = await getAllUsers();
-                console.log('Users API Response:', response); // Debug log
-
-                if (response.success && response.data) {
-                    // Normalize data format using actual database fields
-                    const formattedUsers = response.data.map(user => ({
-                        id: user.id?.toString() || Math.random().toString(),
-                        name: user.name || 'Unknown User',
-                        email: user.email || 'No Email',
-                        phone: user.phone ? `+91 ${user.phone}` : 'N/A',
-                        location: user.city || user.location || 'N/A',
-                        totalBookings: 0, // Will be calculated from bookings
-                        totalSpent: '₹0', // Will be calculated from bookings
-                        status: user.role === 'admin' ? 'Admin' : 'Active',
-                        joinedDate: user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'
-                    }));
-
-                    console.log('Formatted Users:', formattedUsers); // Debug log
-                    setCustomers(formattedUsers);
-                } else {
-                    console.error('Invalid response format:', response);
-                    showToast('No customer data available', 'info');
-                }
-            } catch (error) {
-                console.error('Error fetching customers:', error);
-                showToast('Failed to load customers', 'error');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchCustomers();
-    }, [showToast]);
-
     const [searchTerm, setSearchTerm] = useState('');
     const [actionMenuOpen, setActionMenuOpen] = useState(null);
 
-    // Filter Logic
+    useEffect(() => {
+        fetchCustomers();
+    }, []);
+
+    const fetchCustomers = async () => {
+        setLoading(true);
+        try {
+            const response = await getAllUsers();
+            if (response.success && response.data) {
+                // Normalize data format using actual database fields
+                const formattedUsers = response.data.map(user => ({
+                    id: user.id,
+                    name: user.name || 'Unknown User',
+                    email: user.email || 'No Email',
+                    phone: user.phone ? `+91 ${user.phone}` : 'N/A',
+                    location: user.city || user.location || 'N/A',
+                    totalBookings: user.total_bookings || 0,
+                    totalSpent: user.total_spent ? `₹${user.total_spent}` : '₹0',
+                    status: user.role === 'admin' ? 'Admin' : 'Active',
+                    joinedDate: user.joined_date ? new Date(user.joined_date).toLocaleDateString() : 'N/A'
+                }));
+                setCustomers(formattedUsers);
+            } else {
+                showToast('No customer data available', 'info');
+            }
+        } catch (error) {
+            console.error('Error fetching customers:', error);
+            showToast('Failed to load customers', 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     // Filter Logic
     const filteredCustomers = customers.filter(customer =>
         (customer.name && customer.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -67,20 +62,48 @@ const AdminCustomers = () => {
     );
 
     // Handlers
+    const toggleActionMenu = (id, e) => {
+        e.stopPropagation();
+        setActionMenuOpen(actionMenuOpen === id ? null : id);
+    };
+
+    // Close menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = () => setActionMenuOpen(null);
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, []);
+
     const handleBlockUser = (id) => {
         if (window.confirm('Are you sure you want to block this user?')) {
+            // TODO: Implement block API endpoint
             setCustomers(prev => prev.map(c => c.id === id ? { ...c, status: 'Blocked' } : c));
             showToast('User has been blocked', 'warning');
             setActionMenuOpen(null);
         }
     };
 
-    const handleDeleteUser = (id) => {
-        if (window.confirm('Are you sure you want to permanently delete this user?')) {
-            setCustomers(prev => prev.filter(c => c.id !== id));
-            showToast('User deleted successfully', 'success');
+    const handleDeleteUser = async (id) => {
+        if (window.confirm('Are you sure you want to permanently delete this user? This cannot be undone.')) {
+            try {
+                const response = await deleteUser(id);
+                if (response.success) {
+                    setCustomers(prev => prev.filter(c => c.id !== id));
+                    showToast('User deleted successfully', 'success');
+                } else {
+                    showToast(response.message || 'Failed to delete user', 'error');
+                }
+            } catch (error) {
+                console.error('Delete error:', error);
+                showToast('Error deleting user', 'error');
+            }
             setActionMenuOpen(null);
         }
+    };
+
+    const handleEditUser = (id) => {
+        showToast('Edit feature coming soon!', 'info');
+        setActionMenuOpen(null);
     };
 
     return (
@@ -94,10 +117,6 @@ const AdminCustomers = () => {
                     <div className="stat-card">
                         <span className="stat-label">Total Users</span>
                         <span className="stat-value">{customers.length}</span>
-                    </div>
-                    <div className="stat-card">
-                        <span className="stat-label">Active</span>
-                        <span className="stat-value">{customers.filter(c => c.status === 'Active').length}</span>
                     </div>
                 </div>
             </div>
@@ -117,7 +136,6 @@ const AdminCustomers = () => {
             </div>
 
             {/* Customers List */}
-            {/* Customers List */}
             {loading ? (
                 <div style={{ textAlign: 'center', padding: '2rem' }}>Loading customers...</div>
             ) : (
@@ -125,14 +143,42 @@ const AdminCustomers = () => {
                     {filteredCustomers.map(customer => (
                         <div key={customer.id} className="customer-card">
                             <div className="card-header">
-                                <div className="user-avatar">
-                                    <FaUser />
+                                <div className="user-info-wrapper">
+                                    <div className="user-avatar">
+                                        <FaUser />
+                                    </div>
+                                    <div className="user-basic-info">
+                                        <h3>{customer.name}</h3>
+                                        <span className={`status-dot ${customer.status.toLowerCase()}`}>
+                                            {customer.status}
+                                        </span>
+                                    </div>
                                 </div>
-                                <div className="user-basic-info">
-                                    <h3>{customer.name}</h3>
-                                    <span className={`status-dot ${customer.status.toLowerCase()}`}>
-                                        {customer.status}
-                                    </span>
+
+                                {/* Action Menu */}
+                                <div className="action-menu-wrapper">
+                                    <button
+                                        className="action-btn"
+                                        onClick={(e) => toggleActionMenu(customer.id, e)}
+                                    >
+                                        <FaEllipsisV />
+                                    </button>
+                                    {actionMenuOpen === customer.id && (
+                                        <div className="action-dropdown">
+                                            <button onClick={() => handleEditUser(customer.id)}>
+                                                <FaEdit /> Edit
+                                            </button>
+                                            <button onClick={() => handleBlockUser(customer.id)}>
+                                                <FaBan /> Block
+                                            </button>
+                                            <button
+                                                className="delete-btn"
+                                                onClick={() => handleDeleteUser(customer.id)}
+                                            >
+                                                <FaTrash /> Delete
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -170,7 +216,7 @@ const AdminCustomers = () => {
                 </div>
             )}
 
-            {filteredCustomers.length === 0 && (
+            {filteredCustomers.length === 0 && !loading && (
                 <div className="no-results">
                     <p>No customers found matching your search.</p>
                 </div>
