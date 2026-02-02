@@ -11,21 +11,27 @@ const AdminLogin = () => {
     const navigate = useNavigate();
     const { success, error } = useToast();
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
 
-        // TODO: Replace with real backend authentication
-        setTimeout(() => {
-            if (email === 'admin@kamwalaa.com' && password === 'admin123') {
-                localStorage.setItem('adminToken', 'mock-token-12345');
+        try {
+            const { adminLogin } = await import('../../services/apiService');
+            const response = await adminLogin(email, password);
+
+            if (response.success) {
+                // Save admin token
+                localStorage.setItem('adminToken', response.user.token);
+                localStorage.setItem('kamwalaa_admin_user', JSON.stringify(response.user));
+
                 success('Welcome back, Admin!');
                 navigate('/admin/dashboard');
-            } else {
-                error('Invalid credentials. Please try again.');
             }
+        } catch (err) {
+            error(err.response?.data?.message || 'Invalid credentials. Please try again.');
+        } finally {
             setLoading(false);
-        }, 1500);
+        }
     };
 
     return (
