@@ -152,7 +152,7 @@ const Login = () => {
                 </div>
             </div>
             <button type="submit" className="btn btn-primary btn-lg w-100 submit-btn" disabled={loading || formData.pin.length < 4}>
-                {loading ? 'Verifying...' : 'Unlock'}
+                {loading ? 'Logging in...' : 'Login with PIN'}
             </button>
             <div className="form-options" style={{ justifyContent: 'center', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
                 <button type="button" onClick={() => setMode('full')} className="btn-link">
