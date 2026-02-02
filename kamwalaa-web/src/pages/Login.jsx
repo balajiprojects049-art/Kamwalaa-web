@@ -27,6 +27,7 @@ const Login = () => {
         phone: localStorage.getItem('kamwalaa_saved_phone') || '',
         password: '',
         pin: '',
+        confirmPin: '',
     });
 
     // Check for saved phone
@@ -97,6 +98,13 @@ const Login = () => {
         e.preventDefault();
         if (formData.pin.length !== 4) {
             setError('Please enter a 4-digit number');
+            toast.error('PIN must be 4 digits');
+            return;
+        }
+
+        if (formData.pin !== formData.confirmPin) {
+            setError('PINs do not match');
+            toast.error('PINs do not match');
             return;
         }
 
@@ -104,6 +112,7 @@ const Login = () => {
         try {
             const res = await setPin(formData.phone, formData.pin);
             if (res.success) {
+                localStorage.setItem('kamwalaa_saved_phone', formData.phone);
                 toast.success('Passkey protection enabled!');
                 navigate(from, { state: bookingState });
             }
@@ -230,7 +239,10 @@ const Login = () => {
             <div className="form-group">
                 <label className="form-label">Create a Quick Passkey</label>
                 <p className="form-subtitle">Set a 4-digit PIN for faster login next time.</p>
-                <div className="input-wrapper" style={{ marginTop: '1rem' }}>
+
+                {/* Enter PIN */}
+                <label className="form-label" style={{ marginTop: '1rem', fontSize: '0.9rem' }}>Enter Passkey</label>
+                <div className="input-wrapper">
                     <input
                         type={showPassword ? "text" : "password"}
                         name="pin"
@@ -240,10 +252,36 @@ const Login = () => {
                         placeholder="0 0 0 0"
                         style={{ textAlign: 'center', fontSize: '2rem', letterSpacing: '1rem', height: '60px' }}
                         autoFocus
+                        required
                     />
                 </div>
+
+                {/* Re-enter PIN */}
+                <label className="form-label" style={{ marginTop: '1rem', fontSize: '0.9rem' }}>Re-enter Passkey</label>
+                <div className="input-wrapper">
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        name="confirmPin"
+                        value={formData.confirmPin}
+                        onChange={(e) => setFormData({ ...formData, confirmPin: e.target.value.replace(/\D/g, '').slice(0, 4) })}
+                        className="form-input pin-input no-icon"
+                        placeholder="0 0 0 0"
+                        style={{ textAlign: 'center', fontSize: '2rem', letterSpacing: '1rem', height: '60px' }}
+                        required
+                    />
+                </div>
+
+                {/* Show/Hide Toggle */}
+                <button
+                    type="button"
+                    className="btn-link"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{ marginTop: '0.5rem', fontSize: '0.85rem' }}
+                >
+                    {showPassword ? 'Hide' : 'Show'} PIN
+                </button>
             </div>
-            <button type="submit" className="btn btn-primary btn-lg w-100 submit-btn" disabled={loading || formData.pin.length < 4}>
+            <button type="submit" className="btn btn-primary btn-lg w-100 submit-btn" disabled={loading || formData.pin.length < 4 || formData.confirmPin.length < 4}>
                 {loading ? 'Saving...' : 'Save Passkey'}
             </button>
             <button type="button" onClick={handleSkip} className="btn-link w-100" style={{ marginTop: '1rem' }}>

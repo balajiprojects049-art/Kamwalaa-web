@@ -74,17 +74,9 @@ const Register = () => {
             });
 
             if (res.success) {
-                // If login returns a token, we can log them in directly
-                if (res.user && res.user.token) {
-                    localStorage.setItem('kamwalaa_saved_phone', formData.phone);
-                    login(res.user);
-                    toast.success('Account created successfully! Welcome to Kamwalaa.');
-                    navigate('/');
-                } else {
-                    // Fallback if no token (shouldn't happen with our recent fixes)
-                    toast.success('Account created! Please login.');
-                    navigate('/login');
-                }
+                // Always redirect to login page after registration
+                toast.success('Account created successfully! Please login to continue.');
+                navigate('/login', { state: { newUser: true, phone: formData.phone } });
             }
         } catch (err) {
             setError(err.response?.data?.message || 'Registration failed');
