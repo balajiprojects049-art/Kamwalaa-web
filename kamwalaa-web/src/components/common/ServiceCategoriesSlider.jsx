@@ -20,7 +20,8 @@ const ServiceCategoriesSlider = () => {
             if (window.innerWidth < 480) setCardsToShow(1);
             else if (window.innerWidth < 768) setCardsToShow(2);
             else if (window.innerWidth < 1024) setCardsToShow(3);
-            else setCardsToShow(4);
+            else if (window.innerWidth < 1280) setCardsToShow(4);
+            else setCardsToShow(5);
         };
 
         handleResize(); // Init
