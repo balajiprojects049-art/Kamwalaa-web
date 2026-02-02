@@ -12,10 +12,21 @@ const api = axios.create({
 // Request interceptor to add auth token if available
 api.interceptors.request.use(
     (config) => {
+        // 1. Check for Admin Token first if it's an admin route or if explicitly requested
+        const adminToken = localStorage.getItem('adminToken');
         const user = JSON.parse(localStorage.getItem('user') || '{}');
-        if (user.token) {
+
+        // Logic: Use Admin Token for admin routes, otherwise User Token
+        // Or if only admin token exists, use that.
+
+        if (config.url.includes('/admin') || (adminToken && !user.token)) {
+            if (adminToken) {
+                config.headers.Authorization = `Bearer ${adminToken}`;
+            }
+        } else if (user.token) {
             config.headers.Authorization = `Bearer ${user.token}`;
         }
+
         return config;
     },
     (error) => {
