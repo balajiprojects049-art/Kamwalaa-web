@@ -24,7 +24,8 @@ import BecomePartner from './pages/BecomePartner';
 
 // Public Pages for User Profile
 import UserProfile from './pages/UserProfile';
-import UserBookings from './pages/UserBookings';
+import MyBookings from './pages/MyBookings';
+import ProtectedRoute from './components/common/ProtectedRoute';
 
 // Admin Pages
 import AdminLogin from './pages/admin/AdminLogin';
@@ -60,11 +61,20 @@ function App() {
                           <Route path="/contact" element={<Contact />} />
                           <Route path="/login" element={<Login />} />
                           <Route path="/register" element={<Register />} />
+                          <Route path="/bookings" element={
+                            <ProtectedRoute>
+                              <MyBookings />
+                            </ProtectedRoute>
+                          } />
                           <Route path="/booking" element={<Booking />} />
                           <Route path="/booking-success" element={<BookingSuccess />} />
                           <Route path="/become-partner" element={<BecomePartner />} />
-                          <Route path="/profile" element={<UserProfile />} />
-                          <Route path="/bookings" element={<UserBookings />} />
+                          {/* Profile routes */}
+                          <Route path="/profile" element={
+                            <ProtectedRoute>
+                              <UserProfile />
+                            </ProtectedRoute>
+                          } />
                         </Route>
 
                         {/* Admin Routes */}
