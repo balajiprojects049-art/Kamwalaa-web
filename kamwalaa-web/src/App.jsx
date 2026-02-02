@@ -66,7 +66,11 @@ function App() {
                               <MyBookings />
                             </ProtectedRoute>
                           } />
-                          <Route path="/booking" element={<Booking />} />
+                          <Route path="/booking" element={
+                            <ProtectedRoute>
+                              <Booking />
+                            </ProtectedRoute>
+                          } />
                           <Route path="/booking-success" element={<BookingSuccess />} />
                           <Route path="/become-partner" element={<BecomePartner />} />
                           {/* Profile routes */}
