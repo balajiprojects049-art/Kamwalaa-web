@@ -1,5 +1,6 @@
-const { Client, LocalAuth } = require('whatsapp-web.js');
-const qrcode = require('qrcode-terminal');
+// TEMPORARILY DISABLED: whatsapp-web.js requires Chromium which isn't available on Railway
+// const { Client, LocalAuth } = require('whatsapp-web.js');
+// const qrcode = require('qrcode-terminal');
 
 let whatsappClient = null;
 let isReady = false;
@@ -9,8 +10,15 @@ const ADMIN_WHATSAPP = '919030545655'; // India country code + number
 
 /**
  * Initialize WhatsApp Client
+ * DISABLED: WhatsApp Web.js requires a browser environment (Chromium)
+ * Railway/Render doesn't support this. Use Twilio WhatsApp API instead for production.
  */
 const initializeWhatsApp = () => {
+    console.log('⚠️ WhatsApp Web.js is disabled (not compatible with Railway)');
+    console.log('ℹ️ Booking notifications will only be sent via Socket.IO to admin panel');
+    return null;
+
+    /* ORIGINAL CODE - COMMENTED OUT FOR RAILWAY COMPATIBILITY
     if (whatsappClient) {
         console.log('📱 WhatsApp client already initialized');
         return whatsappClient;
@@ -75,6 +83,7 @@ const initializeWhatsApp = () => {
     whatsappClient.initialize();
 
     return whatsappClient;
+    */
 };
 
 /**
@@ -138,32 +147,32 @@ const formatBookingMessage = (data) => {
     message += `📋 *Booking ID:* ${booking_number}\n`;
     message += `✅ *Payment Status:* ${payment_status.toUpperCase()}\n`;
     message += `💰 *Amount:* ₹${total_amount}\n\n`;
-    
+
     message += `👤 *CUSTOMER DETAILS*\n`;
     message += `━━━━━━━━━━━━━━━━━━━━\n`;
     message += `Name: ${customer_name}\n`;
     message += `Phone: ${customer_phone}\n\n`;
-    
+
     message += `🛠️ *SERVICE DETAILS*\n`;
     message += `━━━━━━━━━━━━━━━━━━━━\n`;
     message += `Service: ${service_name}\n`;
     message += `Date: ${booking_date}\n`;
     message += `Time: ${booking_time}\n\n`;
-    
+
     message += `📍 *SERVICE ADDRESS*\n`;
     message += `━━━━━━━━━━━━━━━━━━━━\n`;
     message += `${address_line1}\n`;
     if (address_line2) message += `${address_line2}\n`;
     message += `${city}, ${state} - ${pincode}\n`;
     if (landmark) message += `Landmark: ${landmark}\n`;
-    
+
     if (special_instructions) {
         message += `\n📝 *Special Instructions:*\n${special_instructions}\n`;
     }
-    
+
     message += `\n━━━━━━━━━━━━━━━━━━━━\n`;
     message += `🚀 *Action Required:* Please assign a partner to this booking.`;
-    
+
     return message;
 };
 
