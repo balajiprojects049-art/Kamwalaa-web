@@ -67,7 +67,7 @@ const Hero = () => {
                         <div className="hero-image-wrapper animate-float">
                             {/* Slideshow Images */}
                             {[
-                                '/assets/images/hero-collage-1.png',
+                                '/assets/images/hero-services.png',
                                 '/assets/images/hero-collage-2.jpg',
                                 '/assets/images/hero-collage-3.jpg'
                             ].map((imgSrc, index) => (
@@ -96,18 +96,18 @@ const Hero = () => {
                             ))}
 
                             {/* Ensure height is maintained by an invisible duplicate or fixed height container. 
-                                Since absolute positioning removes flow, we use the first image as static placeholder if needed, 
-                                but better to rely on CSS height or a relative container. 
-                                For now, I'll keep the first image as a relative 'spacer' but hidden, or just set container height.
-                                Actually better: Make the wrapper have aspect ratio. 
-                                However, to keep it simple, I'll use the first image as 'relative' and others 'absolute' 
-                                BUT that messes up transitions. 
-                                Best approach: Wrapper has fixed aspect ratio or size.
-                                Let's assume the wrapper 'hero-image-wrapper' in CSS sets dimensions.
-                            */}
+                                    Since absolute positioning removes flow, we use the first image as static placeholder if needed, 
+                                    but better to rely on CSS height or a relative container. 
+                                    For now, I'll keep the first image as a relative 'spacer' but hidden, or just set container height.
+                                    Actually better: Make the wrapper have aspect ratio. 
+                                    However, to keep it simple, I'll use the first image as 'relative' and others 'absolute' 
+                                    BUT that messes up transitions. 
+                                    Best approach: Wrapper has fixed aspect ratio or size.
+                                    Let's assume the wrapper 'hero-image-wrapper' in CSS sets dimensions.
+                                */}
                             {/* Spacer Image (Invisible) to keep layout size */}
                             <img
-                                src="/assets/images/hero-collage-1.png"
+                                src="/assets/images/hero-services.png"
                                 alt=""
                                 style={{ visibility: 'hidden', pointerEvents: 'none' }}
                                 className="hero-main-image"
