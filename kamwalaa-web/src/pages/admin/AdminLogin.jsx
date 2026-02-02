@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../context/ToastContext';
 import { FaUserShield, FaLock, FaEnvelope } from 'react-icons/fa';
@@ -11,23 +11,37 @@ const AdminLogin = () => {
     const navigate = useNavigate();
     const { success, error } = useToast();
 
+    // Redirect if already logged in
+    useEffect(() => {
+        const adminToken = localStorage.getItem('adminToken');
+        if (adminToken) {
+            console.log('✅ Admin already logged in, redirecting to dashboard');
+            navigate('/admin/dashboard');
+        }
+    }, [navigate]);
+
     const handleLogin = async (e) => {
         e.preventDefault();
+        console.log('🔑 Admin login attempt for:', email);
         setLoading(true);
 
         try {
             const { adminLogin } = await import('../../services/apiService');
             const response = await adminLogin(email, password);
 
+            console.log('📡 Login response:', response);
+
             if (response.success) {
                 // Save admin token
                 localStorage.setItem('adminToken', response.user.token);
                 localStorage.setItem('kamwalaa_admin_user', JSON.stringify(response.user));
 
+                console.log('✅ Admin logged in successfully');
                 success('Welcome back, Admin!');
                 navigate('/admin/dashboard');
             }
         } catch (err) {
+            console.error('❌ Admin login error:', err);
             error(err.response?.data?.message || 'Invalid credentials. Please try again.');
         } finally {
             setLoading(false);
