@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 
+const helmet = require('helmet');
+
 const app = express();
 
 const limiter = rateLimit({
@@ -11,6 +13,7 @@ const limiter = rateLimit({
     legacyHeaders: false,
 });
 
+app.use(helmet());
 app.use(limiter);
 
 // Middleware

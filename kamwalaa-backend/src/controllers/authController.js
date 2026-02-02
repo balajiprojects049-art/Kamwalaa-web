@@ -374,9 +374,11 @@ exports.setPin = async (req, res) => {
             });
         }
 
+        const hashedPin = await bcrypt.hash(pin, 10);
+
         await pool.query(
             'UPDATE users SET login_pin = $1 WHERE phone = $2',
-            [pin, phone]
+            [hashedPin, phone]
         );
 
         res.status(200).json({
@@ -406,7 +408,15 @@ exports.pinLogin = async (req, res) => {
         const userResult = await pool.query('SELECT * FROM users WHERE phone = $1', [phone]);
         const user = userResult.rows[0];
 
-        if (!user || user.login_pin !== pin) {
+        if (!user || user.login_pin === null) {
+            return res.status(401).json({
+                success: false,
+                message: 'Passkey not set'
+            });
+        }
+
+        const isMatch = await bcrypt.compare(pin, user.login_pin);
+        if (!isMatch) {
             return res.status(401).json({
                 success: false,
                 message: 'Invalid Passkey PIN'
@@ -448,7 +458,15 @@ exports.resetPasswordWithPin = async (req, res) => {
         const userResult = await pool.query('SELECT * FROM users WHERE phone = $1', [phone]);
         const user = userResult.rows[0];
 
-        if (!user || user.login_pin !== pin) {
+        if (!user || user.login_pin === null) {
+            return res.status(401).json({
+                success: false,
+                message: 'Passkey not set'
+            });
+        }
+
+        const isMatch = await bcrypt.compare(pin, user.login_pin);
+        if (!isMatch) {
             return res.status(401).json({
                 success: false,
                 message: 'Invalid Passkey PIN'
@@ -511,9 +529,11 @@ exports.resetPinWithPassword = async (req, res) => {
             });
         }
 
+        const hashedNewPin = await bcrypt.hash(newPin, 10);
+
         await pool.query(
             'UPDATE users SET login_pin = $1 WHERE phone = $2',
-            [newPin, phone]
+            [hashedNewPin, phone]
         );
 
         res.status(200).json({
