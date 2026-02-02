@@ -359,20 +359,35 @@ exports.setPin = async (req, res) => {
             });
         }
 
+        // Check if user exists
+        const userCheck = await pool.query('SELECT id, phone FROM users WHERE phone = $1', [phone]);
+        if (userCheck.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found with this phone number'
+            });
+        }
+
         const hashedPin = await bcrypt.hash(pin, 10);
 
-        await pool.query(
-            'UPDATE users SET login_pin = $1 WHERE phone = $2',
+        const result = await pool.query(
+            'UPDATE users SET login_pin = $1 WHERE phone = $2 RETURNING id',
             [hashedPin, phone]
         );
+
+        console.log(`✅ PIN set successfully for user: ${phone}`);
 
         res.status(200).json({
             success: true,
             message: 'Passkey PIN set successfully'
         });
     } catch (err) {
-        console.error('Error setting PIN:', err);
-        res.status(500).json({ success: false, message: 'Server Error' });
+        console.error('❌ Error setting PIN:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Server Error',
+            error: err.message
+        });
     }
 };
 
