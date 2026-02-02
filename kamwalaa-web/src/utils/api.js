@@ -27,10 +27,19 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     (error) => {
+        // Check if the error is 401 Unauthorized
         if (error.response?.status === 401) {
-            // Unauthorized - clear user data and redirect to login
+            // IGNORE redirect for admin login attempts
+            if (error.config.url.includes('/auth/admin/login')) {
+                return Promise.reject(error);
+            }
+
+            // For other requests, clear user data and redirect to login
             localStorage.removeItem('user');
-            window.location.href = '/login';
+            // Only redirect if we are not already on the login page
+            if (!window.location.pathname.includes('/login')) {
+                window.location.href = '/login';
+            }
         }
         return Promise.reject(error);
     }
