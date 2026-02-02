@@ -1,6 +1,7 @@
 const pool = require('../config/db');
 const axios = require('axios');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const validatePassword = (password) => {
     const minLength = 8;
@@ -16,6 +17,13 @@ const validatePassword = (password) => {
     if (!hasSpecialChar) return "Password must contain at least one special character";
 
     return null;
+};
+
+// Generate JWT
+const generateToken = (id, role) => {
+    return jwt.sign({ id, role }, process.env.JWT_SECRET, {
+        expiresIn: '30d',
+    });
 };
 
 // @desc    Send OTP to phone number
@@ -154,7 +162,8 @@ exports.verifyOTP = async (req, res) => {
                 phone: user.phone,
                 email: user.email,
                 city: user.city,
-                role: user.role
+                role: user.role,
+                token: generateToken(user.id, user.role)
             }
         });
     } catch (err) {
@@ -203,7 +212,9 @@ exports.adminLogin = async (req, res) => {
                     id: adminUser.id, // Real UUID
                     name: adminUser.name,
                     email: adminUser.email,
-                    role: 'admin'
+                    email: adminUser.email,
+                    role: 'admin',
+                    token: generateToken(adminUser.id, 'admin')
                 }
             });
         }
@@ -275,7 +286,9 @@ exports.register = async (req, res) => {
                 email: user.email,
                 city: user.city,
                 role: user.role,
-                hasPin: false
+                role: user.role,
+                hasPin: false,
+                token: generateToken(user.id, user.role)
             }
         });
     } catch (err) {
@@ -336,7 +349,9 @@ exports.phoneLogin = async (req, res) => {
                 email: user.email,
                 city: user.city,
                 role: user.role,
-                hasPin: !!user.login_pin
+                role: user.role,
+                hasPin: !!user.login_pin,
+                token: generateToken(user.id, user.role)
             }
         });
     } catch (err) {
@@ -407,7 +422,8 @@ exports.pinLogin = async (req, res) => {
                 phone: user.phone,
                 email: user.email,
                 city: user.city,
-                role: user.role
+                role: user.role,
+                token: generateToken(user.id, user.role)
             }
         });
     } catch (err) {

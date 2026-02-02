@@ -4,12 +4,15 @@ const {
     createBooking,
     getUserBookings,
     getAllBookings,
-    updateBookingStatus
+    updateBookingStatus,
+    confirmPayment
 } = require('../controllers/bookingController');
+const { protect, adminOnly } = require('../middleware/authMiddleware');
 
-router.post('/', createBooking);
-router.get('/', getAllBookings);
-router.get('/user/:userId', getUserBookings);
-router.put('/:id/status', updateBookingStatus);
+router.post('/', protect, createBooking);
+router.get('/', protect, adminOnly, getAllBookings);
+router.get('/user/:userId', protect, getUserBookings);
+router.put('/:id/status', protect, updateBookingStatus);
+router.put('/:id/confirm-payment', protect, confirmPayment);
 
 module.exports = router;

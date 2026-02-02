@@ -3,6 +3,7 @@ const app = require('./src/app');
 const pool = require('./src/config/db');
 const http = require('http');
 const { Server } = require('socket.io');
+const { initializeWhatsApp } = require('./src/utils/whatsappService');
 
 const PORT = process.env.PORT || 5000;
 
@@ -43,10 +44,16 @@ io.on('connection', (socket) => {
 pool.connect()
     .then(() => {
         console.log('✅ Database connected successfully');
+
+        // Initialize WhatsApp
+        console.log('📱 Starting WhatsApp service...');
+        initializeWhatsApp();
+
         server.listen(PORT, () => {
             console.log(`🚀 Server running on port ${PORT}`);
             console.log(`📡 API URL: http://localhost:${PORT}/api`);
             console.log(`⚡ Socket.io ready for real-time updates`);
+            console.log(`📱 WhatsApp service initializing...`);
         });
     })
     .catch((err) => {

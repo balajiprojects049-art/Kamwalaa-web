@@ -1,4 +1,5 @@
 const pool = require('../config/db');
+const { sendBookingToWhatsApp } = require('../utils/whatsappService');
 
 // @desc    Create a new booking
 // @route   POST /api/v1/bookings
@@ -232,3 +233,104 @@ exports.updateBookingStatus = async (req, res) => {
         });
     }
 };
+
+// @desc    Confirm payment and send notifications
+// @route   PUT /api/v1/bookings/:id/confirm-payment
+// @access  Private
+exports.confirmPayment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { payment_id, payment_method } = req.body;
+
+        // Update payment status
+        const result = await pool.query(
+            `UPDATE bookings 
+             SET payment_status = 'paid', 
+                 payment_id = $1,
+                 status = 'confirmed',
+                 updated_at = NOW() 
+             WHERE id = $2 
+             RETURNING *`,
+            [payment_id, id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Booking not found'
+            });
+        }
+
+        const booking = result.rows[0];
+
+        // Get full booking details with user and service info
+        const fullBookingResult = await pool.query(
+            `SELECT 
+                b.*,
+                u.name as customer_name,
+                u.phone as customer_phone,
+                s.name as service_name
+            FROM bookings b
+            LEFT JOIN users u ON b.user_id = u.id
+            LEFT JOIN services s ON b.service_id = s.id
+            WHERE b.id = $1`,
+            [id]
+        );
+
+        const fullBooking = fullBookingResult.rows[0];
+
+        console.log('💳 Payment confirmed for booking:', fullBooking.booking_number);
+
+        // Send to Admin Panel via Socket.io
+        const io = req.app.get('io');
+        if (io) {
+            io.to('admin_notifications').emit('payment_confirmed', {
+                title: '✅ Payment Confirmed',
+                message: `Payment received for Booking #${fullBooking.booking_number}`,
+                bookingId: fullBooking.id,
+                displayId: fullBooking.booking_number,
+                serviceName: fullBooking.service_name,
+                amount: fullBooking.total_amount,
+                customer: fullBooking.customer_name,
+                phone: fullBooking.customer_phone,
+                address: {
+                    line1: fullBooking.address_line1,
+                    line2: fullBooking.address_line2,
+                    city: fullBooking.city,
+                    state: fullBooking.state,
+                    pincode: fullBooking.pincode,
+                    landmark: fullBooking.landmark
+                }
+            });
+            console.log(`🔔 Admin panel notification sent for ${fullBooking.booking_number}`);
+        }
+
+        // Send to WhatsApp
+        sendBookingToWhatsApp(fullBooking)
+            .then((whatsappResult) => {
+                if (whatsappResult.success) {
+                    console.log(`📱 WhatsApp message sent for booking ${fullBooking.booking_number}`);
+                } else {
+                    console.log(`⚠️ WhatsApp message failed: ${whatsappResult.message}`);
+                }
+            })
+            .catch((err) => {
+                console.error('❌ WhatsApp error:', err);
+            });
+
+        res.status(200).json({
+            success: true,
+            message: 'Payment confirmed and notifications sent',
+            data: booking
+        });
+
+    } catch (err) {
+        console.error('Error confirming payment:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to confirm payment',
+            error: err.toString()
+        });
+    }
+};
+

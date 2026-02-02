@@ -149,18 +149,26 @@
 .input-icon {
     position: absolute;
     left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
     color: var(--text-tertiary);
     font-size: 1.25rem;
+    z-index: 10;
+    pointer-events: none;
+    /* Let clicks pass through to input if needed */
 }
 
 .form-input {
     width: 100%;
-    padding: 0.875rem 1rem 0.875rem 4.5rem;
+    padding: 0.875rem 1rem 0.875rem 3.5rem !important;
+    /* Ensure space for icon */
     border: 2px solid var(--border-color);
     border-radius: var(--radius-lg);
     font-size: var(--text-base);
     font-family: var(--font-primary);
     transition: all var(--transition-fast);
+    background: white;
+    /* Ensure background is solid */
 }
 
 .form-input:focus {
@@ -361,6 +369,7 @@
         grid-template-columns: 1fr;
     }
 }
+
 /* PIN Input Styles */
 .pin-input {
     background: #f9fafb !important;
@@ -384,7 +393,7 @@
     border-radius: 8px;
     font-size: 0.95rem;
     font-weight: 500;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .btn-link {
@@ -406,4 +415,3 @@
 .w-100 {
     width: 100%;
 }
-

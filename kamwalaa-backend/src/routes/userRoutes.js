@@ -7,11 +7,12 @@ const {
     addUserAddress,
     getAllUsers
 } = require('../controllers/userController');
+const { protect, adminOnly } = require('../middleware/authMiddleware');
 
-router.get('/', getAllUsers);
-router.get('/:id', getUserProfile);
-router.put('/:id', updateUserProfile);
-router.get('/:id/addresses', getUserAddresses);
-router.post('/:id/addresses', addUserAddress);
+router.get('/', protect, adminOnly, getAllUsers);
+router.get('/:id', protect, getUserProfile);
+router.put('/:id', protect, updateUserProfile);
+router.get('/:id/addresses', protect, getUserAddresses);
+router.post('/:id/addresses', protect, addUserAddress);
 
 module.exports = router;

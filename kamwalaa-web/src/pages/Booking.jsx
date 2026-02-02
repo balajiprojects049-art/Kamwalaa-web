@@ -211,9 +211,36 @@ const Booking = () => {
             const responses = await Promise.all(bookingPromises);
             console.log('Create Booking Response:', responses);
 
-            // Get the real booking number from backend response
-            // response.data holds the DB row
-            const bookingId = responses[0]?.data?.booking_number || `BK-${Date.now()}`;
+            // Get the real booking ID (UUID) and number from backend response
+            const bookingData = responses[0]?.data;
+            const bookingUUID = bookingData?.id; // This is the UUID primary key
+            const bookingNumber = bookingData?.booking_number || `BK-${Date.now()}`;
+
+            // ⭐ IMPORTANT: Confirm payment to trigger WhatsApp & Admin panel notifications
+            console.log('Confirming payment for booking:', bookingUUID);
+
+            try {
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+                const confirmResponse = await fetch(`${API_URL}/bookings/${bookingUUID}/confirm-payment`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        payment_id: formData.paymentMethod === 'cash' ? `COD_${Date.now()}` : `ONLINE_${Date.now()}`,
+                        payment_method: formData.paymentMethod
+                    })
+                });
+
+                if (confirmResponse.ok) {
+                    console.log('✅ Payment confirmed - WhatsApp & Admin notified!');
+                } else {
+                    console.warn('⚠️ Payment confirmation failed, but booking was created');
+                }
+            } catch (confirmError) {
+                console.error('Payment confirmation error:', confirmError);
+                // Don't fail the booking if notification fails
+            }
 
             success('Booking confirmed successfully!');
 
@@ -221,7 +248,7 @@ const Booking = () => {
             setTimeout(() => {
                 navigate('/booking-success', {
                     state: {
-                        bookingId: bookingId,
+                        bookingId: bookingNumber,
                         ...formData,
                         selectedServices
                     }
