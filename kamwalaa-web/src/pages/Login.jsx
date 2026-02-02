@@ -110,6 +110,7 @@ const Login = () => {
 
         setLoading(true);
         try {
+            console.log('Setting PIN for phone:', formData.phone);
             const res = await setPin(formData.phone, formData.pin);
             if (res.success) {
                 localStorage.setItem('kamwalaa_saved_phone', formData.phone);
@@ -117,8 +118,10 @@ const Login = () => {
                 navigate(from, { state: bookingState });
             }
         } catch (err) {
-            setError('Failed to set PIN');
-            toast.error('Could not save PIN');
+            console.error('PIN setup error:', err);
+            const errorMsg = err.response?.data?.message || err.response?.data?.error || 'Could not save PIN';
+            setError(errorMsg);
+            toast.error(errorMsg);
         } finally {
             setLoading(false);
         }
