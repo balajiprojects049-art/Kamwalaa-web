@@ -167,46 +167,47 @@ exports.adminLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Hardcoded admin credentials for MVP
-        if (email === 'admin@kamwalaa.com' && password === 'admin123') {
-            // Fetch real admin user from DB to get valid UUID
-            let userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-            let adminUser = userResult.rows[0];
-
-            if (!adminUser) {
-                // Auto-create admin if missing (Development convenience)
-                const newAdmin = await pool.query(
-                    `INSERT INTO users (name, email, phone, role, is_verified, city) 
-                     VALUES ('Admin User', $1, '9000000000', 'admin', true, 'Hyderabad') 
-                     RETURNING *`,
-                    [email]
-                );
-                adminUser = newAdmin.rows[0];
-            }
-
-            // Ensure role is admin
-            if (adminUser.role !== 'admin') {
-                await pool.query("UPDATE users SET role = 'admin' WHERE id = $1", [adminUser.id]);
-                adminUser.role = 'admin';
-            }
-
-            return res.status(200).json({
-                success: true,
-                message: 'Admin login successful',
-                user: {
-                    id: adminUser.id, // Real UUID
-                    name: adminUser.name,
-                    email: adminUser.email,
-                    email: adminUser.email,
-                    role: 'admin',
-                    token: generateToken(adminUser.id, 'admin')
-                }
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide email and password'
             });
         }
 
-        res.status(401).json({
-            success: false,
-            message: 'Invalid credentials'
+        // Fetch admin user from database
+        const userResult = await pool.query(
+            "SELECT * FROM users WHERE email = $1 AND role = 'admin'",
+            [email]
+        );
+
+        if (userResult.rows.length === 0) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
+        }
+
+        const adminUser = userResult.rows[0];
+
+        // Check password
+        const isMatch = await bcrypt.compare(password, adminUser.password);
+        if (!isMatch) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'Admin login successful',
+            user: {
+                id: adminUser.id,
+                name: adminUser.name,
+                email: adminUser.email,
+                role: 'admin',
+                token: generateToken(adminUser.id, 'admin')
+            }
         });
     } catch (err) {
         console.error('Error in admin login:', err);
