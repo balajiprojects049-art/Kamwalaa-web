@@ -1,5 +1,10 @@
 const pool = require('../config/db');
-const { sendBookingToWhatsApp } = require('../utils/whatsappService');
+const {
+    sendBookingToWhatsApp,
+    sendBookingConfirmationToCustomer,
+    sendPartnerAssignmentToCustomer,
+    sendServiceCompletionToCustomer
+} = require('../utils/whatsappService');
 
 // @desc    Create a new booking
 // @route   POST /api/v1/bookings
@@ -79,7 +84,22 @@ exports.createBooking = async (req, res) => {
 
         const savedBooking = result.rows[0];
 
-        // Notify Admin via Real-Time Socket
+        // Get full booking details with customer and service info for WhatsApp
+        const fullBookingResult = await pool.query(
+            `SELECT 
+                b.*,
+                u.name as customer_name,
+                u.phone as customer_phone,
+                s.name as service_name
+            FROM bookings b
+            LEFT JOIN users u ON b.user_id = u.id
+            LEFT JOIN services s ON b.service_id = s.id
+            WHERE b.id = $1`,
+            [savedBooking.id]
+        );
+
+        const fullBooking = fullBookingResult.rows[0];
+
         // Notify Admin via Real-Time Socket
         const io = req.app.get('io');
         if (io) {
@@ -93,6 +113,19 @@ exports.createBooking = async (req, res) => {
             });
             console.log(`🔔 Notification sent for ${savedBooking.booking_number}`);
         }
+
+        // ** SCENARIO 1: Send WhatsApp to Admin **
+        sendBookingToWhatsApp(fullBooking)
+            .then((whatsappResult) => {
+                if (whatsappResult.success) {
+                    console.log(`📱 WhatsApp sent to admin for booking ${fullBooking.booking_number}`);
+                } else {
+                    console.log(`⚠️ WhatsApp to admin failed: ${whatsappResult.message}`);
+                }
+            })
+            .catch((err) => {
+                console.error('❌ WhatsApp error:', err);
+            });
 
         res.status(201).json({
             success: true,
@@ -218,6 +251,69 @@ exports.updateBookingStatus = async (req, res) => {
                 success: false,
                 message: 'Booking not found'
             });
+        }
+
+        const booking = result.rows[0];
+
+        // Get full booking details for WhatsApp notifications
+        const fullBookingResult = await pool.query(
+            `SELECT 
+                b.*,
+                u.name as customer_name,
+                u.phone as customer_phone,
+                s.name as service_name,
+                p.business_name as partner_name,
+                p.id as partner_id,
+                pu.phone as partner_phone,
+                p.rating as partner_rating
+            FROM bookings b
+            LEFT JOIN users u ON b.user_id = u.id
+            LEFT JOIN services s ON b.service_id = s.id
+            LEFT JOIN partners p ON b.partner_id = p.id
+            LEFT JOIN users pu ON p.user_id = pu.id
+            WHERE b.id = $1`,
+            [id]
+        );
+
+        const fullBooking = fullBookingResult.rows[0];
+
+        // ** SCENARIO 2: When admin confirms booking **
+        if (status === 'confirmed') {
+            sendBookingConfirmationToCustomer(fullBooking.customer_phone, fullBooking)
+                .then(result => {
+                    if (result.success) {
+                        console.log(`📱 Confirmation WhatsApp sent to customer for ${fullBooking.booking_number}`);
+                    }
+                })
+                .catch(err => console.error('❌ WhatsApp confirmation error:', err));
+        }
+
+        // ** SCENARIO 3: When partner is assigned **
+        if (status === 'assigned' && fullBooking.partner_id) {
+            const partnerData = {
+                partner_name: fullBooking.partner_name,
+                partner_phone: fullBooking.partner_phone,
+                rating: fullBooking.partner_rating
+            };
+
+            sendPartnerAssignmentToCustomer(fullBooking.customer_phone, fullBooking, partnerData)
+                .then(result => {
+                    if (result.success) {
+                        console.log(`📱 Partner assignment WhatsApp sent to customer for ${fullBooking.booking_number}`);
+                    }
+                })
+                .catch(err => console.error('❌ WhatsApp partner assignment error:', err));
+        }
+
+        // ** SCENARIO 4: When service is completed **
+        if (status === 'completed') {
+            sendServiceCompletionToCustomer(fullBooking.customer_phone, fullBooking)
+                .then(result => {
+                    if (result.success) {
+                        console.log(`📱 Completion WhatsApp sent to customer for ${fullBooking.booking_number}`);
+                    }
+                })
+                .catch(err => console.error('❌ WhatsApp completion error:', err));
         }
 
         res.status(200).json({

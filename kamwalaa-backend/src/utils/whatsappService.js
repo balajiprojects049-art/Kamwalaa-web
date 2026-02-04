@@ -1,6 +1,6 @@
-// TEMPORARILY DISABLED: whatsapp-web.js requires Chromium which isn't available on Railway
-// const { Client, LocalAuth } = require('whatsapp-web.js');
-// const qrcode = require('qrcode-terminal');
+// WhatsApp Web.js integration
+const { Client, LocalAuth } = require('whatsapp-web.js');
+const qrcode = require('qrcode-terminal');
 
 let whatsappClient = null;
 let isReady = false;
@@ -10,22 +10,15 @@ const ADMIN_WHATSAPP = '919030545655'; // India country code + number
 
 /**
  * Initialize WhatsApp Client
- * DISABLED: WhatsApp Web.js requires a browser environment (Chromium)
- * Railway/Render doesn't support this. Use Twilio WhatsApp API instead for production.
  */
 const initializeWhatsApp = () => {
-    console.log('⚠️ WhatsApp Web.js is disabled (not compatible with Railway)');
-    console.log('ℹ️ Booking notifications will only be sent via Socket.IO to admin panel');
-    return null;
-
-    /* ORIGINAL CODE - COMMENTED OUT FOR RAILWAY COMPATIBILITY
     if (whatsappClient) {
         console.log('📱 WhatsApp client already initialized');
         return whatsappClient;
     }
 
     console.log('📱 Initializing WhatsApp client...');
-    
+
     whatsappClient = new Client({
         authStrategy: new LocalAuth({
             clientId: 'kamwalaa-admin',
@@ -83,11 +76,10 @@ const initializeWhatsApp = () => {
     whatsappClient.initialize();
 
     return whatsappClient;
-    */
 };
 
 /**
- * Send booking details to admin WhatsApp
+ * Send booking details to admin WhatsApp (Scenario 1)
  */
 const sendBookingToWhatsApp = async (bookingData) => {
     try {
@@ -106,7 +98,7 @@ const sendBookingToWhatsApp = async (bookingData) => {
         const chatId = `${ADMIN_WHATSAPP}@c.us`;
         await whatsappClient.sendMessage(chatId, message);
 
-        console.log('✅ Booking details sent to WhatsApp successfully!');
+        console.log('✅ Booking details sent to admin WhatsApp successfully!');
         return {
             success: true,
             message: 'Sent to WhatsApp'
@@ -122,7 +114,111 @@ const sendBookingToWhatsApp = async (bookingData) => {
 };
 
 /**
- * Format booking data into WhatsApp message
+ * Send booking confirmation to customer (Scenario 2)
+ */
+const sendBookingConfirmationToCustomer = async (customerPhone, bookingData) => {
+    try {
+        if (!whatsappClient || !isReady) {
+            console.log('⚠️ WhatsApp client not ready.');
+            return { success: false, message: 'WhatsApp client not ready' };
+        }
+
+        const message = `✅ *Booking Confirmed!*\n\n` +
+            `Hello ${bookingData.customer_name},\n\n` +
+            `Your booking has been confirmed!\n\n` +
+            `📋 *Booking ID:* ${bookingData.booking_number}\n` +
+            `🛠️ *Service:* ${bookingData.service_name}\n` +
+            `📅 *Date:* ${bookingData.booking_date}\n` +
+            `⏰ *Time:* ${bookingData.booking_time}\n` +
+            `💰 *Amount:* ₹${bookingData.total_amount}\n\n` +
+            `Our team will reach you at the scheduled time.\n\n` +
+            `Thank you for choosing Kamwalaa!`;
+
+        const chatId = `${customerPhone.replace(/[^0-9]/g, '')}@c.us`;
+        await whatsappClient.sendMessage(chatId, message);
+
+        console.log(`✅ Confirmation sent to customer: ${customerPhone}`);
+        return { success: true, message: 'Customer notified' };
+
+    } catch (error) {
+        console.error('❌ Error sending customer confirmation:', error);
+        return { success: false, message: error.message };
+    }
+};
+
+/**
+ * Send partner assignment notification to customer (Scenario 3)
+ */
+const sendPartnerAssignmentToCustomer = async (customerPhone, bookingData, partnerData) => {
+    try {
+        if (!whatsappClient || !isReady) {
+            console.log('⚠️ WhatsApp client not ready.');
+            return { success: false, message: 'WhatsApp client not ready' };
+        }
+
+        const message = `👨‍🔧 *Technician Assigned!*\n\n` +
+            `Hello ${bookingData.customer_name},\n\n` +
+            `Your service partner has been assigned!\n\n` +
+            `👤 *Technician:* ${partnerData.partner_name}\n` +
+            `📞 *Contact:* ${partnerData.partner_phone}\n` +
+            `⭐ *Rating:* ${partnerData.rating || '4.5'}/5.0\n\n` +
+            `📋 *Booking ID:* ${bookingData.booking_number}\n` +
+            `📅 *Scheduled:* ${bookingData.booking_date} at ${bookingData.booking_time}\n\n` +
+            `Your service partner will arrive on time.\n\n` +
+            `Thank you for choosing Kamwalaa!`;
+
+        const chatId = `${customerPhone.replace(/[^0-9]/g, '')}@c.us`;
+        await whatsappClient.sendMessage(chatId, message);
+
+        console.log(`✅ Partner assignment sent to customer: ${customerPhone}`);
+        return { success: true, message: 'Customer notified about partner' };
+
+    } catch (error) {
+        console.error('❌ Error sending partner assignment notification:', error);
+        return { success: false, message: error.message };
+    }
+};
+
+/**
+ * Send service completion notification to customer (Scenario 4)
+ */
+const sendServiceCompletionToCustomer = async (customerPhone, bookingData) => {
+    try {
+        if (!whatsappClient || !isReady) {
+            console.log('⚠️ WhatsApp client not ready.');
+            return { success: false, message: 'WhatsApp client not ready' };
+        }
+
+        const message = `🎉 *Service Completed Successfully!*\n\n` +
+            `Hello ${bookingData.customer_name},\n\n` +
+            `Thank you for using Kamwalaa! Your service has been completed.\n\n` +
+            `📋 *Invoice Details:*\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `Booking ID: ${bookingData.booking_number}\n` +
+            `Service: ${bookingData.service_name}\n` +
+            `Amount: ₹${bookingData.total_amount}\n` +
+            `Payment: ${bookingData.payment_method || 'Cash on Service'}\n` +
+            `Status: ✅ Completed\n\n` +
+            `👨‍🔧 Technician: ${bookingData.partner_name || 'N/A'}\n\n` +
+            `📊 *How was your experience?*\n` +
+            `Please rate our service and help us improve!\n\n` +
+            `We appreciate your business!\n` +
+            `- Team Kamwalaa`;
+
+        const chatId = `${customerPhone.replace(/[^0-9]/g, '')}@c.us`;
+        await whatsappClient.sendMessage(chatId, message);
+
+        console.log(`✅ Service completion notification sent to customer: ${customerPhone}`);
+        return { success: true, message: 'Completion notification sent' };
+
+    } catch (error) {
+        console.error('❌ Error sending completion notification:', error);
+        return { success: false, message: error.message };
+    }
+};
+
+/**
+ * Format booking data into WhatsApp message for admin
  */
 const formatBookingMessage = (data) => {
     const {
@@ -140,12 +236,13 @@ const formatBookingMessage = (data) => {
         landmark,
         special_instructions,
         total_amount,
+        payment_method,
         payment_status
     } = data;
 
     let message = `🎉 *NEW BOOKING RECEIVED* 🎉\n\n`;
     message += `📋 *Booking ID:* ${booking_number}\n`;
-    message += `✅ *Payment Status:* ${payment_status.toUpperCase()}\n`;
+    message += `✅ *Payment:* ${payment_method || 'Cash on Service'}\n`;
     message += `💰 *Amount:* ₹${total_amount}\n\n`;
 
     message += `👤 *CUSTOMER DETAILS*\n`;
@@ -190,5 +287,8 @@ const getWhatsAppStatus = () => {
 module.exports = {
     initializeWhatsApp,
     sendBookingToWhatsApp,
+    sendBookingConfirmationToCustomer,
+    sendPartnerAssignmentToCustomer,
+    sendServiceCompletionToCustomer,
     getWhatsAppStatus
 };
