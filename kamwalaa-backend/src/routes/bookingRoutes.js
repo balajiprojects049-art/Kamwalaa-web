@@ -9,7 +9,7 @@ const {
 } = require('../controllers/bookingController');
 const { protect, adminOnly } = require('../middleware/authMiddleware');
 
-router.post('/', protect, createBooking);
+router.post('/', createBooking); // Allow guest bookings
 router.get('/', protect, adminOnly, getAllBookings);
 router.get('/user/:userId', protect, getUserBookings);
 router.put('/:id/status', protect, updateBookingStatus);

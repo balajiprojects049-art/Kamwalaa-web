@@ -45,6 +45,11 @@ api.interceptors.response.use(
                 return Promise.reject(error);
             }
 
+            // IGNORE redirect for guest bookings
+            if (error.config.url.includes('/bookings') && error.config.method === 'post') {
+                return Promise.reject(error);
+            }
+
             // For other requests, clear user data and redirect to login
             localStorage.removeItem('user');
             // Only redirect if we are not already on the login page
