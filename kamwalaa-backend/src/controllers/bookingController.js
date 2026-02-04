@@ -8,11 +8,14 @@ const {
 
 // @desc    Create a new booking
 // @route   POST /api/v1/bookings
-// @access  Private (requires user)
+// @access  Public (allows guest bookings)
 exports.createBooking = async (req, res) => {
     try {
         const {
             user_id,
+            guest_name,
+            guest_phone,
+            guest_email,
             service_id,
             booking_date,
             booking_time,
@@ -26,8 +29,37 @@ exports.createBooking = async (req, res) => {
             payment_method
         } = req.body;
 
+        let actualUserId = user_id;
+
+        // If no user_id provided, create a guest user account
+        if (!user_id && guest_phone) {
+            console.log('Creating guest user account...');
+
+            // Check if user already exists with this phone
+            const existingUser = await pool.query(
+                'SELECT id FROM users WHERE phone = $1',
+                [guest_phone]
+            );
+
+            if (existingUser.rows.length > 0) {
+                // User exists, use their ID
+                actualUserId = existingUser.rows[0].id;
+                console.log('Found existing user:', actualUserId);
+            } else {
+                // Create new user
+                const newUserResult = await pool.query(
+                    `INSERT INTO users (name, phone, email, city, role, is_verified)
+                     VALUES ($1, $2, $3, $4, 'customer', true)
+                     RETURNING id`,
+                    [guest_name || 'Guest User', guest_phone, guest_email || null, city]
+                );
+                actualUserId = newUserResult.rows[0].id;
+                console.log('Created new guest user:', actualUserId);
+            }
+        }
+
         // Validate required fields
-        if (!user_id || !service_id || !booking_date || !booking_time ||
+        if (!actualUserId || !service_id || !booking_date || !booking_time ||
             !address_line1 || !city || !pincode) {
             return res.status(400).json({
                 success: false,
@@ -51,17 +83,8 @@ exports.createBooking = async (req, res) => {
         const service = serviceResult.rows[0];
         const totalAmount = service.price;
 
-        // Ensure user exists before inserting (Fail fast)
-        const userCheck = await pool.query('SELECT id FROM users WHERE id = $1', [user_id]);
-        if (userCheck.rows.length === 0) {
-            return res.status(400).json({
-                success: false,
-                message: 'User account not found. Please re-login.'
-            });
-        }
-
         console.log('Inserting booking with data:', {
-            user_id, service_id, booking_date, booking_time,
+            user_id: actualUserId, service_id, booking_date, booking_time,
             price: service.price
         });
 
@@ -75,7 +98,7 @@ exports.createBooking = async (req, res) => {
             ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'pending', 'pending')
             RETURNING *`,
             [
-                user_id, service_id, booking_date, booking_time,
+                actualUserId, service_id, booking_date, booking_time,
                 address_line1, address_line2, city, state, pincode, landmark,
                 special_instructions, payment_method,
                 service.price, totalAmount

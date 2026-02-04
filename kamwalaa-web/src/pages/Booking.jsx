@@ -168,16 +168,18 @@ const Booking = () => {
             return;
         }
 
-        if (!user) {
-            showError('Please login to verify your booking');
-            // Save state and redirect to login
-            navigate('/login', { state: { from: location.pathname, bookingState: location.state } });
-            return;
-        }
-
         setIsSubmitting(true);
 
         try {
+            // If user is not logged in, create a temporary user ID from phone number
+            let userId = user?.id;
+
+            if (!user) {
+                // For guest bookings, we'll use phone as temporary identifier
+                // Backend will handle user creation if needed
+                console.log('Guest booking - will create user if needed');
+            }
+
             // Create a booking for each selected service
             // Note: In a real app, you might want a 'cart' concept or single booking with items.
             // For now, we loop.
@@ -192,7 +194,11 @@ const Booking = () => {
                 };
 
                 const bookingPayload = {
-                    user_id: user.id,
+                    // If user exists, use their ID, otherwise send guest details
+                    user_id: userId,
+                    guest_name: !userId ? formData.fullName : undefined,
+                    guest_phone: !userId ? formData.phone : undefined,
+                    guest_email: !userId ? formData.email : undefined,
                     service_id: service.id,
                     booking_date: formData.date,
                     booking_time: formatTime(formData.timeSlot),
