@@ -233,7 +233,30 @@
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
+    align-items: center;
 }
+
+.booking-footer .btn svg {
+    margin-right: 0.5rem;
+}
+
+.review-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #f0fdf4;
+    color: #16a34a;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.review-badge .star-filled {
+    color: #fbbf24;
+    fill: #fbbf24;
+}
+
 
 @media (max-width: 640px) {
     .booking-details {

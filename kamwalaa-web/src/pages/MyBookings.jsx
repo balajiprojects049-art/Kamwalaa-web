@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiCalendar, FiClock, FiMapPin, FiPackage, FiLoader, FiAlertCircle } from 'react-icons/fi';
+import { FiCalendar, FiClock, FiMapPin, FiPackage, FiLoader, FiAlertCircle, FiStar } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import { getUserBookings } from '../services/apiService';
 import PageHero from '../components/common/PageHero';
+import ReviewModal from '../components/common/ReviewModal';
 import './MyBookings.css';
 
 const MyBookings = () => {
@@ -12,6 +13,8 @@ const MyBookings = () => {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [reviewModalOpen, setReviewModalOpen] = useState(false);
+    const [selectedBooking, setSelectedBooking] = useState(null);
 
     useEffect(() => {
         if (!user) {
@@ -52,6 +55,28 @@ const MyBookings = () => {
         if (!dateString) return '';
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(dateString).toLocaleDateString('en-US', options);
+    };
+
+    const handleOpenReviewModal = (booking) => {
+        setSelectedBooking(booking);
+        setReviewModalOpen(true);
+    };
+
+    const handleCloseReviewModal = () => {
+        setReviewModalOpen(false);
+        setSelectedBooking(null);
+    };
+
+    const handleReviewSubmitted = async () => {
+        // Refresh bookings after review submission
+        try {
+            const response = await getUserBookings(user.id);
+            if (response.success) {
+                setBookings(response.data);
+            }
+        } catch (err) {
+            console.error('Error refreshing bookings:', err);
+        }
     };
 
     if (loading) {
@@ -147,6 +172,19 @@ const MyBookings = () => {
                                     {booking.status === 'pending' && (
                                         <button className="btn btn-outline-danger btn-sm">Cancel Booking</button>
                                     )}
+                                    {booking.status === 'completed' && !booking.has_review && (
+                                        <button
+                                            className="btn btn-primary btn-sm"
+                                            onClick={() => handleOpenReviewModal(booking)}
+                                        >
+                                            <FiStar /> Rate Service
+                                        </button>
+                                    )}
+                                    {booking.status === 'completed' && booking.has_review && (
+                                        <div className="review-badge">
+                                            <FiStar className="star-filled" /> Review Submitted
+                                        </div>
+                                    )}
                                     <button className="btn btn-outline btn-sm">View Details</button>
                                 </div>
                             </div>
@@ -154,6 +192,15 @@ const MyBookings = () => {
                     </div>
                 )}
             </div>
+
+            {/* Review Modal */}
+            {reviewModalOpen && selectedBooking && (
+                <ReviewModal
+                    booking={selectedBooking}
+                    onClose={handleCloseReviewModal}
+                    onSubmitSuccess={handleReviewSubmitted}
+                />
+            )}
         </div>
     );
 };

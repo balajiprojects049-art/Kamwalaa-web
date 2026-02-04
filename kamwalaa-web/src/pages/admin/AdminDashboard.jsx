@@ -38,12 +38,35 @@ const AdminDashboard = () => {
                     const bookings = response.data;
                     const totalRev = bookings.reduce((acc, curr) => acc + (parseFloat(curr.total_amount) || 0), 0);
 
+                    // Calculate popular services
+                    const serviceCount = {};
+                    bookings.forEach(booking => {
+                        const serviceName = booking.service_name || 'Unknown Service';
+                        serviceCount[serviceName] = (serviceCount[serviceName] || 0) + 1;
+                    });
+
+                    // Sort and get top 5 services
+                    const sortedServices = Object.entries(serviceCount)
+                        .sort((a, b) => b[1] - a[1])
+                        .slice(0, 5)
+                        .map(([name, count], index) => ({
+                            name,
+                            count,
+                            colorClass: ['bg-blue-fill', 'bg-green-fill', 'bg-purple-fill', 'bg-orange-fill', 'bg-pink-fill'][index]
+                        }));
+
+                    // Calculate unique customers from the last 30 days
+                    const thirtyDaysAgo = new Date();
+                    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                    const recentBookings = bookings.filter(b => new Date(b.created_at) >= thirtyDaysAgo);
+                    const uniqueCustomers = new Set(recentBookings.map(b => b.customer_phone || b.user_id)).size;
+
                     setStats({
                         totalBookings: bookings.length,
                         totalRevenue: totalRev,
                         recentBookings: bookings.slice(0, 5), // Top 5 recent
-                        newCustomers: 0, // Placeholder until user API is connected
-                        popularServices: [] // Placeholder
+                        newCustomers: uniqueCustomers,
+                        popularServices: sortedServices
                     });
                 }
             } catch (error) {
