@@ -20,6 +20,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Booking from './pages/Booking';
 import BookingSuccess from './pages/BookingSuccess';
+import Invoice from './pages/Invoice';
 import BecomePartner from './pages/BecomePartner';
 
 // Public Pages for User Profile
@@ -67,6 +68,7 @@ function App() {
                             </ProtectedRoute>
                           } />
                           <Route path="/booking" element={<Booking />} />
+                          <Route path="/invoice/:id" element={<Invoice />} />
                           <Route path="/booking-success" element={<BookingSuccess />} />
                           <Route path="/become-partner" element={<BecomePartner />} />
                           {/* Profile routes */}

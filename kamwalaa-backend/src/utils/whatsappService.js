@@ -114,6 +114,21 @@ const sendBookingToWhatsApp = async (bookingData) => {
 };
 
 /**
+ * Helper to ensure phone number has 91 prefix
+ */
+const sanitizePhoneNumber = (phone) => {
+    if (!phone) return null;
+    let cleanPhone = phone.replace(/[^0-9]/g, '');
+
+    // If number is 10 digits (e.g. 90305...), add 91
+    if (cleanPhone.length === 10) {
+        cleanPhone = '91' + cleanPhone;
+    }
+
+    return cleanPhone;
+};
+
+/**
  * Send booking confirmation to customer (Scenario 2)
  */
 const sendBookingConfirmationToCustomer = async (customerPhone, bookingData) => {
@@ -121,6 +136,12 @@ const sendBookingConfirmationToCustomer = async (customerPhone, bookingData) => 
         if (!whatsappClient || !isReady) {
             console.log('⚠️ WhatsApp client not ready.');
             return { success: false, message: 'WhatsApp client not ready' };
+        }
+
+        const formattedPhone = sanitizePhoneNumber(customerPhone);
+        if (!formattedPhone) {
+            console.log('⚠️ Invalid phone number:', customerPhone);
+            return { success: false, message: 'Invalid phone number' };
         }
 
         const message = `✅ *Booking Confirmed!*\n\n` +
@@ -134,10 +155,10 @@ const sendBookingConfirmationToCustomer = async (customerPhone, bookingData) => 
             `Our team will reach you at the scheduled time.\n\n` +
             `Thank you for choosing Kamwalaa!`;
 
-        const chatId = `${customerPhone.replace(/[^0-9]/g, '')}@c.us`;
+        const chatId = `${formattedPhone}@c.us`;
         await whatsappClient.sendMessage(chatId, message);
 
-        console.log(`✅ Confirmation sent to customer: ${customerPhone}`);
+        console.log(`✅ Confirmation sent to customer: ${formattedPhone} (Original: ${customerPhone})`);
         return { success: true, message: 'Customer notified' };
 
     } catch (error) {
@@ -149,12 +170,18 @@ const sendBookingConfirmationToCustomer = async (customerPhone, bookingData) => 
 /**
  * Send partner assignment notification to customer (Scenario 3)
  */
+/**
+ * Send partner assignment notification to customer (Scenario 3)
+ */
 const sendPartnerAssignmentToCustomer = async (customerPhone, bookingData, partnerData) => {
     try {
         if (!whatsappClient || !isReady) {
             console.log('⚠️ WhatsApp client not ready.');
             return { success: false, message: 'WhatsApp client not ready' };
         }
+
+        const formattedPhone = sanitizePhoneNumber(customerPhone);
+        if (!formattedPhone) return { success: false, message: 'Invalid phone number' };
 
         const message = `👨‍🔧 *Technician Assigned!*\n\n` +
             `Hello ${bookingData.customer_name},\n\n` +
@@ -167,10 +194,10 @@ const sendPartnerAssignmentToCustomer = async (customerPhone, bookingData, partn
             `Your service partner will arrive on time.\n\n` +
             `Thank you for choosing Kamwalaa!`;
 
-        const chatId = `${customerPhone.replace(/[^0-9]/g, '')}@c.us`;
+        const chatId = `${formattedPhone}@c.us`;
         await whatsappClient.sendMessage(chatId, message);
 
-        console.log(`✅ Partner assignment sent to customer: ${customerPhone}`);
+        console.log(`✅ Partner assignment sent to customer: ${formattedPhone}`);
         return { success: true, message: 'Customer notified about partner' };
 
     } catch (error) {
@@ -182,6 +209,9 @@ const sendPartnerAssignmentToCustomer = async (customerPhone, bookingData, partn
 /**
  * Send service completion notification to customer (Scenario 4)
  */
+/**
+ * Send service completion & invoice to customer (Scenario 4)
+ */
 const sendServiceCompletionToCustomer = async (customerPhone, bookingData) => {
     try {
         if (!whatsappClient || !isReady) {
@@ -189,26 +219,29 @@ const sendServiceCompletionToCustomer = async (customerPhone, bookingData) => {
             return { success: false, message: 'WhatsApp client not ready' };
         }
 
+        const formattedPhone = sanitizePhoneNumber(customerPhone);
+        if (!formattedPhone) return { success: false, message: 'Invalid phone number' };
+
+        // Use production URL to ensure the link is BLUE and CLICKABLE in WhatsApp
+        const clientUrl = 'https://kamwalaa-web-production.up.railway.app';
+        const invoiceLink = `${clientUrl}/invoice/${bookingData.booking_number}`;
+
         const message = `🎉 *Service Completed Successfully!*\n\n` +
             `Hello ${bookingData.customer_name},\n\n` +
             `Thank you for using Kamwalaa! Your service has been completed.\n\n` +
-            `📋 *Invoice Details:*\n` +
-            `━━━━━━━━━━━━━━━━━━━━\n` +
-            `Booking ID: ${bookingData.booking_number}\n` +
+            `📄 *View Invoice & Download PDF:*\n` +
+            `${invoiceLink}\n\n` +
+            `📋 *Summary:*\n` +
             `Service: ${bookingData.service_name}\n` +
             `Amount: ₹${bookingData.total_amount}\n` +
-            `Payment: ${bookingData.payment_method || 'Cash on Service'}\n` +
-            `Status: ✅ Completed\n\n` +
-            `👨‍🔧 Technician: ${bookingData.partner_name || 'N/A'}\n\n` +
-            `📊 *How was your experience?*\n` +
-            `Please rate our service and help us improve!\n\n` +
+            `Technician: ${bookingData.partner_name || 'Assigned Partner'}\n\n` +
             `We appreciate your business!\n` +
             `- Team Kamwalaa`;
 
-        const chatId = `${customerPhone.replace(/[^0-9]/g, '')}@c.us`;
+        const chatId = `${formattedPhone}@c.us`;
         await whatsappClient.sendMessage(chatId, message);
 
-        console.log(`✅ Service completion notification sent to customer: ${customerPhone}`);
+        console.log(`✅ Invoice Link sent to customer: ${formattedPhone}`);
         return { success: true, message: 'Completion notification sent' };
 
     } catch (error) {

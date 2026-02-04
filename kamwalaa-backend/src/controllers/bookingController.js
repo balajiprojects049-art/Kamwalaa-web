@@ -302,10 +302,20 @@ exports.updateBookingStatus = async (req, res) => {
 
         // ** SCENARIO 2: When admin confirms booking **
         if (status === 'confirmed') {
+            console.log('🔔 Status changed to CONFIRMED. Sending WhatsApp to customer...');
+            console.log('📱 Customer phone:', fullBooking.customer_phone);
+            console.log('📋 Booking data:', {
+                booking_number: fullBooking.booking_number,
+                customer_name: fullBooking.customer_name,
+                service_name: fullBooking.service_name
+            });
+
             sendBookingConfirmationToCustomer(fullBooking.customer_phone, fullBooking)
                 .then(result => {
                     if (result.success) {
-                        console.log(`📱 Confirmation WhatsApp sent to customer for ${fullBooking.booking_number}`);
+                        console.log(`✅ Confirmation WhatsApp sent to customer for ${fullBooking.booking_number}`);
+                    } else {
+                        console.log(`⚠️ WhatsApp failed for ${fullBooking.booking_number}:`, result.message);
                     }
                 })
                 .catch(err => console.error('❌ WhatsApp confirmation error:', err));
