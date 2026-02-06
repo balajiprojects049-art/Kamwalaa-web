@@ -1,58 +1,89 @@
-/* Admin Login Page Stylings - Split Layout Premium */
+/* Modern Professional Admin Login - Clean & Minimal Design */
 .admin-login-page {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #0f172a;
-    /* Slate 900 */
-    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     padding: 2rem;
+    overflow: hidden;
 }
 
-/* Glassmorphism Split Card */
+/* Animated Background Pattern */
+.admin-login-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        linear-gradient(30deg, rgba(255, 255, 255, .1) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, .1) 87.5%, rgba(255, 255, 255, .1)),
+        linear-gradient(150deg, rgba(255, 255, 255, .1) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, .1) 87.5%, rgba(255, 255, 255, .1)),
+        linear-gradient(30deg, rgba(255, 255, 255, .1) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, .1) 87.5%, rgba(255, 255, 255, .1)),
+        linear-gradient(150deg, rgba(255, 255, 255, .1) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, .1) 87.5%, rgba(255, 255, 255, .1));
+    background-size: 80px 140px;
+    background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+    opacity: 0.3;
+    animation: backgroundSlide 20s linear infinite;
+}
+
+@keyframes backgroundSlide {
+    0% {
+        background-position: 0 0, 0 0, 40px 70px, 40px 70px;
+    }
+
+    100% {
+        background-position: 80px 140px, 80px 140px, 120px 210px, 120px 210px;
+    }
+}
+
+/* Main Card */
 .admin-login-card {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    background: #1e293b;
-    /* Slate 800 */
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 1.5rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    grid-template-columns: 42% 58%;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
     width: 100%;
-    max-width: 1000px;
+    max-width: 880px;
     overflow: hidden;
     position: relative;
-    animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
 }
 
 @keyframes slideUpFade {
     from {
         opacity: 0;
-        transform: translateY(40px);
+        transform: translateY(40px) scale(0.96);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
 }
 
 /* --- Left Side: Branding --- */
 .admin-brand-section {
     position: relative;
-    background: #0f172a;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 3rem;
+    padding: 2.5rem 2rem;
     color: white;
     text-align: center;
 }
 
-/* Animated Background (Blobs) */
+/* Decorative Elements */
 .admin-bg-decoration {
     position: absolute;
     top: 0;
@@ -60,6 +91,7 @@
     width: 100%;
     height: 100%;
     z-index: 1;
+    overflow: hidden;
 }
 
 .admin-blob-1,
@@ -67,135 +99,169 @@
 .admin-blob-3 {
     position: absolute;
     border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.5;
-    animation: floatBlob 20s infinite ease-in-out alternate;
+    filter: blur(80px);
+    opacity: 0.2;
 }
 
 .admin-blob-1 {
-    top: -20%;
-    left: -20%;
-    width: 400px;
-    height: 400px;
-    background: #3b82f6;
-    animation-delay: 0s;
+    top: -15%;
+    left: -15%;
+    width: 350px;
+    height: 350px;
+    background: rgba(255, 255, 255, 0.3);
+    animation: float1 18s ease-in-out infinite;
 }
 
 .admin-blob-2 {
     bottom: -20%;
     right: -20%;
-    width: 300px;
-    height: 300px;
-    background: #8b5cf6;
-    animation-delay: -5s;
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.2);
+    animation: float2 15s ease-in-out infinite;
 }
 
 .admin-blob-3 {
-    top: 40%;
-    left: 40%;
+    top: 50%;
+    left: 30%;
     width: 250px;
     height: 250px;
-    background: #06b6d4;
-    animation-delay: -10s;
+    background: rgba(255, 255, 255, 0.15);
+    animation: float3 20s ease-in-out infinite;
 }
 
-@keyframes floatBlob {
-    0% {
-        transform: translate(0, 0) scale(1);
+@keyframes float1 {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg);
     }
 
-    33% {
-        transform: translate(30px, -50px) scale(1.1);
+    50% {
+        transform: translate(30px, -30px) rotate(180deg);
+    }
+}
+
+@keyframes float2 {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg);
     }
 
-    66% {
-        transform: translate(-20px, 20px) scale(0.9);
+    50% {
+        transform: translate(-40px, 40px) rotate(-180deg);
     }
+}
 
+@keyframes float3 {
+
+    0%,
     100% {
         transform: translate(0, 0) scale(1);
     }
+
+    50% {
+        transform: translate(20px, -20px) scale(1.1);
+    }
 }
 
-/* Branding Content */
+/* Content Wrapper */
 .brand-content-wrapper {
     position: relative;
     z-index: 10;
 }
 
 .admin-icon-circle {
-    width: 5rem;
-    height: 5rem;
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 1.5rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin: 0 auto 1.25rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    transition: transform 0.3s ease;
+}
+
+.admin-icon-circle:hover {
+    transform: scale(1.05);
 }
 
 .admin-icon-circle svg {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     color: white;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .admin-brand-section h2 {
-    font-size: 2.25rem;
+    font-size: 2.125rem;
     font-weight: 800;
     margin-bottom: 0.5rem;
-    background: linear-gradient(135deg, white, #94a3b8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.5px;
 }
 
-.admin-brand-section p {
-    color: #94a3b8;
-    font-size: 1.1rem;
-    margin-bottom: 2.5rem;
+.admin-brand-section>p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    font-weight: 500;
 }
 
 .admin-features {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    align-items: center;
+    width: 100%;
+    max-width: 280px;
 }
 
 .admin-feature {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 0.75rem 1.25rem;
-    border-radius: 50px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.admin-feature:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(5px);
 }
 
 .feature-dot {
-    width: 8px;
-    height: 8px;
-    background: #3b82f6;
+    width: 10px;
+    height: 10px;
+    background: #fff;
     border-radius: 50%;
-    box-shadow: 0 0 10px #3b82f6;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+    flex-shrink: 0;
 }
 
 .admin-feature span {
-    font-size: 0.9rem;
-    color: #e2e8f0;
+    font-size: 0.95rem;
+    color: white;
+    font-weight: 500;
+    text-align: left;
 }
 
 /* --- Right Side: Form --- */
 .admin-form-section {
-    padding: 4rem 3rem;
+    padding: 3rem 2.75rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: #1e293b;
-    /* Dark card bg */
+    background: #ffffff;
 }
 
 .form-header {
@@ -205,30 +271,32 @@
 .form-header h3 {
     font-size: 1.75rem;
     font-weight: 700;
-    color: white;
+    color: #1a202c;
     margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
 }
 
 .form-header p {
-    color: #94a3b8;
+    color: #718096;
+    font-size: 1rem;
 }
 
 /* Form Styles */
 .admin-login-form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.75rem;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.625rem;
 }
 
 .form-label {
-    color: #ffffff !important;
-    font-size: 0.9rem;
+    color: #2d3748;
+    font-size: 0.9375rem;
     font-weight: 600;
     margin-left: 0.25rem;
 }
@@ -239,61 +307,70 @@
     align-items: center;
 }
 
-.input-icon {
-    position: absolute;
-    left: 1rem;
-    color: #64748b;
-    font-size: 1.1rem;
-    z-index: 1;
-}
-
 .form-input {
     width: 100%;
     padding: 1rem 1.25rem;
-    /* Left padding for icon */
-    background: rgba(15, 23, 42, 0.5);
-    border: 1px solid #334155;
-    border-radius: 0.75rem;
-    color: white;
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    color: #2d3748;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.form-input:hover {
+    border-color: #cbd5e0;
+    background: #fff;
 }
 
 .form-input:focus {
     outline: none;
-    background: rgba(15, 23, 42, 0.8);
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    background: #fff;
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
 
 .form-input::placeholder {
-    color: #64748b;
+    color: #a0aec0;
+    font-weight: 400;
 }
 
 .admin-login-btn {
     width: 100%;
-    padding: 1rem;
+    padding: 1.125rem 1.5rem;
     margin-top: 1rem;
-    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     font-weight: 700;
-    border-radius: 0.75rem;
+    font-size: 1.0625rem;
+    border-radius: 12px;
     border: none;
     cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    letter-spacing: 0.3px;
 }
 
-.admin-login-btn:hover {
+.admin-login-btn:hover:not(:disabled) {
     transform: translateY(-2px);
-    background: linear-gradient(135deg, #1d4ed8, #4338ca);
+    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+}
+
+.admin-login-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.admin-login-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
 }
 
 .loading-spinner {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.625rem;
 }
 
 .spinner-svg {
@@ -319,35 +396,61 @@
 }
 
 .back-link {
-    color: #64748b;
+    color: #718096;
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 0.9rem;
-    transition: color 0.3s;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
 }
 
 .back-link:hover {
-    color: #94a3b8;
+    color: #667eea;
+    background: #f7fafc;
 }
 
-/* Responsive */
+/* Responsive Design */
 @media (max-width: 900px) {
     .admin-login-card {
         grid-template-columns: 1fr;
-        max-width: 500px;
+        max-width: 480px;
     }
 
     .admin-brand-section {
-        padding: 2rem;
-        display: none;
-        /* Hide brand on mobile or stack it */
+        padding: 2.5rem 2rem;
+        min-height: 240px;
     }
 
-    /* Option: Show brand but smaller */
-    /* .admin-brand-section { display: flex; height: 200px; } */
+    .admin-brand-section h2 {
+        font-size: 2rem;
+    }
+
+    .admin-features {
+        display: none;
+    }
 
     .admin-form-section {
-        padding: 2.5rem;
+        padding: 2.5rem 2rem;
+    }
+
+    .form-header h3 {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-login-page {
+        padding: 1rem;
+    }
+
+    .admin-form-section {
+        padding: 2rem 1.5rem;
+    }
+
+    .form-header h3 {
+        font-size: 1.5rem;
     }
 }

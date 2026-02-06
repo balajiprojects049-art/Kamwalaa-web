@@ -12,9 +12,9 @@ import {
     FaBell,
     FaSearch,
     FaChartLine,
-    FaFileAlt
+    FaFileAlt,
+    FaHandshake
 } from 'react-icons/fa';
-import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { initSocket, joinAdminRoom } from '../../services/socketService';
 import './AdminLayout.css';
@@ -23,7 +23,6 @@ import './AdminLayout.css';
 const NOTIFICATION_SOUND = "data:audio/wav;base64,UklGRl9vT1BXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU..."; // Placeholder shortened
 
 const AdminLayout = () => {
-    const { user, logout } = useAuth();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Default closed on mobile
     const [scrolled, setScrolled] = useState(false);
 
@@ -127,6 +126,7 @@ const AdminLayout = () => {
         { path: '/admin/reports', icon: <FaFileAlt />, label: 'Reports' },
         { path: '/admin/bookings', icon: <FaCalendarAlt />, label: 'Bookings' },
         { path: '/admin/services', icon: <FaTools />, label: 'Services' },
+        { path: '/admin/partners', icon: <FaHandshake />, label: 'Partner Requests' },
         { path: '/admin/customers', icon: <FaUsers />, label: 'Customers' },
         { path: '/admin/settings', icon: <FaCog />, label: 'Settings' },
     ];

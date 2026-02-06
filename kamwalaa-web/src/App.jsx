@@ -9,6 +9,7 @@ import { CartProvider } from './context/CartContext';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import PublicLayout from './components/layout/PublicLayout';
 import AdminLayout from './components/admin/AdminLayout';
+import AdminProtectedRoute from './components/admin/AdminProtectedRoute';
 
 // Public Pages
 import Home from './pages/Home';
@@ -22,6 +23,9 @@ import Booking from './pages/Booking';
 import BookingSuccess from './pages/BookingSuccess';
 import Invoice from './pages/Invoice';
 import BecomePartner from './pages/BecomePartner';
+import PartnerDashboard from './pages/partner/PartnerDashboard';
+import PartnerRegistration from './pages/partner/PartnerRegistration';
+import PartnerLogin from './pages/partner/PartnerLogin';
 
 // Public Pages for User Profile
 import UserProfile from './pages/UserProfile';
@@ -37,6 +41,7 @@ import AdminCustomers from './pages/admin/AdminCustomers';
 import AdminSettings from './pages/admin/AdminSettings';
 import AdminAnalytics from './pages/admin/AdminAnalytics';
 import AdminReports from './pages/admin/AdminReports';
+import AdminPartnerRequests from './pages/admin/AdminPartnerRequests';
 
 import './index.css';
 import './App.css';
@@ -77,12 +82,28 @@ function App() {
                               <UserProfile />
                             </ProtectedRoute>
                           } />
+                          <Route path="/partner/dashboard" element={
+                            <ProtectedRoute>
+                              <PartnerDashboard />
+                            </ProtectedRoute>
+                          } />
+                          <Route path="/partner/register" element={
+                            <ProtectedRoute>
+                              <PartnerRegistration />
+                            </ProtectedRoute>
+                          } />
+                          <Route path="/partner/login" element={<PartnerLogin />} />
                         </Route>
 
-                        {/* Admin Routes */}
+
+                        {/* Admin Routes - Strictly Separated */}
                         <Route path="/admin/login" element={<AdminLogin />} />
 
-                        <Route path="/admin" element={<AdminLayout />}>
+                        <Route path="/admin" element={
+                          <AdminProtectedRoute>
+                            <AdminLayout />
+                          </AdminProtectedRoute>
+                        }>
                           <Route index element={<AdminDashboard />} />
                           <Route path="dashboard" element={<AdminDashboard />} />
                           <Route path="analytics" element={<AdminAnalytics />} />
@@ -90,6 +111,7 @@ function App() {
                           <Route path="services" element={<AdminServices />} />
                           <Route path="bookings" element={<AdminBookings />} />
                           <Route path="customers" element={<AdminCustomers />} />
+                          <Route path="partners" element={<AdminPartnerRequests />} />
                           <Route path="settings" element={<AdminSettings />} />
                         </Route>
                       </Routes>
@@ -101,7 +123,7 @@ function App() {
           </CityProvider>
         </AuthProvider>
       </LanguageProvider>
-    </ErrorBoundary>
+    </ErrorBoundary >
   );
 }
 

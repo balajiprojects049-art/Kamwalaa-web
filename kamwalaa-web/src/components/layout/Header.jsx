@@ -39,6 +39,36 @@ const Header = () => {
     ];
 
     const isActive = (path) => location.pathname === path;
+    const isPartnerPage = location.pathname.startsWith('/partner') || location.pathname === '/become-partner';
+
+    if (isPartnerPage) {
+        return (
+            <header className="header header-scrolled">
+                <div className="container">
+                    <div className="header-content" style={{ justifyContent: 'space-between' }}>
+                        <Link to="/" className="logo" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <img src="/logo.png" alt="Kamwalaa" className="logo-img" />
+                            <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#1e3a8a', paddingLeft: '10px', borderLeft: '2px solid #cbd5e1' }}>Partner</span>
+                        </Link>
+                        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+                            <a href="https://wa.me/919030545655" target="_blank" rel="noreferrer" style={{ color: '#64748b', fontWeight: '500', textDecoration: 'none' }}>
+                                Help Center
+                            </a>
+                            {user ? (
+                                <button onClick={() => { logout(); navigate('/partner/login'); }} style={{ background: 'none', border: 'none', color: '#ef4444', fontWeight: '600', cursor: 'pointer' }}>
+                                    Logout
+                                </button>
+                            ) : (
+                                <Link to="/" className="btn btn-sm btn-outline" style={{ border: '1px solid #cbd5e1', padding: '8px 16px', borderRadius: '6px' }}>
+                                    Back to Home
+                                </Link>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </header>
+        );
+    }
 
     return (
         <header className={`header ${isScrolled ? 'header-scrolled' : ''}`}>

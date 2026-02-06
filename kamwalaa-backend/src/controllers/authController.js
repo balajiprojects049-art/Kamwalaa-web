@@ -2,6 +2,7 @@ const pool = require('../config/db');
 const axios = require('axios');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { sendOTPToWhatsApp } = require('../utils/whatsappService');
 
 const validatePassword = (password) => {
     const minLength = 8;
@@ -51,7 +52,9 @@ exports.sendOTP = async (req, res) => {
         );
 
         // Development mode - log OTP to console
-        // In production, integrate with SMS service like MSG91, Twilio, etc.
+        // Send WhatsApp OTP
+        sendOTPToWhatsApp(phone, otp).catch(err => console.log('WhatsApp send failed but continuing'));
+
         console.log(`🔐 OTP for ${phone}: ${otp}`);
 
         res.status(200).json({
@@ -546,3 +549,63 @@ exports.resetPinWithPassword = async (req, res) => {
         res.status(500).json({ success: false, message: 'Server Error' });
     }
 };
+
+// @route   POST /api/v1/auth/admin/login
+// @desc    Admin login with email and password
+// @access  Public
+exports.adminLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        console.log('🔐 Admin login attempt:', email);
+
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide email and password'
+            });
+        }
+
+        // Hardcoded admin credentials for now
+        const ADMIN_EMAIL = 'admin@kamwalaa.com';
+        const ADMIN_PASSWORD = 'Admin@123456';
+
+        if (email !== ADMIN_EMAIL) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
+        }
+
+        if (password !== ADMIN_PASSWORD) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign(
+            { email: ADMIN_EMAIL, role: 'admin' },
+            process.env.JWT_SECRET || 'kamwalaa_secret_key_2024',
+            { expiresIn: '7d' }
+        );
+
+        console.log('✅ Admin logged in successfully');
+
+        res.status(200).json({
+            success: true,
+            message: 'Admin login successful',
+            user: {
+                email: ADMIN_EMAIL,
+                name: 'Kamwalaa Admin',
+                role: 'admin',
+                token
+            }
+        });
+    } catch (err) {
+        console.error('❌ Admin login error:', err);
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};
+

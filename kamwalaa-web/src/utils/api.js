@@ -12,19 +12,27 @@ const api = axios.create({
 // Request interceptor to add auth token if available
 api.interceptors.request.use(
     (config) => {
-        // 1. Check for Admin Token first if it's an admin route or if explicitly requested
         const adminToken = localStorage.getItem('adminToken');
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        // 'kamwalaa_user' is the key used in AuthContext, let's look for both common keys just in case
+        // But referencing the codebase, AuthContext uses 'kamwalaa_user'. api.js lines 17 used 'user'.
+        // Step 2105 confirms 'kamwalaa_user'.
+        // Let's check both or fix it.
+        const userStr = localStorage.getItem('kamwalaa_user') || localStorage.getItem('user');
+        const user = userStr ? JSON.parse(userStr) : {};
 
-        // Logic: Use Admin Token for admin routes, otherwise User Token
-        // Or if only admin token exists, use that.
+        // CTX CHECK: Are we in Admin Portal?
+        const isAdminPath = window.location.pathname.startsWith('/admin');
 
-        if (config.url.includes('/admin') || (adminToken && !user.token)) {
+        if (isAdminPath) {
+            // FORCE Admin Token for any request coming from Admin Portal
             if (adminToken) {
                 config.headers.Authorization = `Bearer ${adminToken}`;
             }
-        } else if (user.token) {
-            config.headers.Authorization = `Bearer ${user.token}`;
+        } else {
+            // Otherwise use User Token
+            if (user.token) {
+                config.headers.Authorization = `Bearer ${user.token}`;
+            }
         }
 
         return config;
@@ -40,21 +48,32 @@ api.interceptors.response.use(
     (error) => {
         // Check if the error is 401 Unauthorized
         if (error.response?.status === 401) {
-            // IGNORE redirect for admin login attempts
-            if (error.config.url.includes('/auth/admin/login')) {
+            const isAdminPath = window.location.pathname.startsWith('/admin');
+
+            // IGNORE redirect for specific login endpoints
+            if (error.config.url.includes('/login')) {
                 return Promise.reject(error);
             }
 
-            // IGNORE redirect for guest bookings
+            // IGNORE redirect for specific public actions
             if (error.config.url.includes('/bookings') && error.config.method === 'post') {
                 return Promise.reject(error);
             }
 
-            // For other requests, clear user data and redirect to login
-            localStorage.removeItem('user');
-            // Only redirect if we are not already on the login page
-            if (!window.location.pathname.includes('/login')) {
-                window.location.href = '/login';
+            // For other requests, handle redirect based on context
+            if (isAdminPath) {
+                // Clean Admin State
+                localStorage.removeItem('adminToken');
+                if (!window.location.pathname.includes('/admin/login')) {
+                    window.location.href = '/admin/login';
+                }
+            } else {
+                // Clean User State
+                localStorage.removeItem('kamwalaa_user');
+                localStorage.removeItem('user'); // Clean legacy key too
+                if (!window.location.pathname.includes('/login')) {
+                    window.location.href = '/login';
+                }
             }
         }
         return Promise.reject(error);

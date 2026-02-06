@@ -80,6 +80,11 @@ export const getUserBookings = async (userId) => {
     return response.data;
 };
 
+export const getPartnerBookings = async (partnerId) => {
+    const response = await api.get(`/bookings/partner/${partnerId}`);
+    return response.data;
+};
+
 export const getAllBookings = async (status) => {
     const params = status ? { status } : {};
     const response = await api.get('/bookings', { params });
@@ -132,6 +137,47 @@ export const getServiceReviews = async (serviceId) => {
 
 export const getPartnerReviews = async (partnerId) => {
     const response = await api.get(`/reviews/partner/${partnerId}`);
+    return response.data;
+};
+
+// Partners
+export const getAllPartners = async () => {
+    const response = await api.get('/partners');
+    return response.data;
+};
+
+export const getCurrentPartner = async () => {
+    const response = await api.get('/partners/me');
+    return response.data;
+};
+
+export const createPartner = async (partnerData) => {
+    // Check if partnerData is FormData (for file uploads)
+    const config = partnerData instanceof FormData
+        ? { headers: { 'Content-Type': 'multipart/form-data' } }
+        : {};
+
+    const response = await api.post('/partners/register', partnerData, config);
+    return response.data;
+};
+
+export const getPartnerRequests = async () => {
+    const response = await api.get('/partners/requests');
+    return response.data;
+};
+
+export const verifyPartner = async (id) => {
+    const response = await api.put(`/partners/${id}/verify`);
+    return response.data;
+};
+
+export const rejectPartner = async (id) => {
+    const response = await api.put(`/partners/${id}/reject`);
+    return response.data;
+};
+
+export const assignPartner = async (bookingId, partnerId) => {
+    const response = await api.put(`/bookings/${bookingId}/assign`, { partner_id: partnerId });
     return response.data;
 };
 

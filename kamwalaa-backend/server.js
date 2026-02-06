@@ -68,5 +68,6 @@ pool.connect()
 process.on('unhandledRejection', (err) => {
     console.log('UNHANDLED REJECTION! 💥 Shutting down...');
     console.log(err.name, err.message);
-    process.exit(1);
+    console.log(err.name, err.message);
+    // process.exit(1); // Don't crash on unhandled rejection (e.g. WhatsApp failure)
 });

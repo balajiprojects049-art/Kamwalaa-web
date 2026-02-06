@@ -8,10 +8,10 @@ const {
     getAllUsers,
     deleteUser
 } = require('../controllers/userController');
-const { protect, adminOnly } = require('../middleware/authMiddleware');
+const { protect, adminOnly, protectAdmin } = require('../middleware/authMiddleware');
 
-router.get('/', protect, adminOnly, getAllUsers);
-router.delete('/:id', protect, adminOnly, deleteUser);
+router.get('/', protectAdmin, getAllUsers);
+router.delete('/:id', protectAdmin, deleteUser);
 router.get('/:id', protect, getUserProfile);
 router.put('/:id', protect, updateUserProfile);
 router.get('/:id/addresses', protect, getUserAddresses);

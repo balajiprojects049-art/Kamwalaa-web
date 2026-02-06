@@ -28,11 +28,19 @@ const corsOptions = {
     optionsSuccessStatus: 200
 };
 
+const path = require('path');
+
+// ... (previous code)
+
 app.use(cors(corsOptions));
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
+// Serve static files from uploads folder
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 // Basic Route
+// ...
 app.get('/', (req, res) => {
     res.json({
         message: 'Welcome to Kamwalaa API',
@@ -52,6 +60,7 @@ app.use('/api/v1/auth', require('./routes/authRoutes'));
 app.use('/api/v1/services', require('./routes/serviceRoutes'));
 app.use('/api/v1/bookings', require('./routes/bookingRoutes'));
 app.use('/api/v1/users', require('./routes/userRoutes'));
+app.use('/api/v1/partners', require('./routes/partnerRoutes'));
 app.use('/api/v1/reviews', require('./routes/reviewRoutes'));
 
 // Error handling middleware

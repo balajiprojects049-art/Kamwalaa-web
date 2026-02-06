@@ -10,10 +10,11 @@ import {
     FaTrash,
     FaCalendarAlt,
     FaClock,
-    FaMapMarkerAlt
+    FaMapMarkerAlt,
+    FaUserPlus
 } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
-import { getAllBookings, updateBookingStatus } from '../../services/apiService';
+import { getAllBookings, updateBookingStatus, getAllPartners, assignPartner } from '../../services/apiService';
 import './AdminBookings.css';
 
 const AdminBookings = () => {
@@ -21,7 +22,13 @@ const AdminBookings = () => {
 
     // Mock Bookings Data
     const [bookings, setBookings] = useState([]);
+    const [partners, setPartners] = useState([]); // State for partners
     const [loading, setLoading] = useState(true);
+    const [filterStatus, setFilterStatus] = useState('All');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedBooking, setSelectedBooking] = useState(null);
+    const [showAssignModal, setShowAssignModal] = useState(false); // Modal state
+    const [selectedPartner, setSelectedPartner] = useState('');
 
     const fetchBookings = async () => {
         try {
@@ -42,7 +49,8 @@ const AdminBookings = () => {
                     address: `${b.address_line1}, ${b.city}`,
                     phone: b.customer_phone || 'N/A',
                     paymentMethod: b.payment_method || 'Cash',
-                    instructions: b.special_instructions || 'None'
+                    instructions: b.special_instructions || 'None',
+                    partnerName: b.partner_name || null // Add partner name
                 }));
                 setBookings(formattedBookings);
             }
@@ -54,13 +62,21 @@ const AdminBookings = () => {
         }
     };
 
+    const fetchPartners = async () => {
+        try {
+            const response = await getAllPartners();
+            if (response.success) {
+                setPartners(response.data);
+            }
+        } catch (error) {
+            console.error('Error fetching partners:', error);
+        }
+    };
+
     useEffect(() => {
         fetchBookings();
+        fetchPartners(); // Fetch partners on load
     }, []);
-
-    const [filterStatus, setFilterStatus] = useState('All');
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedBooking, setSelectedBooking] = useState(null);
 
     // Filter Logic
     const filteredBookings = bookings.filter(booking => {
@@ -97,10 +113,31 @@ const AdminBookings = () => {
         }
     };
 
+    const handleAssignPartner = async () => {
+        if (!selectedPartner || !selectedBooking) {
+            showToast('Please select a partner', 'error');
+            return;
+        }
+
+        try {
+            const response = await assignPartner(selectedBooking.id, selectedPartner);
+            if (response.success) {
+                showToast('Partner assigned successfully!', 'success');
+                setShowAssignModal(false);
+                setSelectedPartner('');
+                fetchBookings(); // Refresh bookings to show assigned status/partner
+            }
+        } catch (error) {
+            console.error('Error assigning partner:', error);
+            showToast('Failed to assign partner', 'error');
+        }
+    };
+
     const getStatusColor = (status) => {
         switch (status) {
             case 'Pending': return 'status-pending';
             case 'Confirmed': return 'status-confirmed';
+            case 'Assigned': return 'status-confirmed'; // Reuse confirmed color or add new
             case 'Completed': return 'status-completed';
             case 'Cancelled': return 'status-cancelled';
             default: return 'status-default';
@@ -147,6 +184,7 @@ const AdminBookings = () => {
                         <option value="All">All Status</option>
                         <option value="Pending">Pending</option>
                         <option value="Confirmed">Confirmed</option>
+                        <option value="Assigned">Assigned</option>
                         <option value="Completed">Completed</option>
                         <option value="Cancelled">Cancelled</option>
                     </select>
@@ -189,6 +227,11 @@ const AdminBookings = () => {
                                             <div className="service-info">
                                                 <span className="service-name">{booking.service}</span>
                                                 <span className="service-cat">{booking.category}</span>
+                                                {booking.partnerName && (
+                                                    <span style={{ fontSize: '0.8rem', color: '#1a73e8', display: 'block' }}>
+                                                        Valet: {booking.partnerName}
+                                                    </span>
+                                                )}
                                             </div>
                                         </td>
                                         <td>
@@ -227,11 +270,24 @@ const AdminBookings = () => {
                                                             onClick={() => handleStatusUpdate(booking.id, 'Cancelled')}
                                                             title="Reject Booking"
                                                         >
-                                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                                                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-                                                            </svg>
+                                                            <FaTrash />
                                                         </button>
                                                     </>
+                                                )}
+
+                                                {/* Allow Assign Partner for Confirmed Bookings */}
+                                                {(booking.status === 'Confirmed' || booking.status === 'Assigned') && (
+                                                    <button
+                                                        className="icon-btn confirm-btn"
+                                                        onClick={() => {
+                                                            setSelectedBooking(booking);
+                                                            setShowAssignModal(true);
+                                                        }}
+                                                        style={{ backgroundColor: '#2563eb' }}
+                                                        title="Assign Partner"
+                                                    >
+                                                        <FaUserPlus />
+                                                    </button>
                                                 )}
 
                                                 {booking.status === 'Confirmed' && (
@@ -260,7 +316,7 @@ const AdminBookings = () => {
             </div>
 
             {/* Booking Detail Modal */}
-            {selectedBooking && (
+            {selectedBooking && !showAssignModal && (
                 <div className="modal-overlay" onClick={() => setSelectedBooking(null)}>
                     <div className="modal-content booking-modal" onClick={e => e.stopPropagation()}>
                         <div className="modal-header">
@@ -348,9 +404,74 @@ const AdminBookings = () => {
                                     </button>
                                 </>
                             )}
+
+                            {/* Assign Partner Button inside View Modal */}
+                            {selectedBooking.status === 'Confirmed' && (
+                                <button
+                                    className="action-btn accept"
+                                    onClick={() => setShowAssignModal(true)}
+                                    style={{ backgroundColor: '#2563eb' }}
+                                >
+                                    Assign Partner
+                                </button>
+                            )}
+
                             <button className="cancel-btn" onClick={() => setSelectedBooking(null)}>
                                 Close
                             </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Assign Partner Modal */}
+            {showAssignModal && selectedBooking && (
+                <div className="modal-overlay" onClick={() => setShowAssignModal(false)}>
+                    <div className="modal-content booking-modal" onClick={e => e.stopPropagation()} style={{ maxWidth: '500px' }}>
+                        <div className="modal-header">
+                            <h2>Assign Partner</h2>
+                            <button className="close-btn" onClick={() => setShowAssignModal(false)}>
+                                <FaTimes />
+                            </button>
+                        </div>
+
+                        <div style={{ padding: '20px' }}>
+                            <p style={{ marginBottom: '10px' }}>Assign a service partner for Booking <strong>{selectedBooking.displayId}</strong></p>
+
+                            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>Select Partner</label>
+                            <select
+                                value={selectedPartner}
+                                onChange={(e) => setSelectedPartner(e.target.value)}
+                                style={{
+                                    width: '100%',
+                                    padding: '10px',
+                                    border: '1px solid #ccc',
+                                    borderRadius: '5px',
+                                    marginBottom: '20px',
+                                    fontSize: '1rem'
+                                }}
+                            >
+                                <option value="">-- Choose a Partner --</option>
+                                {partners.map(p => (
+                                    <option key={p.id} value={p.id}>
+                                        {p.business_name} ({p.contact_phone})
+                                    </option>
+                                ))}
+                            </select>
+
+                            <div className="modal-actions">
+                                <button className="cancel-btn" onClick={() => setShowAssignModal(false)}>
+                                    Cancel
+                                </button>
+                                <button
+                                    className="action-btn accept"
+                                    onClick={handleAssignPartner}
+                                    disabled={!selectedPartner}
+                                    style={{ opacity: !selectedPartner ? 0.5 : 1 }}
+                                >
+                                    Confirm Assignment
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

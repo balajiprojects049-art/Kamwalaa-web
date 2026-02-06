@@ -317,11 +317,78 @@ const getWhatsAppStatus = () => {
     };
 };
 
+/**
+ * Send partner verification approval notification
+ */
+const sendPartnerApprovalNotification = async (partnerPhone, partnerName) => {
+    try {
+        if (!whatsappClient || !isReady) {
+            console.log('⚠️ WhatsApp client not ready.');
+            return { success: false, message: 'WhatsApp client not ready' };
+        }
+
+        const formattedPhone = sanitizePhoneNumber(partnerPhone);
+        if (!formattedPhone) return { success: false, message: 'Invalid phone number' };
+
+        const message = `🎉 *Partner Verification Approved!*\n\n` +
+            `Hello ${partnerName},\n\n` +
+            `Congratulations! Your partner account with Kamwalaa has been successfully verified. ✅\n\n` +
+            `You are now eligible to accept service requests and start earning.\n\n` +
+            `🚀 *Next Steps:*\n` +
+            `- Log in to your partner dashboard\n` +
+            `- Keep your status "Online" to receive jobs\n` +
+            `- Maintain high service quality\n\n` +
+            `Welcome to the Kamwalaa Family! 🤝`;
+
+        const chatId = `${formattedPhone}@c.us`;
+        await whatsappClient.sendMessage(chatId, message);
+
+        console.log(`✅ Partner verification sent to: ${formattedPhone}`);
+        return { success: true, message: 'Partner notified' };
+
+    } catch (error) {
+        console.error('❌ Error sending partner verification notification:', error);
+        return { success: false, message: error.message };
+    }
+};
+
+/**
+ * Send OTP for Login
+ */
+const sendOTPToWhatsApp = async (phone, otp) => {
+    try {
+        if (!whatsappClient || !isReady) {
+            console.log('⚠️ WhatsApp client not ready. OTP not sent.');
+            return { success: false, message: 'WhatsApp client not ready' };
+        }
+
+        const formattedPhone = sanitizePhoneNumber(phone);
+        if (!formattedPhone) return { success: false, message: 'Invalid phone number' };
+
+        const message = `🔐 *Kamwalaa Login OTP*\n\n` +
+            `Your One-Time Password is: *${otp}*\n\n` +
+            `This code is valid for 10 minutes.\n` +
+            `Do not share this code with anyone.`;
+
+        const chatId = `${formattedPhone}@c.us`;
+        await whatsappClient.sendMessage(chatId, message);
+
+        console.log(`✅ OTP sent to: ${formattedPhone}`);
+        return { success: true, message: 'OTP sent' };
+
+    } catch (error) {
+        console.error('❌ Error sending OTP:', error);
+        return { success: false, message: error.message };
+    }
+};
+
 module.exports = {
     initializeWhatsApp,
     sendBookingToWhatsApp,
     sendBookingConfirmationToCustomer,
     sendPartnerAssignmentToCustomer,
     sendServiceCompletionToCustomer,
+    sendPartnerApprovalNotification,
+    sendOTPToWhatsApp, // Export new function
     getWhatsAppStatus
 };

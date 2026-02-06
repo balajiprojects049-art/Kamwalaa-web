@@ -463,3 +463,136 @@ exports.confirmPayment = async (req, res) => {
     }
 };
 
+
+// @desc    Assign partner to booking
+// @route   PUT /api/v1/bookings/:id/assign
+// @access  Private (Admin)
+exports.assignPartner = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { partner_id } = req.body;
+
+        if (!partner_id) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide a partner_id'
+            });
+        }
+
+        // Check if booking exists
+        const bookingCheck = await pool.query('SELECT * FROM bookings WHERE id = $1', [id]);
+        if (bookingCheck.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Booking not found'
+            });
+        }
+
+        // Update booking with partner_id and status='assigned'
+        const result = await pool.query(
+            `UPDATE bookings 
+             SET partner_id = $1, 
+                 status = 'assigned', 
+                 updated_at = NOW() 
+             WHERE id = $2 
+             RETURNING *`,
+            [partner_id, id]
+        );
+
+        const booking = result.rows[0];
+
+        // Fetch full details for WhatsApp
+        const fullBookingResult = await pool.query(
+            `SELECT 
+                b.*,
+                u.name as customer_name,
+                u.phone as customer_phone,
+                s.name as service_name,
+                p.business_name as partner_name,
+                p.id as partner_id,
+                pu.phone as partner_phone,
+                p.rating as partner_rating
+            FROM bookings b
+            LEFT JOIN users u ON b.user_id = u.id
+            LEFT JOIN services s ON b.service_id = s.id
+            LEFT JOIN partners p ON b.partner_id = p.id
+            LEFT JOIN users pu ON p.user_id = pu.id
+            WHERE b.id = $1`,
+            [id]
+        );
+
+        const fullBooking = fullBookingResult.rows[0];
+
+        // ** SCENARIO 3: Send WhatsApp Notification **
+        const partnerData = {
+            partner_name: fullBooking.partner_name,
+            partner_phone: fullBooking.partner_phone,
+            rating: fullBooking.partner_rating
+        };
+
+        sendPartnerAssignmentToCustomer(fullBooking.customer_phone, fullBooking, partnerData)
+            .then(result => {
+                if (result.success) {
+                    console.log(`📱 Partner assignment WhatsApp sent for ${fullBooking.booking_number}`);
+                }
+            })
+            .catch(err => console.error('❌ WhatsApp partner assignment error:', err));
+
+        res.status(200).json({
+            success: true,
+            message: 'Partner assigned successfully',
+            data: booking
+        });
+
+    } catch (err) {
+        console.error('Error assigning partner:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Server Error',
+            error: err.toString()
+        });
+    }
+};
+
+// @desc    Get bookings assigned to a partner
+// @route   GET /api/v1/bookings/partner/:partnerId
+// @access  Private
+exports.getPartnerBookings = async (req, res) => {
+    try {
+        const { partnerId } = req.params;
+
+        const result = await pool.query(
+            `SELECT 
+                b.*,
+                u.name as customer_name,
+                u.phone as customer_phone,
+                u.city as customer_city,
+                s.name as service_name,
+                s.image_url as service_image
+            FROM bookings b
+            JOIN users u ON b.user_id = u.id
+            JOIN services s ON b.service_id = s.id
+            WHERE b.partner_id = $1
+            ORDER BY 
+                CASE WHEN b.status = 'assigned' THEN 1
+                     WHEN b.status = 'in_progress' THEN 2
+                     ELSE 3 
+                END,
+                b.booking_date ASC, 
+                b.booking_time ASC`,
+            [partnerId]
+        );
+
+        res.status(200).json({
+            success: true,
+            count: result.rows.length,
+            data: result.rows
+        });
+    } catch (err) {
+        console.error('Error fetching partner bookings:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Server Error'
+        });
+    }
+};

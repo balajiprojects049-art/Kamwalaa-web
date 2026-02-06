@@ -5,14 +5,17 @@ const {
     getUserBookings,
     getAllBookings,
     updateBookingStatus,
-    confirmPayment
+    confirmPayment,
+    assignPartner,
+    getPartnerBookings
 } = require('../controllers/bookingController');
-const { protect, adminOnly } = require('../middleware/authMiddleware');
-
+const { protect, adminOnly, protectAdmin } = require('../middleware/authMiddleware');
 router.post('/', createBooking); // Allow guest bookings
-router.get('/', protect, adminOnly, getAllBookings);
+router.get('/', protectAdmin, getAllBookings);
 router.get('/user/:userId', protect, getUserBookings);
 router.put('/:id/status', protect, updateBookingStatus);
 router.put('/:id/confirm-payment', protect, confirmPayment);
+router.put('/:id/assign', protect, assignPartner);
+router.get('/partner/:partnerId', protect, getPartnerBookings);
 
 module.exports = router;

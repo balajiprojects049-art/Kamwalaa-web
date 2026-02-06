@@ -63,4 +63,39 @@ const adminOnly = async (req, res, next) => {
     }
 };
 
-module.exports = { protect, adminOnly };
+/**
+ * Protect Admin Routes - Standalone check for Admin Token
+ */
+const protectAdmin = async (req, res, next) => {
+    let token;
+
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        try {
+            token = req.headers.authorization.split(' ')[1];
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+            if (decoded.role !== 'admin') {
+                return res.status(403).json({ success: false, message: 'Not authorized as admin' });
+            }
+
+            // Manually set req.user to admin placeholder since we don't query DB
+            req.user = {
+                id: 'admin_static_id',
+                email: decoded.email,
+                role: 'admin',
+                name: 'Administrator'
+            };
+
+            next();
+        } catch (error) {
+            console.error('Admin Auth Error:', error);
+            return res.status(401).json({ success: false, message: 'Not authorized, token failed' });
+        }
+    }
+
+    if (!token) {
+        return res.status(401).json({ success: false, message: 'Not authorized, no token' });
+    }
+};
+
+module.exports = { protect, adminOnly, protectAdmin };
