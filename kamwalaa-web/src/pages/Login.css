@@ -158,7 +158,8 @@
     /* Let clicks pass through to input if needed */
 }
 
-.form-input {
+
+.login-form .form-input {
     width: 100%;
     padding: 0.875rem 1rem 0.875rem 3.5rem !important;
     /* Ensure space for icon */
@@ -171,14 +172,14 @@
     /* Ensure background is solid */
 }
 
-.form-input:focus {
+.login-form .form-input:focus {
     outline: none;
     border-color: var(--primary-500);
     box-shadow: 0 0 0 3px rgba(0, 100, 175, 0.1);
 }
 
-.form-input.no-icon {
-    padding-left: 1rem;
+.login-form .form-input.no-icon {
+    padding-left: 1rem !important;
     background-color: white !important;
     color: #111827 !important;
     /* Force black text */

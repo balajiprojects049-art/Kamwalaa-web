@@ -15,18 +15,34 @@ const protect = async (req, res, next) => {
             // Verify token
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-            // Get user from token
-            const result = await pool.query(
-                'SELECT id, name, phone, email FROM users WHERE id = $1',
-                [decoded.id]
-            );
-
-            if (result.rows.length === 0) {
-                return res.status(401).json({ success: false, message: 'User not found' });
+            // SPECIAL CASE: Hardcoded Admin
+            if (decoded.role === 'admin') {
+                req.user = {
+                    id: 'admin', // Static ID for admin
+                    email: decoded.email,
+                    role: 'admin',
+                    name: 'Administrator'
+                };
+                return next();
             }
 
-            req.user = result.rows[0];
-            next();
+            // Normal User: Get user from token
+            if (decoded.id) {
+                const result = await pool.query(
+                    'SELECT id, name, phone, email, role FROM users WHERE id = $1',
+                    [decoded.id]
+                );
+
+                if (result.rows.length === 0) {
+                    return res.status(401).json({ success: false, message: 'User not found' });
+                }
+
+                req.user = result.rows[0];
+                return next();
+            } else {
+                return res.status(401).json({ success: false, message: 'Invalid token structure' });
+            }
+
         } catch (error) {
             console.error('Auth middleware error:', error);
             return res.status(401).json({ success: false, message: 'Not authorized, token failed' });

@@ -307,7 +307,7 @@
     align-items: center;
 }
 
-.form-input {
+.admin-login-form .form-input {
     width: 100%;
     padding: 1rem 1.25rem;
     background: #f7fafc;
@@ -319,19 +319,19 @@
     font-weight: 500;
 }
 
-.form-input:hover {
+.admin-login-form .form-input:hover {
     border-color: #cbd5e0;
     background: #fff;
 }
 
-.form-input:focus {
+.admin-login-form .form-input:focus {
     outline: none;
     background: #fff;
     border-color: #667eea;
     box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
 
-.form-input::placeholder {
+.admin-login-form .form-input::placeholder {
     color: #a0aec0;
     font-weight: 400;
 }

@@ -67,24 +67,35 @@ exports.createBooking = async (req, res) => {
             });
         }
 
-        // Get service details for pricing
-        const serviceResult = await pool.query(
-            'SELECT * FROM services WHERE id = $1',
-            [service_id]
-        );
+        // Helper to check UUID
+        const isUuid = (str) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
+
+        let serviceResult;
+
+        if (isUuid(service_id)) {
+            // It's a UUID, look up by ID
+            serviceResult = await pool.query('SELECT * FROM services WHERE id = $1', [service_id]);
+        } else {
+            // It's not a UUID, assume it's a slug
+            console.log(`Looking up service by slug: ${service_id}`);
+            serviceResult = await pool.query('SELECT * FROM services WHERE slug = $1', [service_id]);
+        }
 
         if (serviceResult.rows.length === 0) {
+            console.log(`Service not found for ID/Slug: ${service_id}`);
             return res.status(404).json({
                 success: false,
-                message: 'Service not found'
+                message: `Service not found (ID: ${service_id})`
             });
         }
 
         const service = serviceResult.rows[0];
+        // Use the real UUID from the database
+        const serviceUuid = service.id;
         const totalAmount = service.price;
 
         console.log('Inserting booking with data:', {
-            user_id: actualUserId, service_id, booking_date, booking_time,
+            user_id: actualUserId, service_id: serviceUuid, booking_date, booking_time,
             price: service.price
         });
 
@@ -98,7 +109,7 @@ exports.createBooking = async (req, res) => {
             ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'pending', 'pending')
             RETURNING *`,
             [
-                actualUserId, service_id, booking_date, booking_time,
+                actualUserId, serviceUuid, booking_date, booking_time,
                 address_line1, address_line2, city, state, pincode, landmark,
                 special_instructions, payment_method,
                 service.price, totalAmount

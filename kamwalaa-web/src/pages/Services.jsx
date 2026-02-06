@@ -3,6 +3,7 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import PageHero from '../components/common/PageHero';
 import { FiSearch, FiChevronRight, FiClock, FiCheck, FiStar, FiUser, FiCalendar, FiInfo, FiShield, FiHeart, FiShare2, FiChevronDown, FiChevronUp, FiDollarSign, FiAward } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
+import { getAllCategories } from '../data/servicesData';
 import { getServiceCategories } from '../services/apiService';
 import { getServiceIcon } from '../utils/serviceIcons';
 import EnhancedServiceModal from '../components/EnhancedServiceModal';
@@ -36,41 +37,38 @@ const Services = () => {
     const [quantity, setQuantity] = useState(1);
     const [isFavorite, setIsFavorite] = useState(false);
 
-    // Fetch categories from API
+    // Fetch categories from Local Data (Restored per user request)
     useEffect(() => {
-        const fetchCategories = async () => {
+        const loadCategories = () => {
+            setIsLoading(true);
             try {
-                setIsLoading(true);
-                setError(null);
-                const response = await getServiceCategories();
+                // Use local data as the source of truth for now
+                const localData = getAllCategories();
+                setAllCategories(localData);
 
-                if (response.success && response.data) {
-                    setAllCategories(response.data);
+                // Default selection logic
+                if (localData.length > 0) {
+                    const targetCategory = categoryId
+                        ? localData.find(c => c.id === categoryId)
+                        : localData[0];
 
-                    // Default selection logic
-                    if (response.data.length > 0) {
-                        const targetCategory = categoryId
-                            ? response.data.find(c => c.id === categoryId)
-                            : response.data[0];
-
-                        if (targetCategory) {
-                            setSelectedCategory(targetCategory);
-                            // Select first subcategory if available
-                            if (targetCategory.subcategories && targetCategory.subcategories.length > 0) {
-                                setSelectedSubcategory(targetCategory.subcategories[0]);
-                            }
+                    if (targetCategory) {
+                        setSelectedCategory(targetCategory);
+                        // Select first subcategory if available
+                        if (targetCategory.subcategories && targetCategory.subcategories.length > 0) {
+                            setSelectedSubcategory(targetCategory.subcategories[0]);
                         }
                     }
                 }
             } catch (err) {
-                console.error('Error fetching categories:', err);
-                setError('Failed to load services. Please try again later.');
+                console.error('Error loading services:', err);
+                setError('Failed to load services.');
             } finally {
                 setIsLoading(false);
             }
         };
 
-        fetchCategories();
+        loadCategories();
     }, [categoryId]);
 
     // Helper for localised names
