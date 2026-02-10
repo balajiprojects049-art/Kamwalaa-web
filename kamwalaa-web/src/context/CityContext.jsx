@@ -25,10 +25,9 @@ export const CityProvider = ({ children }) => {
         const savedCity = localStorage.getItem('kamwalaa_city');
         if (savedCity && cities.includes(savedCity)) {
             setSelectedCity(savedCity);
-        } else {
-            // Show city modal on first visit
-            setShowCityModal(true);
         }
+        // Always show city modal on website open
+        setShowCityModal(true);
     }, []);
 
     const selectCity = (city) => {
