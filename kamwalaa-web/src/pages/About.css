@@ -7,7 +7,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
     align-items: center;
-    margin-bottom: 6rem;
+    margin-bottom: 8rem;
 }
 
 .about-text h2 {
@@ -32,6 +32,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
+    margin-bottom: 4rem;
 }
 
 .value-card {

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getAllCategories } from '../data/servicesData';
+import { translations } from '../i18n/translations';
 import Hero from '../components/common/Hero';
 import ServiceCategoriesSlider from '../components/common/ServiceCategoriesSlider';
 import FeaturedServices from '../components/home/FeaturedServices';
@@ -10,6 +12,7 @@ import Testimonials from '../components/common/Testimonials';
 import { useLanguage } from '../context/LanguageContext';
 
 const Home = () => {
+    const navigate = useNavigate();
     const { currentLanguage } = useLanguage();
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -95,6 +98,34 @@ const Home = () => {
             <ServiceCategoriesSlider />
 
             <FeaturedServices title="Main Services" services={mainServices} />
+
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0 40px' }}>
+                <button
+                    onClick={() => navigate('/services')}
+                    style={{
+                        padding: '12px 30px',
+                        background: 'linear-gradient(135deg, #2563EB, #1D4ED8)',
+                        color: '#ffffff',
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontSize: '1rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 6px -1px rgba(37, 99, 235, 0.2)',
+                        transition: 'all 0.3s ease'
+                    }}
+                    onMouseOver={(e) => {
+                        e.target.style.transform = 'translateY(-2px)';
+                        e.target.style.boxShadow = '0 6px 8px -1px rgba(37, 99, 235, 0.3)';
+                    }}
+                    onMouseOut={(e) => {
+                        e.target.style.transform = 'translateY(0)';
+                        e.target.style.boxShadow = '0 4px 6px -1px rgba(37, 99, 235, 0.2)';
+                    }}
+                >
+                    {translations[currentLanguage]?.services?.viewAll || 'View All Services'}
+                </button>
+            </div>
 
 
 
