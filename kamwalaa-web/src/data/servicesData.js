@@ -164,7 +164,7 @@ export const servicesData = {
         color: '#0EA5E9',
         bgColor: '#E0F2FE',
         gradient: 'linear-gradient(135deg, #0EA5E9, #0369A1)',
-        image: '/assets/images/services/plumbing/main-plumbing.png',
+        image: '/images/services/plumbing-service.png',
         description: {
             en: 'Complete plumbing solutions including sink & tap services, water tank cleaning, and pipe repairs.',
             te: 'సింక్ & ట్యాప్ సేవలు, వాటర్ ట్యాంక్ క్లీనింగ్ మరియు పైప్ మరమ్మతులతో సహా పూర్తి ప్లంబింగ్ సొల్యూషన్స్.',
@@ -264,6 +264,7 @@ export const servicesData = {
                         id: 'waterline',
                         name: { en: 'Water Line Installation', te: 'వాటర్ లైన్ ఇన్‌స్టాలేషన్', hi: 'वॉटर लाइन इंस्टालेशन' },
                         price: '₹2,500',
+                        images: ['/images/services/plumbing-service.png'],
                         description: {
                             en: 'Installation of new UPVC, CPVC or GI water supply lines.',
                             te: 'కొత్త UPVC, CPVC లేదా GI వాటర్ సప్లై లైన్ల ఇన్‌స్టాలేషన్.',
@@ -308,7 +309,7 @@ export const servicesData = {
     ac: {
         id: 'ac',
         icon: '❄️',
-        iconPath: '/assets/icons/ac.png',
+        iconPath: '/assets/icons/air-conditioner.png',
         name: { en: 'AC Services', te: 'AC సేవలు', hi: 'AC सेवाएं' },
         color: '#3B82F6',
         bgColor: '#DBEAFE',
@@ -399,7 +400,7 @@ export const servicesData = {
     refrigerator: {
         id: 'refrigerator',
         icon: '🧊',
-        iconPath: '/assets/icons/refrigerator.png',
+        iconPath: '/assets/icons/refrigator.png',
         name: { en: 'Refrigerator Services', te: 'రిఫ్రిజిరేటర్ సేవలు', hi: 'रेफ्रिजरेटर सेवाएं' },
         color: '#8B5CF6',
         bgColor: '#EDE9FE',
@@ -867,7 +868,7 @@ export const servicesData = {
         color: '#22C55E',
         bgColor: '#D1FAE5',
         gradient: 'linear-gradient(135deg, #22C55E, #16A34A)',
-        image: '/assets/images/services/gardening/main-gardening.jpg',
+        image: '/images/services/gardening service.jpg',
         description: {
             en: 'Complete gardening solutions including planting, lawn maintenance, and garden cleaning.',
             te: 'ప్లాంటింగ్, లాన్ మెయింటెనెన్స్ మరియు గార్డెన్ క్లీనింగ్‌తో సహా పూర్తి గార్డెనింగ్ సొల్యూషన్స్.',

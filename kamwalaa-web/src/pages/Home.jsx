@@ -56,16 +56,25 @@ const Home = () => {
         })).slice(0, 4);
     }, [categories, currentLanguage]);
 
-    // 2. Recommended -> Popular Subcategories
-    const recommendedServices = useMemo(() => {
-        const recs = [];
-        categories.forEach(cat => {
-            if (cat.subcategories) {
-                cat.subcategories.slice(0, 1).forEach(sub => {
-                    // Find a service image
-                    const serviceImage = sub.services?.[0]?.images?.[0] || null;
 
-                    recs.push({
+
+    // 3. Special -> Specific Hand-picked Services
+    const specialServices = useMemo(() => {
+        const targetIds = [
+            { catId: 'electrical', subId: 'fans' },
+            { catId: 'ac', subId: 'ac-service' },
+            { catId: 'waterPurifier', subId: 'ro-repair' },
+            { catId: 'cleaning', subId: 'bathroom-cleaning' }
+        ];
+
+        const specs = [];
+        targetIds.forEach(({ catId, subId }) => {
+            const cat = categories.find(c => c.id === catId);
+            if (cat && cat.subcategories) {
+                const sub = cat.subcategories.find(s => s.id === subId);
+                if (sub) {
+                    const serviceImage = sub.services?.[0]?.images?.[0] || null;
+                    specs.push({
                         id: sub.id,
                         name: { en: getName(sub) },
                         price: null,
@@ -74,36 +83,8 @@ const Home = () => {
                         categoryId: cat.id,
                         subcategoryId: sub.id
                     });
-                });
+                }
             }
-        });
-        return recs.slice(0, 4);
-    }, [categories, currentLanguage]);
-
-    // 3. Special -> More Subcategories
-    const specialServices = useMemo(() => {
-        const specs = [];
-        const allSubs = [];
-        categories.forEach(cat => {
-            if (cat.subcategories) {
-                cat.subcategories.forEach(sub => {
-                    allSubs.push({ sub, cat });
-                });
-            }
-        });
-        // Pick from index 2 to 6
-        allSubs.slice(2, 6).forEach(({ sub, cat }) => {
-            const serviceImage = sub.services?.[0]?.images?.[0] || null;
-
-            specs.push({
-                id: sub.id,
-                name: { en: getName(sub) },
-                price: null,
-                images: serviceImage ? [serviceImage] : [],
-                type: 'subcategory',
-                categoryId: cat.id,
-                subcategoryId: sub.id
-            });
         });
         return specs;
     }, [categories, currentLanguage]);
@@ -115,7 +96,7 @@ const Home = () => {
 
             <FeaturedServices title="Main Services" services={mainServices} />
 
-            <FeaturedServices title="Recommended Services" services={recommendedServices} />
+
 
             <FeaturedServices title="Special Services" services={specialServices} />
 
