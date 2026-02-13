@@ -137,7 +137,15 @@ const PartnerRegistration = () => {
                             <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                                 <div className="form-group">
                                     <label>Full Name</label>
-                                    <input type="text" name="name" value={formData.name} disabled className="form-input" style={{ background: '#f1f5f9' }} />
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        className="form-input"
+                                        placeholder="Enter your full name"
+                                        required
+                                    />
                                 </div>
                                 <div className="form-group">
                                     <label>Phone Number</label>

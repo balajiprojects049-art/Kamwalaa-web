@@ -67,7 +67,7 @@ const PartnerDashboard = () => {
                             No service partner profile was found linked to your account.
                         </p>
                         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-                            <a href="/become-partner" className="btn btn-primary" style={{ textDecoration: 'none' }}>
+                            <a href="/partner/register" className="btn btn-primary" style={{ textDecoration: 'none' }}>
                                 Register as a Partner
                             </a>
                             <a href="/partner/login" className="btn btn-secondary" style={{ textDecoration: 'none', background: '#e2e8f0', color: '#1e293b' }}>

@@ -18,13 +18,20 @@ exports.registerPartner = async (req, res) => {
 
         if (userCheck.rows.length > 0) {
             userId = userCheck.rows[0].id;
-            // Optional: Check if already a partner
-            const partnerCheck = await pool.query('SELECT id FROM partners WHERE user_id = $1', [userId]);
+            // Check if already a partner
+            const partnerCheck = await pool.query('SELECT id, status FROM partners WHERE user_id = $1', [userId]);
             if (partnerCheck.rows.length > 0) {
-                return res.status(400).json({ success: false, message: 'Partner already registered with this phone number.' });
+                return res.status(200).json({
+                    success: true,
+                    message: `You are already registered as a partner. Status: ${partnerCheck.rows[0].status}`,
+                    data: partnerCheck.rows[0]
+                });
             }
+
+            // Update existing user role to partner
+            await pool.query("UPDATE users SET role = 'partner' WHERE id = $1", [userId]);
         } else {
-            // Create User (Pending verification)
+            // Create User
             const newUser = await pool.query(
                 `INSERT INTO users (name, phone, email, city, role, is_verified)
                  VALUES ($1, $2, $3, $4, 'partner', false)

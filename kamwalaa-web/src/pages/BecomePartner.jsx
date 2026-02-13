@@ -1,10 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PageHero from '../components/common/PageHero';
+import { useAuth } from '../context/AuthContext';
 import { FiTrendingUp, FiClock, FiDollarSign, FiArrowRight } from 'react-icons/fi';
 import './BecomePartner.css';
 
 const BecomePartner = () => {
+    const { user } = useAuth();
+    const landingPath = user ? '/partner/dashboard' : '/partner/login';
+
     return (
         <div className="partner-page">
             <PageHero
@@ -25,7 +29,7 @@ const BecomePartner = () => {
                         </p>
 
                         <div style={{ marginTop: '40px' }}>
-                            <Link to="/partner/login" className="btn btn-primary" style={{ padding: '15px 40px', fontSize: '1.2rem', borderRadius: '50px' }}>
+                            <Link to={landingPath} className="btn btn-primary" style={{ padding: '15px 40px', fontSize: '1.2rem', borderRadius: '50px' }}>
                                 Register as Partner <FiArrowRight />
                             </Link>
                             <p style={{ marginTop: '15px', color: '#64748b' }}>
