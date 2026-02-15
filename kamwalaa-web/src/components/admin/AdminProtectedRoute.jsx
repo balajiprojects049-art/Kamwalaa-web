@@ -10,7 +10,7 @@ import { Navigate, useLocation } from 'react-router-dom';
  */
 const AdminProtectedRoute = ({ children }) => {
     const location = useLocation();
-    const adminToken = localStorage.getItem('adminToken');
+    const adminToken = sessionStorage.getItem('adminToken');
 
     if (!adminToken) {
         // Redirect to Admin Login, NOT User Login

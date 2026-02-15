@@ -44,7 +44,12 @@ const initializeWhatsApp = () => {
         console.log('📱 SCAN THIS QR CODE WITH YOUR WHATSAPP:');
         console.log('📱 ========================================\n');
         qrcode.generate(qr, { small: true });
-        console.log('\n📱 Open WhatsApp > Linked Devices > Link a Device');
+        console.log('\n🌐 OR CLICK THIS URL TO VIEW QR CODE IN BROWSER:');
+        console.log(`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(qr)}`);
+        console.log('\n📱 Instructions:');
+        console.log('   1. Click the URL above (Ctrl+Click)');
+        console.log('   2. Open WhatsApp > Linked Devices > Link a Device');
+        console.log('   3. Scan the QR code from the browser');
         console.log('📱 ========================================\n');
     });
 

@@ -12,12 +12,9 @@ const api = axios.create({
 // Request interceptor to add auth token if available
 api.interceptors.request.use(
     (config) => {
-        const adminToken = localStorage.getItem('adminToken');
-        // 'kamwalaa_user' is the key used in AuthContext, let's look for both common keys just in case
-        // But referencing the codebase, AuthContext uses 'kamwalaa_user'. api.js lines 17 used 'user'.
-        // Step 2105 confirms 'kamwalaa_user'.
-        // Let's check both or fix it.
-        const userStr = localStorage.getItem('kamwalaa_user') || localStorage.getItem('user');
+        const adminToken = sessionStorage.getItem('adminToken');
+        // 'kamwalaa_user' is the key used in AuthContext
+        const userStr = sessionStorage.getItem('kamwalaa_user');
         const user = userStr ? JSON.parse(userStr) : {};
 
         // CTX CHECK: Are we in Admin Portal?
@@ -63,14 +60,14 @@ api.interceptors.response.use(
             // For other requests, handle redirect based on context
             if (isAdminPath) {
                 // Clean Admin State
-                localStorage.removeItem('adminToken');
+                sessionStorage.removeItem('adminToken');
                 if (!window.location.pathname.includes('/admin/login')) {
                     window.location.href = '/admin/login';
                 }
             } else {
                 // Clean User State
-                localStorage.removeItem('kamwalaa_user');
-                localStorage.removeItem('user'); // Clean legacy key too
+                sessionStorage.removeItem('kamwalaa_user');
+                sessionStorage.removeItem('user'); // Clean legacy key too
                 if (!window.location.pathname.includes('/login')) {
                     window.location.href = '/login';
                 }

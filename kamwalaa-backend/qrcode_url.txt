@@ -1,0 +1,1 @@
+https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=2%40Gg993s%2BFg4qVDDOzW3irxJhEust8V6dgGihGccrGEDAzVfw%2FyC%2BJBLV5koe6JsJNLnf0tWENqio14VR%2FQh6G%2Bjw8Wm%2Bq6FKPkxU%3D%2CJpncWV62iDxUgFCjAQo9vag%2BznA9urntv6WQhY2cwwU%3D%2CKUvt%2BU6wCofr8P28G59PLcLw63nWjLgL7wgNrZQrXWU%3D%2CS3dWMIGQm27jJ5h8WquPDybcRSuzIzJdigYhtylGJoE%3D%2C1

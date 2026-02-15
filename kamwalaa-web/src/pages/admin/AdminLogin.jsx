@@ -13,7 +13,7 @@ const AdminLogin = () => {
 
     // Redirect if already logged in
     useEffect(() => {
-        const adminToken = localStorage.getItem('adminToken');
+        const adminToken = sessionStorage.getItem('adminToken');
         if (adminToken) {
             console.log('✅ Admin already logged in, redirecting to dashboard');
             navigate('/admin/dashboard');
@@ -32,9 +32,9 @@ const AdminLogin = () => {
             console.log('📡 Login response:', response);
 
             if (response.success) {
-                // Save admin token
-                localStorage.setItem('adminToken', response.user.token);
-                localStorage.setItem('kamwalaa_admin_user', JSON.stringify(response.user));
+                // Save admin token to sessionStorage (clears on close)
+                sessionStorage.setItem('adminToken', response.user.token);
+                sessionStorage.setItem('kamwalaa_admin_user', JSON.stringify(response.user));
 
                 console.log('✅ Admin logged in successfully');
                 success('Welcome back, Admin!');

@@ -49,7 +49,7 @@ const AdminLayout = () => {
 
     useEffect(() => {
         // Check for authentication
-        const token = localStorage.getItem('adminToken');
+        const token = sessionStorage.getItem('adminToken');
         if (!token) {
             navigate('/admin/login');
         }
@@ -116,7 +116,7 @@ const AdminLayout = () => {
     }, [toast]);
 
     const handleLogout = () => {
-        localStorage.removeItem('adminToken');
+        sessionStorage.removeItem('adminToken');
         navigate('/admin/login');
     };
 
