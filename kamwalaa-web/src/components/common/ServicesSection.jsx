@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiZap, FiArrowRight } from 'react-icons/fi';
+import { FiZap, FiArrowRight, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { useLanguage } from '../../context/LanguageContext';
 import { getAllCategories } from '../../data/servicesData';
 import { getServiceIcon } from '../../utils/serviceIcons';
@@ -9,6 +9,11 @@ import './ServicesSection.css';
 const ServicesSection = () => {
     const { t, currentLanguage } = useLanguage();
     const categories = getAllCategories();
+    const [showAll, setShowAll] = useState(false);
+
+    // Determine how many items to show initially (assuming 4 cards fit in a row)
+    const initialItemsCount = 4;
+    const displayedCategories = showAll ? categories : categories.slice(0, initialItemsCount);
 
     return (
         <section className="services-section section">
@@ -25,7 +30,7 @@ const ServicesSection = () => {
 
                 {/* Services Grid */}
                 <div className="services-grid">
-                    {categories.map((category, index) => (
+                    {displayedCategories.map((category, index) => (
                         <div
                             key={category.id}
                             className="services-section-card"
@@ -91,12 +96,36 @@ const ServicesSection = () => {
                     ))}
                 </div>
 
-                {/* View All CTA */}
-                <div className="services-footer">
-                    <Link to="/services" className="btn btn-primary btn-lg">
-                        {t.services.viewAll}
-                        <FiZap />
-                    </Link>
+                {/* View More / View All CTA */}
+                <div className="services-footer" style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                    {categories.length > initialItemsCount && (
+                        <button
+                            className="btn btn-primary btn-lg"
+                            onClick={() => setShowAll(!showAll)}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            {showAll ? 'View Less' : 'View More'}
+                            {showAll ? <FiChevronUp /> : <FiChevronDown />}
+                        </button>
+                    )}
+
+                    {showAll && (
+                        <Link to="/services" className="btn btn-outline btn-lg" style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            padding: '0.75rem 1.5rem',
+                            borderRadius: '0.5rem',
+                            fontWeight: '600',
+                            border: '2px solid var(--primary-color)',
+                            color: 'var(--primary-color)',
+                            textDecoration: 'none',
+                            transition: 'all 0.3s ease'
+                        }}>
+                            {t.services.viewAll}
+                            <FiZap />
+                        </Link>
+                    )}
                 </div>
             </div>
         </section>

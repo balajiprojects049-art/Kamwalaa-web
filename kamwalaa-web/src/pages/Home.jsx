@@ -99,7 +99,7 @@ const Home = () => {
 
             <FeaturedServices title="Main Services" services={mainServices} />
 
-            <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0 40px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '10px 0 10px' }}>
                 <button
                     onClick={() => navigate('/services')}
                     style={{

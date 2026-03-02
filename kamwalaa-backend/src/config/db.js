@@ -7,12 +7,12 @@ let poolConfig;
 if (process.env.DATABASE_URL) {
     try {
         const connectionString = process.env.DATABASE_URL;
-        // Check if it's a Supabase URL to add SSL
-        const isSupabase = connectionString.includes('supabase.co');
+        // Check if it's a Supabase or Neon URL to add SSL
+        const requiresSSL = connectionString.includes('supabase.co') || connectionString.includes('neon.tech');
 
         poolConfig = {
             connectionString,
-            ssl: isSupabase ? { rejectUnauthorized: false } : false
+            ssl: requiresSSL ? { rejectUnauthorized: false } : false
         };
     } catch (err) {
         console.error('Error parsing DATABASE_URL', err);
