@@ -20,10 +20,6 @@ const ServicesSection = () => {
             <div className="container">
                 {/* Section Header */}
                 <div className="section-header">
-                    <div className="section-badge">
-                        <span className="badge-icon">🔧</span>
-                        <span>Our Services</span>
-                    </div>
                     <h2 className="section-title">{t.services.title}</h2>
                     <p className="section-subtitle">{t.services.subtitle}</p>
                 </div>

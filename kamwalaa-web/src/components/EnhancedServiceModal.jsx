@@ -1,217 +1,225 @@
 import React from 'react';
-import { FiStar, FiUser, FiCalendar, FiClock, FiCheck, FiChevronDown, FiChevronUp, FiDollarSign, FiShield, FiHeart, FiShare2, FiAward, FiInfo, FiShoppingCart } from 'react-icons/fi';
+import {
+    FiStar, FiClock, FiCheck, FiChevronDown, FiChevronUp,
+    FiShield, FiHeart, FiShare2, FiX, FiShoppingCart,
+    FiMapPin, FiInfo, FiTag
+} from 'react-icons/fi';
 import { useCart } from '../context/CartContext';
 import '../pages/EnhancedModal.css';
 
 const EnhancedServiceModal = ({
-    modalService,
-    currentLanguage,
-    handleCloseModal,
-    handleBookService,
-    mockReviews,
-    mockProvider,
-    mockTimeSlots,
-    mockFAQs,
-    mockAddOns,
-    mockRelatedServices,
-    expandedFAQ,
-    toggleFAQ,
-    selectedTimeSlot,
-    setSelectedTimeSlot,
-    selectedAddOns,
-    handleAddOnToggle,
-    quantity,
-    setQuantity,
-    isFavorite,
-    setIsFavorite,
-    handleShare,
-    calculateTotal
+    modalService, currentLanguage,
+    handleCloseModal, handleBookService,
+    mockFAQs, expandedFAQ, toggleFAQ,
+    selectedAddOns, handleAddOnToggle,
+    quantity, setQuantity,
+    isFavorite, setIsFavorite,
+    handleShare, calculateTotal,
+    // unused but kept for compat
+    mockReviews, mockProvider, mockTimeSlots,
+    mockAddOns, mockRelatedServices,
+    selectedTimeSlot, setSelectedTimeSlot,
 }) => {
     const { addToCart, setIsCartOpen } = useCart();
 
     const handleAddToCart = () => {
-        addToCart({
-            ...modalService,
-            quantity,
-            selectedTimeSlot,
-            selectedAddOns
-        });
+        addToCart({ ...modalService, quantity, selectedTimeSlot, selectedAddOns });
         setIsCartOpen(true);
         handleCloseModal();
     };
 
     if (!modalService) return null;
 
-    return (
-        <div className="modal-overlay" onClick={handleCloseModal}>
-            <div className="modal-content enhanced" onClick={e => e.stopPropagation()}>
-                <button className="modal-close-btn" onClick={handleCloseModal}>&times;</button>
+    const name = typeof modalService.name === 'object'
+        ? (modalService.name[currentLanguage] || modalService.name.en)
+        : modalService.name;
 
-                {/* Action Icons */}
-                <div className="modal-action-icons">
-                    <button onClick={() => setIsFavorite(!isFavorite)} className="icon-btn">
-                        <FiHeart className={isFavorite ? 'active' : ''} />
-                    </button>
-                    <button onClick={handleShare} className="icon-btn">
-                        <FiShare2 />
+    const priceNum = parseInt(String(modalService.price).replace(/[^0-9]/g, '')) || 0;
+    const total = priceNum * quantity;
+
+    const includes = [
+        { icon: FiCheck, text: 'Verified & background-checked professionals' },
+        { icon: FiShield, text: '30-day service warranty' },
+        { icon: FiClock, text: 'On-time arrival — 30 to 45 minutes' },
+        { icon: FiCheck, text: 'Safe, hygienic & insured service' },
+    ];
+
+    return (
+        <div className="em-overlay" onClick={handleCloseModal}>
+            <div className="em-sheet" onClick={e => e.stopPropagation()}>
+
+                {/* ── STICKY HEADER ── */}
+                <div className="em-header">
+                    <div className="em-header-actions">
+                        <button
+                            className="em-icon-btn"
+                            onClick={() => setIsFavorite(!isFavorite)}
+                            aria-label="Favourite"
+                        >
+                            <FiHeart className={isFavorite ? 'em-heart-active' : ''} />
+                        </button>
+                        <button className="em-icon-btn" onClick={handleShare} aria-label="Share">
+                            <FiShare2 />
+                        </button>
+                    </div>
+                    <button className="em-close-btn" onClick={handleCloseModal} aria-label="Close">
+                        <FiX />
                     </button>
                 </div>
 
-                <div className="modal-body vertical-stack">
-                    {/* 1. Image Gallery */}
-                    <div className="modal-images-full">
-                        {modalService.images && modalService.images.length > 0 ? (
-                            <img
-                                src={modalService.images[0]}
-                                alt={modalService.name[currentLanguage] || modalService.name.en}
-                                className="modal-main-image-full"
-                            />
-                        ) : (
-                            <div className="modal-placeholder-image">
-                                <span>No Image Available</span>
-                            </div>
-                        )}
-                    </div>
+                {/* ── SCROLLABLE CONTENT ── */}
+                <div className="em-scroll">
 
-                    {/* 2. Rating & Reviews Summary */}
-                    <div className="modal-rating-section">
-                        <div className="rating-display">
-                            <FiStar className="star filled" />
-                            <span className="rating-value">4.8</span>
-                            <span className="rating-count">(245 reviews)</span>
+                    {/* Image */}
+                    {modalService.images?.[0] ? (
+                        <div className="em-img-wrap">
+                            <img src={modalService.images[0]} alt={name} className="em-img" />
+                            <div className="em-img-badge"><FiTag /> Popular Service</div>
+                        </div>
+                    ) : (
+                        <div className="em-img-placeholder">
+                            <span>🛠️</span>
+                        </div>
+                    )}
+
+                    {/* Title row */}
+                    <div className="em-title-section">
+                        <div className="em-rating-row">
+                            <FiStar className="em-star" />
+                            <span className="em-rating-val">4.8</span>
+                            <span className="em-rating-ct">(245 reviews)</span>
+                            <span className="em-dot" />
+                            <FiShield className="em-verified-icon" />
+                            <span className="em-verified-txt">Verified</span>
+                        </div>
+                        <h2 className="em-title">{name}</h2>
+                        <div className="em-chips">
+                            <span className="em-chip em-chip-green"><FiCheck /> Professional</span>
+                            <span className="em-chip em-chip-blue"><FiClock /> 30–45 min</span>
+                            <span className="em-chip em-chip-gold"><FiShield /> Insured</span>
+                            <span className="em-chip em-chip-purple"><FiMapPin /> Hyderabad</span>
                         </div>
                     </div>
 
-                    {/* 3. Service Title */}
-                    <div className="modal-header-section">
-                        <h2>{modalService.name[currentLanguage] || modalService.name.en}</h2>
-                    </div>
-
-
-                    {/* 4. Pricing Breakdown */}
-                    <div className="modal-pricing-breakdown">
-                        <h3><FiDollarSign /> Pricing Details</h3>
-                        <div className="price-row">
+                    {/* Pricing */}
+                    <div className="em-pricing">
+                        <div className="em-pricing-header">
+                            <FiTag className="em-pricing-icon" />
+                            <span>Pricing Details</span>
+                        </div>
+                        <div className="em-price-row">
                             <span>Base Service Cost</span>
-                            <span>{modalService.price}</span>
+                            <span className="em-price-val">₹{priceNum}</span>
                         </div>
-                        <div className="price-row">
+                        <div className="em-price-row">
                             <span>Quantity</span>
-                            <div className="quantity-selector">
-                                <button onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
-                                <span>{quantity}</span>
-                                <button onClick={() => setQuantity(quantity + 1)}>+</button>
+                            <div className="em-qty">
+                                <button
+                                    className="em-qty-btn"
+                                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                    disabled={quantity <= 1}
+                                >−</button>
+                                <span className="em-qty-val">{quantity}</span>
+                                <button
+                                    className="em-qty-btn"
+                                    onClick={() => setQuantity(quantity + 1)}
+                                >+</button>
                             </div>
                         </div>
-                        <div className="price-row total">
+                        <div className="em-price-total">
                             <span>Total Amount</span>
-                            <span className="total-price">₹{calculateTotal()}</span>
+                            <span className="em-total-val">₹{total}</span>
                         </div>
                     </div>
 
-                    {/* 7. Add-ons - REMOVED */}
+                    {/* What's Included */}
+                    <div className="em-section">
+                        <h3 className="em-section-title">What's Included</h3>
+                        <div className="em-includes">
+                            {includes.map((item, i) => {
+                                const Icon = item.icon;
+                                return (
+                                    <div key={i} className="em-include-item">
+                                        <Icon className="em-include-icon" />
+                                        <span>{item.text}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
 
-                    {/* 8. Description */}
-                    <div className="modal-description-section">
-                        <h3>About this Service</h3>
-                        {modalService.description && (
-                            <div className="multi-lang-desc">
-                                <div className="desc-group en">
-                                    <strong>English:</strong>
-                                    <p>{modalService.description.en}</p>
+                    {/* Description */}
+                    {modalService.description && (
+                        <div className="em-section">
+                            <h3 className="em-section-title">About this Service</h3>
+                            <div className="em-desc-group">
+                                <p>{modalService.description.en || modalService.description}</p>
+                            </div>
+                            {modalService.description.te && (
+                                <div className="em-desc-group em-desc-te">
+                                    <span className="em-desc-lang">Telugu</span>
+                                    <p>{modalService.description.te}</p>
                                 </div>
-                                {modalService.description.te && (
-                                    <div className="desc-group te">
-                                        <strong>Telugu:</strong>
-                                        <p>{modalService.description.te}</p>
-                                    </div>
-                                )}
-                                {modalService.description.hi && (
-                                    <div className="desc-group hi">
-                                        <strong>Hindi:</strong>
-                                        <p>{modalService.description.hi}</p>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* 9. Service Benefits */}
-                    <div className="modal-benefits-section">
-                        <h3>What's Included</h3>
-                        <div className="modal-features-grid">
-                            <div className="modal-feature-item">
-                                <FiCheck className="feature-icon" />
-                                <span>Verified & Background Checked Professionals</span>
-                            </div>
-                            <div className="modal-feature-item">
-                                <FiCheck className="feature-icon" />
-                                <span>Safe, Hygienic & Contactless Service</span>
-                            </div>
-                            <div className="modal-feature-item">
-                                <FiClock className="feature-icon" />
-                                <span>On-time Arrival & Prompt Completion</span>
-                            </div>
-                            <div className="modal-feature-item">
-                                <FiShield className="feature-icon" />
-                                <span>30-Day Service Warranty</span>
-                            </div>
+                            )}
                         </div>
-                    </div>
+                    )}
 
-                    {/* 10. Customer Reviews - REMOVED */}
-
-                    {/* 11. FAQs */}
-                    <div className="modal-faq-section">
-                        <h3><FiInfo /> Frequently Asked Questions</h3>
+                    {/* FAQs */}
+                    <div className="em-section">
+                        <h3 className="em-section-title"><FiInfo /> Quick Answers</h3>
                         {mockFAQs.map(faq => (
-                            <div key={faq.id} className="faq-item">
-                                <div className="faq-question" onClick={() => toggleFAQ(faq.id)}>
+                            <div key={faq.id} className={`em-faq ${expandedFAQ === faq.id ? 'open' : ''}`}>
+                                <button className="em-faq-q" onClick={() => toggleFAQ(faq.id)}>
                                     <span>{faq.question}</span>
                                     {expandedFAQ === faq.id ? <FiChevronUp /> : <FiChevronDown />}
-                                </div>
+                                </button>
                                 {expandedFAQ === faq.id && (
-                                    <div className="faq-answer">
-                                        <p>{faq.answer}</p>
-                                    </div>
+                                    <div className="em-faq-a"><p>{faq.answer}</p></div>
                                 )}
                             </div>
                         ))}
                     </div>
 
-                    {/* 12. Warranty & Policies */}
-                    <div className="modal-warranty-section">
-                        <h3><FiShield /> Warranty & Policies</h3>
-                        <div className="policy-grid">
-                            <div className="policy-item">
-                                <FiShield />
-                                <div>
-                                    <strong>30-Day Warranty</strong>
-                                    <p>Full coverage on all services</p>
-                                </div>
+                    {/* Warranty */}
+                    <div className="em-section em-section-last">
+                        <h3 className="em-section-title"><FiShield /> Our Promise</h3>
+                        <div className="em-promise-grid">
+                            <div className="em-promise-item">
+                                <div className="em-promise-icon"><FiShield /></div>
+                                <strong>30-Day Warranty</strong>
+                                <p>Full coverage on all services</p>
                             </div>
-                            <div className="policy-item">
-                                <FiClock />
-                                <div>
-                                    <strong>Free Cancellation</strong>
-                                    <p>Up to 2 hours before service</p>
-                                </div>
+                            <div className="em-promise-item">
+                                <div className="em-promise-icon"><FiClock /></div>
+                                <strong>Free Cancellation</strong>
+                                <p>Up to 2 hours before service</p>
+                            </div>
+                            <div className="em-promise-item">
+                                <div className="em-promise-icon"><FiCheck /></div>
+                                <strong>Satisfaction Guaranteed</strong>
+                                <p>We re-do if not satisfied</p>
                             </div>
                         </div>
                     </div>
 
-                    {/* 13. Related Services - REMOVED */}
+                    {/* Spacer so content doesn't hide behind sticky CTA */}
+                    <div className="em-cta-spacer" />
+                </div>
 
-                    {/* 14. Action Button */}
-                    <div className="modal-action-section">
-                        <div className="action-buttons-grid">
-                            <button className="modal-add-cart-btn" onClick={handleAddToCart}>
-                                <FiShoppingCart /> Add to Cart
-                            </button>
-                            <button className="modal-book-btn-full" onClick={handleBookService}>
-                                Book Now - ₹{calculateTotal()}
-                            </button>
-                        </div>
+                {/* ── STICKY BOTTOM CTA ── */}
+                <div className="em-cta-bar">
+                    <div className="em-cta-price">
+                        <span className="em-cta-label">Total</span>
+                        <span className="em-cta-amount">₹{total}</span>
+                    </div>
+                    <div className="em-cta-btns">
+                        <button className="em-btn-cart" onClick={handleAddToCart}>
+                            <FiShoppingCart />
+                            <span>Cart</span>
+                        </button>
+                        <button className="em-btn-book" onClick={handleBookService}>
+                            Book Now
+                        </button>
                     </div>
                 </div>
             </div>

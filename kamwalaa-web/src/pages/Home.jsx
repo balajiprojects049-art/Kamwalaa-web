@@ -99,31 +99,13 @@ const Home = () => {
 
             <FeaturedServices title="Main Services" services={mainServices} />
 
-            <div style={{ display: 'flex', justifyContent: 'center', margin: '10px 0 10px' }}>
+            <div className="home-view-all-wrap">
                 <button
+                    className="home-view-all-btn"
                     onClick={() => navigate('/services')}
-                    style={{
-                        padding: '12px 30px',
-                        background: 'linear-gradient(135deg, #2563EB, #1D4ED8)',
-                        color: '#ffffff',
-                        border: 'none',
-                        borderRadius: '8px',
-                        fontSize: '1rem',
-                        fontWeight: '600',
-                        cursor: 'pointer',
-                        boxShadow: '0 4px 6px -1px rgba(37, 99, 235, 0.2)',
-                        transition: 'all 0.3s ease'
-                    }}
-                    onMouseOver={(e) => {
-                        e.target.style.transform = 'translateY(-2px)';
-                        e.target.style.boxShadow = '0 6px 8px -1px rgba(37, 99, 235, 0.3)';
-                    }}
-                    onMouseOut={(e) => {
-                        e.target.style.transform = 'translateY(0)';
-                        e.target.style.boxShadow = '0 4px 6px -1px rgba(37, 99, 235, 0.2)';
-                    }}
                 >
                     {translations[currentLanguage]?.services?.viewAll || 'View All Services'}
+                    <span className="home-view-all-arrow">→</span>
                 </button>
             </div>
 

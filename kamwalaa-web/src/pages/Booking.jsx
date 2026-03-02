@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FiMapPin, FiCalendar, FiClock, FiCreditCard, FiCheckCircle } from 'react-icons/fi';
+import { FiMapPin, FiCalendar, FiClock, FiCreditCard, FiCheckCircle, FiCrosshair, FiTag, FiFileText } from 'react-icons/fi';
 import PageHero from '../components/common/PageHero';
 import { useLanguage } from '../context/LanguageContext';
 import { useToast } from '../context/ToastContext';
@@ -309,17 +309,22 @@ const Booking = () => {
             </PageHero>
 
             <div className="container" style={{ marginTop: '2rem', marginBottom: '2rem' }}>
-                <div className="booking-steps">
-                    <div className={`step ${step >= 1 ? 'active' : ''}`}>
-                        <span>Address</span>
+                <div className="booking-stepper-container">
+                    <div className={`stepper-step ${step >= 1 ? 'completed' : ''} ${step === 1 ? 'current' : ''}`}>
+                        <div className="stepper-circle">{step > 1 ? <FiCheckCircle /> : 1}</div>
+                        <span className="stepper-label">Address</span>
                     </div>
-                    <div className="step-line"></div>
-                    <div className={`step ${step >= 2 ? 'active' : ''}`}>
-                        <span>Schedule</span>
+                    <div className={`stepper-line ${step >= 2 ? 'completed' : ''}`}></div>
+
+                    <div className={`stepper-step ${step >= 2 ? 'completed' : ''} ${step === 2 ? 'current' : ''}`}>
+                        <div className="stepper-circle">{step > 2 ? <FiCheckCircle /> : 2}</div>
+                        <span className="stepper-label">Schedule</span>
                     </div>
-                    <div className="step-line"></div>
-                    <div className={`step ${step >= 3 ? 'active' : ''}`}>
-                        <span>Payment</span>
+                    <div className={`stepper-line ${step >= 3 ? 'completed' : ''}`}></div>
+
+                    <div className={`stepper-step ${step === 3 ? 'current' : ''}`}>
+                        <div className="stepper-circle">3</div>
+                        <span className="stepper-label">Payment</span>
                     </div>
                 </div>
             </div>
@@ -331,9 +336,18 @@ const Booking = () => {
                             {/* Step 1: Address Details */}
                             {step === 1 && (
                                 <div className="booking-step">
-                                    <div className="step-header">
-                                        <FiMapPin />
-                                        <h2>Service Address</h2>
+                                    <div className="step-header step-header-split">
+                                        <div className="step-title-part">
+                                            <FiMapPin />
+                                            <h2>Service Address</h2>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            className="btn-use-location"
+                                            onClick={() => success('Location auto-detected successfully!')}
+                                        >
+                                            <FiCrosshair /> Use Location
+                                        </button>
                                     </div>
                                     <div className="form-grid">
                                         <div className="form-group">
@@ -580,12 +594,36 @@ const Booking = () => {
                                 ))}
                             </div>
                             <div className="summary-divider"></div>
+
+                            {/* Promo Code Advanced Feature */}
+                            <div className="promo-code-container">
+                                <div className="promo-input-group">
+                                    <FiTag className="promo-icon" />
+                                    <input type="text" placeholder="Enter Promo Code" />
+                                    <button type="button" className="btn-apply-promo" onClick={(e) => { e.preventDefault(); success('Coupon KAMWALAA20 Applied!'); }}>Apply</button>
+                                </div>
+                            </div>
+
+                            <div className="summary-divider"></div>
+
                             <div className="summary-total">
                                 <span>Total Items</span>
                                 <span>{selectedServices.length}</span>
                             </div>
                             <div className="summary-note">
                                 <p>💡 Final price will be confirmed by service provider based on work scope</p>
+                            </div>
+
+                            <div className="trust-badges">
+                                <div className="trust-badge">
+                                    <FiCheckCircle /> <span>100% Genuine Parts</span>
+                                </div>
+                                <div className="trust-badge">
+                                    <FiCheckCircle /> <span>Verified Professionals</span>
+                                </div>
+                                <div className="trust-badge">
+                                    <FiFileText /> <span>30-Day Warranty</span>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -1,135 +1,221 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiArrowRight, FiCheckCircle, FiZap, FiDollarSign, FiTarget, FiStar } from 'react-icons/fi';
+import {
+    FiArrowRight, FiCheckCircle, FiZap, FiStar,
+    FiShield, FiClock, FiMapPin, FiPlay, FiTrendingUp
+} from 'react-icons/fi';
 import { useLanguage } from '../../context/LanguageContext';
 import HeroSearch from './HeroSearch';
 import './Hero.css';
 
+/* ---- Animated hero images ---- */
+const HERO_IMAGES = [
+    '/assets/images/hero-services.png',
+    '/assets/images/hero-collage-2.jpg',
+    '/assets/images/hero-collage-3.jpg',
+];
+
+/* ---- Feature pills ---- */
+const FEATURES = [
+    { icon: FiCheckCircle, label: 'Verified Experts' },
+    { icon: FiShield, label: '100% Secure' },
+    { icon: FiClock, label: 'Same-Day Service' },
+    { icon: FiMapPin, label: '15+ Cities' },
+];
+
+/* ---- Recent bookings ticker (demo) ---- */
+const BOOKINGS = [
+    { name: 'Rahul K.', service: 'AC Service', city: 'Ranchi', time: '2 min ago' },
+    { name: 'Priya S.', service: 'Electrician', city: 'Delhi', time: '5 min ago' },
+    { name: 'Amit R.', service: 'RO Repair', city: 'Noida', time: '8 min ago' },
+];
+
 const Hero = () => {
     const { t } = useLanguage();
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [imgIdx, setImgIdx] = useState(0);
+    const [tickerIdx, setTickerIdx] = useState(0);
 
+    /* Slideshow */
     useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentImageIndex((prev) => (prev + 1) % 3);
-        }, 4000);
-        return () => clearInterval(interval);
+        const iv = setInterval(() => setImgIdx(i => (i + 1) % HERO_IMAGES.length), 4500);
+        return () => clearInterval(iv);
     }, []);
 
+    /* Booking ticker */
+    useEffect(() => {
+        const iv = setInterval(() => setTickerIdx(i => (i + 1) % BOOKINGS.length), 3500);
+        return () => clearInterval(iv);
+    }, []);
 
+    const booking = BOOKINGS[tickerIdx];
 
     return (
-        <section className="hero">
-            <div className="hero-bg-pattern"></div>
-            <div className="hero-gradient-overlay"></div>
+        <section className="hero" aria-label="Hero section">
+
+            {/* Animated mesh blobs */}
+            <div className="hero-mesh" aria-hidden="true">
+                <div className="hero-blob hero-blob-1" />
+                <div className="hero-blob hero-blob-2" />
+                <div className="hero-blob hero-blob-3" />
+                <div className="hero-grid-overlay" />
+            </div>
 
             <div className="container">
                 <div className="hero-content">
-                    {/* Left Content */}
+
+                    {/* ================================================
+              LEFT — TEXT
+              ================================================ */}
                     <div className="hero-text">
-                        <div className="hero-badge animate-fade-in">
-                            <span className="badge-dot"></span>
-                            <span>Trusted by 10,000+ Happy Customers</span>
+
+                        {/* Trust badge */}
+                        <div className="hero-trust-badge">
+                            <span className="trust-badge-dot" />
+                            <FiStar className="trust-badge-icon" />
+                            Trusted by <strong>10,000+</strong> Happy Families
                         </div>
 
-                        <h1 className="hero-title animate-fade-in-up">
-                            {t.hero.title}
+                        {/* Headline */}
+                        <h1 className="hero-headline">
+                            {t?.hero?.title || (
+                                <>
+                                    Premium Home Services,{' '}
+                                    <span className="hero-headline-accent">
+                                        Delivered to Your Door
+                                    </span>
+                                </>
+                            )}
                         </h1>
 
-                        <p className="hero-subtitle animate-fade-in-up">
-                            {t.hero.subtitle}
+                        {/* Subtitle */}
+                        <p className="hero-subtitle">
+                            {t?.hero?.subtitle ||
+                                'Book verified, background-checked professionals for AC service, electrical work, plumbing, photography, and 50+ more home services — in under 60 seconds.'}
                         </p>
 
-
-
-
-
-                        <div className="hero-cta-group animate-fade-in-up">
-                            <Link to="/services" className="btn btn-primary btn-lg">
-                                {t.hero.cta}
-                                <FiArrowRight />
-                            </Link>
-                            <Link to="/contact" className="btn btn-outline btn-lg">
-                                {t.hero.bookNow}
-                            </Link>
-                        </div>
-
-
-                    </div>
-
-                    {/* Right Visual */}
-                    <div className="hero-visual">
-                        {/* Search Bar */}
-                        <div className="hero-search-container animate-fade-in-up" style={{ animationDelay: '0.2s', width: '100%', maxWidth: '600px', marginBottom: '2rem', marginTop: '-40px', zIndex: 10 }}>
+                        {/* Search bar */}
+                        <div className="hero-search-container">
                             <HeroSearch />
                         </div>
 
-                        <div className="hero-image-wrapper animate-float">
-                            {/* Slideshow Images */}
+                        {/* Feature pills */}
+                        <div className="hero-features">
+                            {FEATURES.map((f, i) => {
+                                const Icon = f.icon;
+                                return (
+                                    <div key={i} className="hero-feature-pill">
+                                        <Icon className="pill-icon" />
+                                        {f.label}
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* CTA */}
+                        <div className="hero-cta-group">
+                            <Link to="/services" className="hero-cta-primary" id="hero-explore-btn">
+                                Explore Services
+                                <FiArrowRight />
+                            </Link>
+                            <Link to="/become-partner" className="hero-cta-secondary">
+                                <FiPlay style={{ fontSize: '0.8rem' }} />
+                                Become a Partner
+                            </Link>
+                        </div>
+
+                        {/* Mini stats */}
+                        <div className="hero-mini-stats">
                             {[
-                                '/assets/images/hero-services.png',
-                                '/assets/images/hero-collage-2.jpg',
-                                '/assets/images/hero-collage-3.jpg'
-                            ].map((imgSrc, index) => (
+                                { num: '54+', lbl: 'Services' },
+                                { num: '500+', lbl: 'Partners' },
+                                { num: '4.8★', lbl: 'Rating' },
+                            ].map((s, i) => (
+                                <React.Fragment key={i}>
+                                    {i > 0 && <div className="hero-mini-divider" />}
+                                    <div className="hero-mini-stat">
+                                        <div className="hero-mini-stat-num">{s.num}</div>
+                                        <div className="hero-mini-stat-lbl">{s.lbl}</div>
+                                    </div>
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* ================================================
+              RIGHT — VISUAL
+              ================================================ */}
+                    <div className="hero-visual" aria-hidden="true">
+
+                        {/* Main image with 3D perspective */}
+                        <div className="hero-image-wrapper">
+                            {HERO_IMAGES.map((src, i) => (
                                 <img
-                                    key={index}
-                                    src={imgSrc}
-                                    alt={`Professional Home Services ${index + 1}`}
-                                    className={`hero-main-image ${index === currentImageIndex ? 'active' : ''}`}
+                                    key={i}
+                                    src={src}
+                                    alt={`Professional home service ${i + 1}`}
+                                    className="hero-main-image"
                                     style={{
                                         position: 'absolute',
-                                        top: 0,
-                                        left: 0,
+                                        inset: 0,
                                         width: '100%',
                                         height: '100%',
                                         objectFit: 'cover',
-                                        opacity: index === currentImageIndex ? 1 : 0,
-                                        transition: 'opacity 1s ease-in-out',
-                                        zIndex: index === currentImageIndex ? 2 : 1,
-                                        borderRadius: 'inherit'
+                                        opacity: i === imgIdx ? 1 : 0,
+                                        transition: 'opacity 1.2s ease-in-out',
+                                        zIndex: i === imgIdx ? 2 : 1,
                                     }}
                                     onError={(e) => {
-                                        console.error(`Failed to load image: ${imgSrc}`);
-                                        e.target.src = 'https://via.placeholder.com/600x600?text=Service+Image';
+                                        e.target.src = `https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80`;
                                     }}
                                 />
                             ))}
+                            {/* Image overlay */}
+                            <div className="hero-image-overlay" />
 
-                            {/* Ensure height is maintained by an invisible duplicate or fixed height container. 
-                                    Since absolute positioning removes flow, we use the first image as static placeholder if needed, 
-                                    but better to rely on CSS height or a relative container. 
-                                    For now, I'll keep the first image as a relative 'spacer' but hidden, or just set container height.
-                                    Actually better: Make the wrapper have aspect ratio. 
-                                    However, to keep it simple, I'll use the first image as 'relative' and others 'absolute' 
-                                    BUT that messes up transitions. 
-                                    Best approach: Wrapper has fixed aspect ratio or size.
-                                    Let's assume the wrapper 'hero-image-wrapper' in CSS sets dimensions.
-                                */}
-                            {/* Spacer Image (Invisible) to keep layout size */}
-                            <img
-                                src="/assets/images/hero-services.png"
-                                alt=""
-                                style={{ visibility: 'hidden', pointerEvents: 'none' }}
-                                className="hero-main-image"
-                            />
-
-                            <div className="floating-badge badge-1">
-                                <FiZap className="badge-icon" />
-                                <div className="badge-content">
-                                    <div className="badge-title">Same Day Service</div>
-                                    <div className="badge-subtitle">Available Now</div>
-                                </div>
+                            {/* Live booking ticker */}
+                            <div className="hero-ticker">
+                                <span className="ticker-dot" />
+                                <span>
+                                    <strong>{booking.name}</strong> just booked{' '}
+                                    <strong>{booking.service}</strong> in {booking.city} — {booking.time}
+                                </span>
                             </div>
+                        </div>
 
-                            <div className="floating-badge badge-2">
-                                <FiCheckCircle className="badge-icon" />
-                                <div className="badge-content">
-                                    <div className="badge-title">100% Satisfaction</div>
-                                    <div className="badge-subtitle">Guaranteed</div>
-                                </div>
+                        {/* Floating glass badge 1 — Same Day */}
+                        <div className="floating-badge badge-1">
+                            <div className="badge-icon-wrap gold">
+                                <FiZap />
+                            </div>
+                            <div className="badge-content">
+                                <span className="badge-title">Same Day Service</span>
+                                <span className="badge-subtitle">Book in 60 seconds</span>
+                            </div>
+                        </div>
+
+                        {/* Floating glass badge 2 — Satisfaction */}
+                        <div className="floating-badge badge-2">
+                            <div className="badge-icon-wrap green">
+                                <FiCheckCircle />
+                            </div>
+                            <div className="badge-content">
+                                <span className="badge-title">100% Satisfaction</span>
+                                <span className="badge-subtitle">Money-back guarantee</span>
+                            </div>
+                        </div>
+
+                        {/* Floating glass badge 3 — Partners */}
+                        <div className="floating-badge badge-3">
+                            <div className="badge-icon-wrap royal">
+                                <FiTrendingUp />
+                            </div>
+                            <div className="badge-content">
+                                <span className="badge-title">500+ Expert Partners</span>
+                                <span className="badge-subtitle">Insured & verified</span>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>

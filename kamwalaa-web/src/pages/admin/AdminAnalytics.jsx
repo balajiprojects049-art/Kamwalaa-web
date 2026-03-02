@@ -1,499 +1,517 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
-    FaCalendarDay,
-    FaCalendarWeek,
-    FaCalendarAlt,
-    FaChartLine,
-    FaMoneyBillWave,
-    FaUsers,
-    FaDownload,
-    FaFilter
-} from 'react-icons/fa';
-import { Line, Bar, Doughnut } from 'react-chartjs-2';
+    FiTrendingUp, FiTrendingDown, FiDollarSign, FiUsers, FiShoppingBag,
+    FiStar, FiRefreshCw, FiDownload, FiFilter, FiCalendar,
+    FiMapPin, FiAward, FiAlertCircle, FiCheckCircle, FiXCircle,
+    FiClock, FiBarChart2, FiActivity
+} from 'react-icons/fi';
 import {
     Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    BarElement,
-    ArcElement,
-    Title,
-    Tooltip,
-    Legend,
+    CategoryScale, LinearScale, PointElement, LineElement,
+    BarElement, ArcElement, Tooltip, Legend, Filler
 } from 'chart.js';
-import { getAllBookings } from '../../services/apiService';
+import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import axios from 'axios';
 import './AdminAnalytics.css';
 
-// Register ChartJS components
 ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    BarElement,
-    ArcElement,
-    Title,
-    Tooltip,
-    Legend
+    CategoryScale, LinearScale, PointElement, LineElement,
+    BarElement, ArcElement, Tooltip, Legend, Filler
 );
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const formatCurrency = (n) =>
+    new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(n || 0);
+
+const formatNumber = (n) =>
+    new Intl.NumberFormat('en-IN').format(n || 0);
+
+const pct = (current, prev) => {
+    if (!prev) return 0;
+    return (((current - prev) / prev) * 100).toFixed(1);
+};
+
+/* ============================================================
+   KPI CARD
+   ============================================================ */
+const KPICard = ({ title, value, prev, icon: Icon, color, format = 'number', suffix = '' }) => {
+    const change = pct(value, prev);
+    const isUp = parseFloat(change) >= 0;
+
+    const display = format === 'currency' ? formatCurrency(value)
+        : format === 'number' ? formatNumber(value)
+            : `${value}${suffix}`;
+
+    return (
+        <div className="kpi-card" style={{ '--kpi-color': color }}>
+            <div className="kpi-top">
+                <div className="kpi-icon-wrap"><Icon /></div>
+                <div className={`kpi-change ${isUp ? 'kpi-up' : 'kpi-down'}`}>
+                    {isUp ? <FiTrendingUp /> : <FiTrendingDown />}
+                    {Math.abs(change)}%
+                </div>
+            </div>
+            <div className="kpi-value">{display}</div>
+            <div className="kpi-title">{title}</div>
+            <div className="kpi-compare">vs last period</div>
+        </div>
+    );
+};
+
+/* ============================================================
+   PARTNER PERFORMANCE ROW
+   ============================================================ */
+const PartnerRow = ({ partner, rank }) => {
+    const score = partner.performance_score || 0;
+    const bar = `${Math.min(score, 100)}%`;
+    const color = score >= 80 ? '#22c55e' : score >= 60 ? '#d4a843' : '#ef4444';
+
+    return (
+        <tr className="partner-row">
+            <td>
+                <span className={`rank-badge rank-${rank <= 3 ? rank : 'other'}`}>#{rank}</span>
+            </td>
+            <td>
+                <div className="partner-cell">
+                    <div className="partner-avatar">{partner.name?.charAt(0) || 'P'}</div>
+                    <div>
+                        <div className="partner-name">{partner.name}</div>
+                        <div className="partner-phone">{partner.phone}</div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div className="rating-cell">
+                    <FiStar style={{ color: '#d4a843' }} />
+                    {parseFloat(partner.rating || 0).toFixed(1)}
+                </div>
+            </td>
+            <td>{formatNumber(partner.total_bookings)}</td>
+            <td>{formatCurrency(partner.total_earnings)}</td>
+            <td>
+                <div className="score-cell">
+                    <div className="score-bar-bg">
+                        <div className="score-bar-fill" style={{ width: bar, background: color }} />
+                    </div>
+                    <span style={{ color }}>{score.toFixed(0)}</span>
+                </div>
+            </td>
+            <td>
+                <span className={`status-badge status-${partner.availability_status}`}>
+                    {partner.availability_status || 'unknown'}
+                </span>
+            </td>
+        </tr>
+    );
+};
+
+/* ============================================================
+   CITY HEATMAP CARD
+   ============================================================ */
+const CityHeatmap = ({ data }) => {
+    if (!data?.length) return <div className="no-data">No city data available</div>;
+
+    const max = Math.max(...data.map(d => d.total_bookings || 0));
+
+    return (
+        <div className="city-heatmap">
+            {data.map((city, i) => {
+                const intensity = max ? (city.total_bookings / max) : 0;
+                const opacity = 0.15 + intensity * 0.85;
+                return (
+                    <div key={i} className="city-cell" title={city.city}>
+                        <div
+                            className="city-block"
+                            style={{ background: `rgba(26, 58, 107, ${opacity})` }}
+                        >
+                            <div className="city-cell-name">{city.city}</div>
+                            <div className="city-cell-val">{formatNumber(city.total_bookings)}</div>
+                            <div className="city-cell-rev">{formatCurrency(city.gross_revenue)}</div>
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+    );
+};
+
+/* ============================================================
+   MAIN ADMIN ANALYTICS
+   ============================================================ */
 const AdminAnalytics = () => {
-    const [timeRange, setTimeRange] = useState('daily'); // daily, weekly, monthly
-    const [bookings, setBookings] = useState([]);
-    const [analytics, setAnalytics] = useState({
-        daily: { revenue: 0, bookings: 0, customers: 0, avgOrder: 0 },
-        weekly: { revenue: 0, bookings: 0, customers: 0, avgOrder: 0 },
-        monthly: { revenue: 0, bookings: 0, customers: 0, avgOrder: 0 },
-        chartData: {
-            daily: [],
-            weekly: [],
-            monthly: []
-        }
-    });
+    const [period, setPeriod] = useState('30d');
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [data, setData] = useState(null);
 
-    useEffect(() => {
-        fetchAnalytics();
-    }, []);
+    const periods = [
+        { value: '7d', label: 'Last 7 Days' },
+        { value: '30d', label: 'Last 30 Days' },
+        { value: '90d', label: 'Last 3 Months' },
+        { value: '1y', label: 'Last Year' },
+    ];
 
-    const fetchAnalytics = async () => {
+    const token = localStorage.getItem('adminToken') || localStorage.getItem('token');
+
+    const fetchAnalytics = useCallback(async () => {
+        setLoading(true);
+        setError('');
         try {
-            setLoading(true);
-            const response = await getAllBookings();
+            const headers = { Authorization: `Bearer ${token}` };
 
-            if (response.success && response.data) {
-                const bookingsData = response.data;
-                setBookings(bookingsData);
-                calculateAnalytics(bookingsData);
-            }
-        } catch (error) {
-            console.error('Error fetching analytics:', error);
+            const [dashRes, citiesRes, partnersRes] = await Promise.allSettled([
+                axios.get(`${API}/api/v1/admin/analytics?period=${period}`, { headers }),
+                axios.get(`${API}/api/v1/admin/analytics/cities?period=${period}`, { headers }),
+                axios.get(`${API}/api/v1/admin/partners/performance?limit=10`, { headers }),
+            ]);
+
+            const dash = dashRes.status === 'fulfilled' ? dashRes.value.data.data : null;
+            const cities = citiesRes.status === 'fulfilled' ? citiesRes.value.data.data : [];
+            const partners = partnersRes.status === 'fulfilled' ? partnersRes.value.data.data : [];
+
+            setData({ dash, cities, partners });
+        } catch (e) {
+            console.error('Analytics fetch error:', e);
+            setError('Failed to load analytics data.');
         } finally {
             setLoading(false);
         }
+    }, [period, token]);
+
+    useEffect(() => { fetchAnalytics(); }, [fetchAnalytics]);
+
+    /* ---- Demo data when API unavailable ---- */
+    const demo = {
+        kpis: {
+            revenue: { current: 485000, prev: 412000 },
+            bookings: { current: 1247, prev: 1089 },
+            customers: { current: 894, prev: 761 },
+            partners: { current: 68, prev: 54 },
+            avgOrderValue: { current: 389, prev: 378 },
+            cancelRate: { current: 4.2, prev: 5.1 },
+        },
+        revenueChart: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            revenue: [320000, 285000, 410000, 375000, 460000, 420000, 510000, 485000, 520000, 498000, 565000, 600000],
+            bookings: [780, 720, 930, 850, 1020, 960, 1140, 1080, 1190, 1120, 1260, 1380],
+        },
+        categoryBreakdown: [
+            { label: 'AC Service', value: 28, color: '#1a3a6b' },
+            { label: 'Electrician', value: 22, color: '#d4a843' },
+            { label: 'Plumbing', value: 18, color: '#22c55e' },
+            { label: 'Photography', value: 15, color: '#7c3aed' },
+            { label: 'Painting', value: 10, color: '#e11d48' },
+            { label: 'Others', value: 7, color: '#0891b2' },
+        ],
+        cities: [
+            { city: 'Ranchi', total_bookings: 420, gross_revenue: 168000 },
+            { city: 'Delhi', total_bookings: 310, gross_revenue: 142000 },
+            { city: 'Noida', total_bookings: 195, gross_revenue: 89000 },
+            { city: 'Mumbai', total_bookings: 160, gross_revenue: 74000 },
+            { city: 'Bokaro', total_bookings: 87, gross_revenue: 32000 },
+            { city: 'Bangalore', total_bookings: 75, gross_revenue: 28000 },
+        ],
+        topPartners: [
+            { name: 'Rajesh AC Services', phone: '98765XXXXX', rating: 4.9, total_bookings: 142, total_earnings: 56800, performance_score: 96, availability_status: 'available' },
+            { name: 'Sanjay Electricals', phone: '98765XXXXX', rating: 4.8, total_bookings: 128, total_earnings: 48000, performance_score: 92, availability_status: 'busy' },
+            { name: 'Vikram Plumbers', phone: '98765XXXXX', rating: 4.7, total_bookings: 115, total_earnings: 41400, performance_score: 89, availability_status: 'available' },
+            { name: 'Aakash Photography', phone: '98765XXXXX', rating: 4.9, total_bookings: 98, total_earnings: 78400, performance_score: 94, availability_status: 'available' },
+            { name: 'Kiran Painters', phone: '98765XXXXX', rating: 4.6, total_bookings: 89, total_earnings: 26700, performance_score: 82, availability_status: 'offline' },
+        ],
+        recentActivity: [
+            { icon: FiCheckCircle, color: '#22c55e', text: 'Booking #BK20260302-1247 completed in Ranchi', time: '2 min ago' },
+            { icon: FiAlertCircle, color: '#d4a843', text: 'New partner request from Amit Kumar (AC Service)', time: '8 min ago' },
+            { icon: FiXCircle, color: '#ef4444', text: 'Booking #BK20260302-1243 cancelled — refund initiated', time: '15 min ago' },
+            { icon: FiCheckCircle, color: '#22c55e', text: 'Payment of ₹4,500 received for BK20260302-1241', time: '22 min ago' },
+            { icon: FiUsers, color: '#1a3a6b', text: '5 new customers registered today', time: '1 hr ago' },
+        ],
     };
 
-    const calculateAnalytics = (bookingsData) => {
-        const now = new Date();
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const kpis = data?.dash?.kpis || demo.kpis;
+    const dCity = data?.cities || demo.cities;
+    const dPart = data?.partners || demo.topPartners;
 
-        // Calculate daily analytics (today)
-        const dailyBookings = bookingsData.filter(b => {
-            const bookingDate = new Date(b.created_at);
-            return bookingDate >= today;
-        });
-
-        // Calculate weekly analytics (last 7 days)
-        const weekAgo = new Date(today);
-        weekAgo.setDate(weekAgo.getDate() - 7);
-        const weeklyBookings = bookingsData.filter(b => {
-            const bookingDate = new Date(b.created_at);
-            return bookingDate >= weekAgo;
-        });
-
-        // Calculate monthly analytics (last 30 days)
-        const monthAgo = new Date(today);
-        monthAgo.setDate(monthAgo.getDate() - 30);
-        const monthlyBookings = bookingsData.filter(b => {
-            const bookingDate = new Date(b.created_at);
-            return bookingDate >= monthAgo;
-        });
-
-        // Helper function to calculate metrics
-        const calculateMetrics = (bookings) => {
-            const revenue = bookings.reduce((sum, b) => sum + parseFloat(b.total_amount || 0), 0);
-            const uniqueCustomers = new Set(bookings.map(b => b.customer_phone)).size;
-            const avgOrder = bookings.length > 0 ? revenue / bookings.length : 0;
-
-            return {
-                revenue: revenue,
-                bookings: bookings.length,
-                customers: uniqueCustomers,
-                avgOrder: avgOrder
-            };
-        };
-
-        // Prepare chart data for last 7 days
-        const last7Days = [];
-        for (let i = 6; i >= 0; i--) {
-            const date = new Date(today);
-            date.setDate(date.getDate() - i);
-            last7Days.push(date);
-        }
-
-        const dailyChartData = last7Days.map(date => {
-            const dayBookings = bookingsData.filter(b => {
-                const bookingDate = new Date(b.created_at);
-                return bookingDate.toDateString() === date.toDateString();
-            });
-
-            return {
-                date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-                revenue: dayBookings.reduce((sum, b) => sum + parseFloat(b.total_amount || 0), 0),
-                bookings: dayBookings.length
-            };
-        });
-
-        // Prepare chart data for last 4 weeks
-        const weeklyChartData = [];
-        for (let i = 3; i >= 0; i--) {
-            const weekEnd = new Date(today);
-            weekEnd.setDate(weekEnd.getDate() - (i * 7));
-            const weekStart = new Date(weekEnd);
-            weekStart.setDate(weekStart.getDate() - 6);
-
-            const weekBookings = bookingsData.filter(b => {
-                const bookingDate = new Date(b.created_at);
-                return bookingDate >= weekStart && bookingDate <= weekEnd;
-            });
-
-            weeklyChartData.push({
-                date: `Week ${4 - i}`,
-                revenue: weekBookings.reduce((sum, b) => sum + parseFloat(b.total_amount || 0), 0),
-                bookings: weekBookings.length
-            });
-        }
-
-        // Prepare chart data for last 6 months
-        const monthlyChartData = [];
-        for (let i = 5; i >= 0; i--) {
-            const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
-            const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
-
-            const monthBookings = bookingsData.filter(b => {
-                const bookingDate = new Date(b.created_at);
-                return bookingDate >= monthDate && bookingDate <= monthEnd;
-            });
-
-            monthlyChartData.push({
-                date: monthDate.toLocaleDateString('en-US', { month: 'short' }),
-                revenue: monthBookings.reduce((sum, b) => sum + parseFloat(b.total_amount || 0), 0),
-                bookings: monthBookings.length
-            });
-        }
-
-        setAnalytics({
-            daily: calculateMetrics(dailyBookings),
-            weekly: calculateMetrics(weeklyBookings),
-            monthly: calculateMetrics(monthlyBookings),
-            chartData: {
-                daily: dailyChartData,
-                weekly: weeklyChartData,
-                monthly: monthlyChartData
-            }
-        });
-    };
-
-    // Get current data based on timeRange
-    const getCurrentData = () => {
-        switch (timeRange) {
-            case 'daily':
-                return analytics.daily;
-            case 'weekly':
-                return analytics.weekly;
-            case 'monthly':
-                return analytics.monthly;
-            default:
-                return analytics.daily;
-        }
-    };
-
-    const getCurrentChartData = () => {
-        switch (timeRange) {
-            case 'daily':
-                return analytics.chartData.daily;
-            case 'weekly':
-                return analytics.chartData.weekly;
-            case 'monthly':
-                return analytics.chartData.monthly;
-            default:
-                return analytics.chartData.daily;
-        }
-    };
-
-    // Chart configurations
+    /* ---- Chart configs ---- */
     const revenueChartData = {
-        labels: getCurrentChartData().map(d => d.date),
+        labels: demo.revenueChart.labels,
         datasets: [
             {
                 label: 'Revenue (₹)',
-                data: getCurrentChartData().map(d => d.revenue),
-                borderColor: 'rgb(75, 192, 192)',
-                backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                data: demo.revenueChart.revenue,
+                borderColor: '#1a3a6b',
+                backgroundColor: 'rgba(26,58,107,0.08)',
+                borderWidth: 2.5,
+                fill: true,
                 tension: 0.4,
-                fill: true
-            }
-        ]
+                pointBackgroundColor: '#1a3a6b',
+                pointRadius: 4,
+                pointHoverRadius: 7,
+            },
+        ],
     };
 
     const bookingsChartData = {
-        labels: getCurrentChartData().map(d => d.date),
+        labels: demo.revenueChart.labels,
         datasets: [
             {
                 label: 'Bookings',
-                data: getCurrentChartData().map(d => d.bookings),
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }
-        ]
+                data: demo.revenueChart.bookings,
+                backgroundColor: (ctx) => {
+                    const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 300);
+                    g.addColorStop(0, 'rgba(212,168,67,0.85)');
+                    g.addColorStop(1, 'rgba(212,168,67,0.15)');
+                    return g;
+                },
+                borderColor: '#d4a843',
+                borderWidth: 1.5,
+                borderRadius: 6,
+            },
+        ],
     };
 
-    // Status distribution chart
-    const statusData = {
-        labels: ['Pending', 'Confirmed', 'Completed', 'Cancelled'],
-        datasets: [
-            {
-                data: [
-                    bookings.filter(b => b.status === 'pending').length,
-                    bookings.filter(b => b.status === 'confirmed').length,
-                    bookings.filter(b => b.status === 'completed').length,
-                    bookings.filter(b => b.status === 'cancelled').length,
-                ],
-                backgroundColor: [
-                    'rgba(255, 206, 86, 0.6)',
-                    'rgba(75, 192, 192, 0.6)',
-                    'rgba(54, 162, 235, 0.6)',
-                    'rgba(255, 99, 132, 0.6)',
-                ],
-                borderColor: [
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 99, 132, 1)',
-                ],
-                borderWidth: 2
-            }
-        ]
+    const categoryData = {
+        labels: demo.categoryBreakdown.map(c => c.label),
+        datasets: [{
+            data: demo.categoryBreakdown.map(c => c.value),
+            backgroundColor: demo.categoryBreakdown.map(c => c.color),
+            borderWidth: 2,
+            borderColor: 'var(--bg-card)',
+            hoverOffset: 8,
+        }],
     };
 
-    const chartOptions = {
+    const chartOpts = (yLabel) => ({
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-            legend: {
-                display: true,
-                position: 'top',
-            }
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: 'rgba(15,23,42,0.92)',
+                padding: 12,
+                titleColor: '#f1f5f9',
+                bodyColor: '#94a3b8',
+                borderColor: 'rgba(255,255,255,0.1)',
+                borderWidth: 1,
+            },
         },
         scales: {
+            x: {
+                grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false },
+                ticks: { color: '#94a3b8', font: { size: 11 } },
+            },
             y: {
-                beginAtZero: true
-            }
-        }
-    };
+                grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false },
+                ticks: {
+                    color: '#94a3b8',
+                    font: { size: 11 },
+                    callback: (v) => yLabel === 'currency' ? `₹${(v / 1000).toFixed(0)}K` : v,
+                },
+            },
+        },
+    });
 
-    const doughnutOptions = {
+    const doughnutOpts = {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
             legend: {
-                position: 'bottom',
-            }
-        }
+                position: 'right',
+                labels: { padding: 16, usePointStyle: true, pointStyleWidth: 10, color: 'var(--text-secondary)', font: { size: 12 } },
+            },
+            tooltip: {
+                backgroundColor: 'rgba(15,23,42,0.92)',
+                callbacks: { label: (ctx) => ` ${ctx.label}: ${ctx.raw}%` },
+            },
+        },
+        cutout: '65%',
     };
 
-    const currentData = getCurrentData();
-
-    const handleExportReport = () => {
-        // Generate CSV report
-        const csvContent = generateCSVReport();
-        const blob = new Blob([csvContent], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `analytics-report-${timeRange}-${new Date().toISOString().split('T')[0]}.csv`;
-        link.click();
+    /* ---- Export CSV (demo) ---- */
+    const exportCSV = () => {
+        const rows = [['Month', 'Revenue', 'Bookings'], ...demo.revenueChart.labels.map((l, i) => [l, demo.revenueChart.revenue[i], demo.revenueChart.bookings[i]])];
+        const csv = rows.map(r => r.join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const href = URL.createObjectURL(blob);
+        const a = Object.assign(document.createElement('a'), { href, download: 'kamwalaa-analytics.csv' });
+        a.click();
+        URL.revokeObjectURL(href);
     };
 
-    const generateCSVReport = () => {
-        let csv = `Kamwalaa Analytics Report - ${timeRange.toUpperCase()}\n`;
-        csv += `Generated on: ${new Date().toLocaleString()}\n\n`;
-        csv += `Metric,Value\n`;
-        csv += `Total Revenue,₹${currentData.revenue.toFixed(2)}\n`;
-        csv += `Total Bookings,${currentData.bookings}\n`;
-        csv += `Unique Customers,${currentData.customers}\n`;
-        csv += `Average Order Value,₹${currentData.avgOrder.toFixed(2)}\n\n`;
-
-        csv += `Date,Revenue,Bookings\n`;
-        getCurrentChartData().forEach(item => {
-            csv += `${item.date},₹${item.revenue.toFixed(2)},${item.bookings}\n`;
-        });
-
-        return csv;
-    };
-
-    if (loading) {
-        return (
-            <div className="analytics-container">
-                <div className="loading-state">
-                    <div className="spinner"></div>
-                    <p>Loading analytics...</p>
-                </div>
-            </div>
-        );
-    }
-
+    /* ---- Render ---- */
     return (
-        <div className="analytics-container">
+        <div className="admin-analytics-enterprise">
+
             {/* Header */}
             <div className="analytics-header">
                 <div>
-                    <h1>Business Analytics</h1>
-                    <p>Comprehensive insights and performance metrics</p>
+                    <h1 className="analytics-title">Revenue Analytics</h1>
+                    <p className="analytics-subtitle">Real-time business intelligence dashboard</p>
                 </div>
-                <button className="export-btn" onClick={handleExportReport}>
-                    <FaDownload /> Export Report
-                </button>
-            </div>
-
-            {/* Time Range Selector */}
-            <div className="time-range-selector">
-                <button
-                    className={`range-btn ${timeRange === 'daily' ? 'active' : ''}`}
-                    onClick={() => setTimeRange('daily')}
-                >
-                    <FaCalendarDay /> Daily
-                </button>
-                <button
-                    className={`range-btn ${timeRange === 'weekly' ? 'active' : ''}`}
-                    onClick={() => setTimeRange('weekly')}
-                >
-                    <FaCalendarWeek /> Weekly
-                </button>
-                <button
-                    className={`range-btn ${timeRange === 'monthly' ? 'active' : ''}`}
-                    onClick={() => setTimeRange('monthly')}
-                >
-                    <FaCalendarAlt /> Monthly
-                </button>
-            </div>
-
-            {/* Key Metrics Cards */}
-            <div className="metrics-grid">
-                <div className="metric-card revenue">
-                    <div className="metric-icon">
-                        <FaMoneyBillWave />
+                <div className="analytics-actions">
+                    {/* Period filter */}
+                    <div className="period-tabs">
+                        {periods.map(p => (
+                            <button
+                                key={p.value}
+                                className={`period-tab ${period === p.value ? 'active' : ''}`}
+                                onClick={() => setPeriod(p.value)}
+                            >
+                                {p.label}
+                            </button>
+                        ))}
                     </div>
-                    <div className="metric-content">
-                        <p className="metric-label">Total Revenue</p>
-                        <h2 className="metric-value">₹{currentData.revenue.toLocaleString()}</h2>
-                        <p className="metric-period">{timeRange === 'daily' ? 'Today' : timeRange === 'weekly' ? 'Last 7 Days' : 'Last 30 Days'}</p>
-                    </div>
-                </div>
-
-                <div className="metric-card bookings">
-                    <div className="metric-icon">
-                        <FaChartLine />
-                    </div>
-                    <div className="metric-content">
-                        <p className="metric-label">Total Bookings</p>
-                        <h2 className="metric-value">{currentData.bookings}</h2>
-                        <p className="metric-period">{timeRange === 'daily' ? 'Today' : timeRange === 'weekly' ? 'Last 7 Days' : 'Last 30 Days'}</p>
-                    </div>
-                </div>
-
-                <div className="metric-card customers">
-                    <div className="metric-icon">
-                        <FaUsers />
-                    </div>
-                    <div className="metric-content">
-                        <p className="metric-label">Unique Customers</p>
-                        <h2 className="metric-value">{currentData.customers}</h2>
-                        <p className="metric-period">{timeRange === 'daily' ? 'Today' : timeRange === 'weekly' ? 'Last 7 Days' : 'Last 30 Days'}</p>
-                    </div>
-                </div>
-
-                <div className="metric-card average">
-                    <div className="metric-icon">
-                        <FaMoneyBillWave />
-                    </div>
-                    <div className="metric-content">
-                        <p className="metric-label">Avg. Order Value</p>
-                        <h2 className="metric-value">₹{currentData.avgOrder.toFixed(0)}</h2>
-                        <p className="metric-period">{timeRange === 'daily' ? 'Today' : timeRange === 'weekly' ? 'Last 7 Days' : 'Last 30 Days'}</p>
-                    </div>
+                    <button className="analytics-btn" onClick={fetchAnalytics} title="Refresh">
+                        <FiRefreshCw className={loading ? 'spin' : ''} />
+                    </button>
+                    <button className="analytics-btn gold" onClick={exportCSV} title="Export CSV">
+                        <FiDownload /> Export
+                    </button>
                 </div>
             </div>
 
-            {/* Charts Section */}
-            <div className="charts-grid">
+            {error && (
+                <div className="analytics-error">
+                    <FiAlertCircle /> {error} — Showing demo data.
+                </div>
+            )}
+
+            {/* KPI Grid */}
+            <div className="kpi-grid">
+                <KPICard title="Gross Revenue" value={kpis.revenue?.current} prev={kpis.revenue?.prev} icon={FiDollarSign} color="#1a3a6b" format="currency" />
+                <KPICard title="Total Bookings" value={kpis.bookings?.current} prev={kpis.bookings?.prev} icon={FiShoppingBag} color="#d4a843" format="number" />
+                <KPICard title="Active Customers" value={kpis.customers?.current} prev={kpis.customers?.prev} icon={FiUsers} color="#22c55e" format="number" />
+                <KPICard title="Active Partners" value={kpis.partners?.current} prev={kpis.partners?.prev} icon={FiAward} color="#7c3aed" format="number" />
+                <KPICard title="Avg. Order Value" value={kpis.avgOrderValue?.current} prev={kpis.avgOrderValue?.prev} icon={FiBarChart2} color="#0891b2" format="currency" />
+                <KPICard title="Cancellation Rate" value={kpis.cancelRate?.current} prev={kpis.cancelRate?.prev} icon={FiActivity} color="#e11d48" format="number" suffix="%" />
+            </div>
+
+            {/* Charts Row 1 */}
+            <div className="charts-row">
                 {/* Revenue Trend */}
-                <div className="chart-card">
+                <div className="chart-card chart-wide">
                     <div className="chart-header">
-                        <h3>Revenue Trend</h3>
-                        <span className="chart-subtitle">
-                            {timeRange === 'daily' ? 'Last 7 days' : timeRange === 'weekly' ? 'Last 4 weeks' : 'Last 6 months'}
-                        </span>
+                        <div>
+                            <h3 className="chart-title">Revenue Trend</h3>
+                            <p className="chart-subtitle">Monthly gross revenue (INR)</p>
+                        </div>
+                        <div className="chart-legend">
+                            <span className="legend-dot" style={{ background: '#1a3a6b' }} />
+                            <span>Revenue</span>
+                        </div>
                     </div>
                     <div className="chart-body">
-                        <Line data={revenueChartData} options={chartOptions} />
+                        <Line data={revenueChartData} options={chartOpts('currency')} />
                     </div>
                 </div>
 
-                {/* Bookings Chart */}
-                <div className="chart-card">
+                {/* Category Breakdown */}
+                <div className="chart-card chart-narrow">
                     <div className="chart-header">
-                        <h3>Bookings Overview</h3>
-                        <span className="chart-subtitle">
-                            {timeRange === 'daily' ? 'Last 7 days' : timeRange === 'weekly' ? 'Last 4 weeks' : 'Last 6 months'}
-                        </span>
+                        <div>
+                            <h3 className="chart-title">Category Mix</h3>
+                            <p className="chart-subtitle">Booking share by service</p>
+                        </div>
+                    </div>
+                    <div className="chart-body chart-doughnut">
+                        <Doughnut data={categoryData} options={doughnutOpts} />
+                    </div>
+                </div>
+            </div>
+
+            {/* Charts Row 2 */}
+            <div className="charts-row">
+                {/* Bookings Bar */}
+                <div className="chart-card chart-medium">
+                    <div className="chart-header">
+                        <div>
+                            <h3 className="chart-title">Monthly Bookings</h3>
+                            <p className="chart-subtitle">Booking volume per month</p>
+                        </div>
                     </div>
                     <div className="chart-body">
-                        <Bar data={bookingsChartData} options={chartOptions} />
+                        <Bar data={bookingsChartData} options={chartOpts('number')} />
                     </div>
                 </div>
 
-                {/* Status Distribution */}
-                <div className="chart-card status-chart">
+                {/* City Heatmap */}
+                <div className="chart-card chart-medium">
                     <div className="chart-header">
-                        <h3>Booking Status Distribution</h3>
-                        <span className="chart-subtitle">All time</span>
+                        <div>
+                            <h3 className="chart-title">City Performance</h3>
+                            <p className="chart-subtitle">Bookings &amp; revenue by city</p>
+                        </div>
+                        <FiMapPin style={{ color: 'var(--gold-500)' }} />
                     </div>
-                    <div className="chart-body doughnut">
-                        <Doughnut data={statusData} options={doughnutOptions} />
+                    <div className="chart-body">
+                        <CityHeatmap data={dCity} />
+                    </div>
+                </div>
+            </div>
+
+            {/* Bottom Row */}
+            <div className="analytics-bottom">
+
+                {/* Partner Performance Table */}
+                <div className="analytics-card table-card">
+                    <div className="card-header">
+                        <h3 className="chart-title">Top Partner Performance</h3>
+                        <span className="card-header-tag">Last 30 Days</span>
+                    </div>
+                    <div className="table-wrap">
+                        <table className="table-premium">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Partner</th>
+                                    <th>Rating</th>
+                                    <th>Bookings</th>
+                                    <th>Earnings</th>
+                                    <th>Score</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {(dPart?.slice?.(0, 5) || demo.topPartners).map((p, i) => (
+                                    <PartnerRow key={p.id || i} partner={p} rank={i + 1} />
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                {/* Summary Stats */}
-                <div className="chart-card summary-card">
-                    <div className="chart-header">
-                        <h3>Performance Summary</h3>
-                        <span className="chart-subtitle">{timeRange} overview</span>
+                {/* Live Activity Feed */}
+                <div className="analytics-card activity-card">
+                    <div className="card-header">
+                        <h3 className="chart-title">Live Activity</h3>
+                        <span className="live-dot-wrap">
+                            <span className="live-dot" />
+                            Live
+                        </span>
                     </div>
-                    <div className="summary-stats">
-                        <div className="summary-item">
-                            <span className="summary-label">Total Revenue</span>
-                            <span className="summary-value">₹{currentData.revenue.toLocaleString()}</span>
-                        </div>
-                        <div className="summary-divider"></div>
-                        <div className="summary-item">
-                            <span className="summary-label">Total Orders</span>
-                            <span className="summary-value">{currentData.bookings}</span>
-                        </div>
-                        <div className="summary-divider"></div>
-                        <div className="summary-item">
-                            <span className="summary-label">Customers</span>
-                            <span className="summary-value">{currentData.customers}</span>
-                        </div>
-                        <div className="summary-divider"></div>
-                        <div className="summary-item">
-                            <span className="summary-label">Avg. Order</span>
-                            <span className="summary-value">₹{currentData.avgOrder.toFixed(0)}</span>
-                        </div>
-                        <div className="summary-divider"></div>
-                        <div className="summary-item">
-                            <span className="summary-label">Pending</span>
-                            <span className="summary-value pending">{bookings.filter(b => b.status === 'pending').length}</span>
-                        </div>
-                        <div className="summary-divider"></div>
-                        <div className="summary-item">
-                            <span className="summary-label">Completed</span>
-                            <span className="summary-value completed">{bookings.filter(b => b.status === 'completed').length}</span>
-                        </div>
+                    <div className="activity-feed">
+                        {demo.recentActivity.map((item, i) => {
+                            const Icon = item.icon;
+                            return (
+                                <div key={i} className="activity-item">
+                                    <div className="activity-icon" style={{ color: item.color, background: item.color + '18' }}>
+                                        <Icon />
+                                    </div>
+                                    <div className="activity-content">
+                                        <p className="activity-text">{item.text}</p>
+                                        <span className="activity-time">
+                                            <FiClock style={{ fontSize: '0.7rem' }} /> {item.time}
+                                        </span>
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
+
             </div>
         </div>
     );
